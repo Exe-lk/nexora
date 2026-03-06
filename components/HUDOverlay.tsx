@@ -92,7 +92,7 @@ export function FloatingNav() {
     if (pathname !== "/") router.push("/");
   };
 
-  const navItems = ["Occasions", "Pricing", "About", "Contact"];
+  const navItems = ["Occasions", "Pricing", "About"];
 
   return (
     <>
@@ -129,10 +129,10 @@ export function FloatingNav() {
           className="select-none cursor-pointer"
           onClick={handleNavHome}
           style={{
-            height: isMobile ? "34px" : "44px",
+            height: isMobile ? "44px" : "56px",
             width: "auto",
             opacity: 0.95,
-            marginRight: isMobile ? "10px" : "16px",
+            marginRight: isMobile ? "10px" : "18px",
           }}
           priority
         />
@@ -395,6 +395,7 @@ export function FloatingNav() {
               border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
               letterSpacing: "0.06em",
             }}
+            onClick={() => router.push("/book-now")}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = isDark
                 ? "linear-gradient(135deg, rgba(140,100,220,0.45), rgba(230,80,160,0.35))"
@@ -410,7 +411,7 @@ export function FloatingNav() {
               e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Enter World
+            Book Now
           </button>
         )}
 
@@ -600,9 +601,12 @@ export function FloatingNav() {
               border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
               letterSpacing: "0.06em",
             }}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              router.push("/book-now");
+            }}
           >
-            Enter World
+            Book Now
           </button>
         </motion.div>
       )}
@@ -1045,6 +1049,118 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </motion.div>
       </section>}
 
+      {/* ===== 4.25 OUR STORIES ===== */}
+      <section
+        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
+        style={{ minHeight: isMobile ? "auto" : "auto" }}
+      >
+        <ParallaxLayer speed={-0.1}>
+          <Section>
+            <div className="text-center mb-10 md:mb-14">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background:
+                      "linear-gradient(to right, transparent, rgba(200,180,100,0.4))",
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "'Orbitron', sans-serif",
+                    fontSize: "10px",
+                    letterSpacing: "0.4em",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  }}
+                >
+                  NARRATIVE WORLDS
+                </span>
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background:
+                      "linear-gradient(to left, transparent, rgba(230,80,60,0.4))",
+                  }}
+                />
+              </div>
+              <h2
+                className="mt-2"
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: isMobile ? "22px" : "32px",
+                  fontWeight: 700,
+                  color: isDark ? "#ffffff" : "#1a0a2e",
+                  lineHeight: 1.3,
+                }}
+              >
+                Our{" "}
+                <span
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    color: "transparent",
+                  }}
+                >
+                  Stories
+                </span>
+              </h2>
+              <p
+                className="mt-3"
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "12px" : "14px",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
+                  maxWidth: "520px",
+                  margin: "12px auto 0",
+                  lineHeight: 1.7,
+                }}
+              >
+                Step beyond the veil of reality into mythological realms
+                brought to life through immersive VR storytelling.
+              </p>
+            </div>
+          </Section>
+        </ParallaxLayer>
+
+        <div
+          className={`flex ${isMobile ? "flex-col" : ""} gap-6 md:gap-8 w-full max-w-[960px] justify-center items-stretch`}
+          style={{ pointerEvents: "auto", perspective: "1000px" }}
+        >
+          {/* Heaven Card */}
+          <Section delay={0.15}>
+            <StoryCard
+              img={heavenImg.src}
+              title="Swarga: The Celestial Realm"
+              subtitle="HEAVEN"
+              desc="Ascend through golden temples, lotus gardens, and luminous skies. Walk among celestial beings in a world of eternal beauty, serenity, and divine wonder — an immersive journey into the heavens."
+              accent="rgba(200,180,100,"
+              glowColor="rgba(220,200,100,0.12)"
+              isMobile={isMobile}
+              link="/story/heaven"
+            />
+          </Section>
+
+          {/* Hell Card */}
+          <Section delay={0.3}>
+            <StoryCard
+              img={hellImg.src}
+              title="Naraka: The Infernal Depths"
+              subtitle="HELL"
+              desc="Descend into volcanic wastelands, crumbling fortresses, and rivers of fire. Face the guardians of the underworld in a harrowing VR experience that tests your courage at every turn."
+              accent="rgba(230,80,60,"
+              glowColor="rgba(230,80,60,0.12)"
+              isMobile={isMobile}
+              link="/story/hell"
+            />
+          </Section>
+        </div>
+      </section>
+
       {/* ===== 2. CORE EXPERIENCE ZONES ===== */}
       <section
         className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
@@ -1244,118 +1360,6 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </div>
       </section>
 
-      {/* ===== 4.25 OUR STORIES ===== */}
-      <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "auto" }}
-      >
-        <ParallaxLayer speed={-0.1}>
-          <Section>
-            <div className="text-center mb-10 md:mb-14">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div
-                  style={{
-                    width: "40px",
-                    height: "1px",
-                    background:
-                      "linear-gradient(to right, transparent, rgba(200,180,100,0.4))",
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "'Orbitron', sans-serif",
-                    fontSize: "10px",
-                    letterSpacing: "0.4em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
-                  }}
-                >
-                  NARRATIVE WORLDS
-                </span>
-                <div
-                  style={{
-                    width: "40px",
-                    height: "1px",
-                    background:
-                      "linear-gradient(to left, transparent, rgba(230,80,60,0.4))",
-                  }}
-                />
-              </div>
-              <h2
-                className="mt-2"
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "22px" : "32px",
-                  fontWeight: 700,
-                  color: isDark ? "#ffffff" : "#1a0a2e",
-                  lineHeight: 1.3,
-                }}
-              >
-                Our{" "}
-                <span
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    color: "transparent",
-                  }}
-                >
-                  Stories
-                </span>
-              </h2>
-              <p
-                className="mt-3"
-                style={{
-                  fontFamily: "'Exo 2', sans-serif",
-                  fontSize: isMobile ? "12px" : "14px",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
-                  maxWidth: "520px",
-                  margin: "12px auto 0",
-                  lineHeight: 1.7,
-                }}
-              >
-                Step beyond the veil of reality into mythological realms
-                brought to life through immersive VR storytelling.
-              </p>
-            </div>
-          </Section>
-        </ParallaxLayer>
-
-        <div
-          className={`flex ${isMobile ? "flex-col" : ""} gap-6 md:gap-8 w-full max-w-[960px] justify-center items-stretch`}
-          style={{ pointerEvents: "auto", perspective: "1000px" }}
-        >
-          {/* Heaven Card */}
-          <Section delay={0.15}>
-            <StoryCard
-              img={heavenImg.src}
-              title="Swarga: The Celestial Realm"
-              subtitle="HEAVEN"
-              desc="Ascend through golden temples, lotus gardens, and luminous skies. Walk among celestial beings in a world of eternal beauty, serenity, and divine wonder — an immersive journey into the heavens."
-              accent="rgba(200,180,100,"
-              glowColor="rgba(220,200,100,0.12)"
-              isMobile={isMobile}
-              link="/story/heaven"
-            />
-          </Section>
-
-          {/* Hell Card */}
-          <Section delay={0.3}>
-            <StoryCard
-              img={hellImg.src}
-              title="Naraka: The Infernal Depths"
-              subtitle="HELL"
-              desc="Descend into volcanic wastelands, crumbling fortresses, and rivers of fire. Face the guardians of the underworld in a harrowing VR experience that tests your courage at every turn."
-              accent="rgba(230,80,60,"
-              glowColor="rgba(230,80,60,0.12)"
-              isMobile={isMobile}
-              link="/story/hell"
-            />
-          </Section>
-        </div>
-      </section>
-
       {/* ===== 4.5 VR & XR BRANDS ===== */}
       <section
         className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
@@ -1440,25 +1444,26 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-4"} gap-4 md:gap-5 w-full max-w-[900px]`}
             style={{ pointerEvents: "auto" }}
           >
-            {[
-              { name: "Meta Quest", tag: "MR / VR", accent: "rgba(120,180,255," },
-              { name: "Apple Vision Pro", tag: "Spatial Computing", accent: "rgba(200,130,255," },
-              { name: "PlayStation VR2", tag: "Console VR", accent: "rgba(230,80,160," },
-              { name: "Valve Index", tag: "PC VR", accent: "rgba(120,180,255," },
-              { name: "HTC Vive", tag: "Enterprise XR", accent: "rgba(200,130,255," },
-              { name: "Pico", tag: "Standalone VR", accent: "rgba(230,80,160," },
-              { name: "Unity", tag: "Engine", accent: "rgba(120,180,255," },
-              { name: "Unreal Engine", tag: "Engine", accent: "rgba(200,130,255," },
-              { name: "Magic Leap", tag: "AR / MR", accent: "rgba(230,80,160," },
-              { name: "Varjo", tag: "Enterprise XR", accent: "rgba(120,180,255," },
-              { name: "OpenXR", tag: "Standard", accent: "rgba(200,130,255," },
-              { name: "WebXR", tag: "Web Platform", accent: "rgba(230,80,160," },
-            ].map((brand, i) => (
+            {([
+              { name: "Meta Quest", tag: "MR / VR", accent: "rgba(120,180,255,", logo: "meta" },
+              { name: "Apple Vision Pro", tag: "Spatial Computing", accent: "rgba(200,130,255,", logo: "apple" },
+              { name: "PlayStation VR2", tag: "Console VR", accent: "rgba(230,80,160,", logo: "playstation" },
+              { name: "Valve Index", tag: "PC VR", accent: "rgba(120,180,255,", logo: "valve" },
+              { name: "HTC Vive", tag: "Enterprise XR", accent: "rgba(200,130,255,", logo: "htc" },
+              { name: "Pico", tag: "Standalone VR", accent: "rgba(230,80,160,", logo: "pico" },
+              { name: "Unity", tag: "Engine", accent: "rgba(120,180,255,", logo: "unity" },
+              { name: "Unreal Engine", tag: "Engine", accent: "rgba(200,130,255,", logo: "unreal" },
+              { name: "Magic Leap", tag: "AR / MR", accent: "rgba(230,80,160,", logo: "magicleap" },
+              { name: "Varjo", tag: "Enterprise XR", accent: "rgba(120,180,255,", logo: "varjo" },
+              { name: "OpenXR", tag: "Standard", accent: "rgba(200,130,255,", logo: "openxr" },
+              { name: "WebXR", tag: "Web Platform", accent: "rgba(230,80,160,", logo: "webxr" },
+            ] as const).map((brand, i) => (
               <Section key={brand.name} delay={0.05 + i * 0.04}>
                 <BrandCard
                   name={brand.name}
                   tag={brand.tag}
                   accent={brand.accent}
+                  logo={brand.logo}
                 />
               </Section>
             ))}
@@ -2026,13 +2031,16 @@ function BrandCard({
   name,
   tag,
   accent,
+  logo,
 }: {
   name: string;
   tag: string;
   accent: string;
+  logo?: PlatformLogoKey;
 }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const logoColor = isDark ? `${accent}0.92)` : `${accent}0.85)`;
   return (
     <div
       className="group cursor-default flex flex-col items-center justify-center text-center p-5 md:p-6 rounded-2xl transition-all duration-300"
@@ -2055,6 +2063,26 @@ function BrandCard({
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
+      {logo ? (
+        <div className="flex items-center justify-center mb-3">
+          <div
+            aria-hidden="true"
+            className="flex items-center justify-center"
+            style={{
+              width: "34px",
+              height: "34px",
+              borderRadius: "12px",
+              background: isDark ? `${accent}0.06)` : `${accent}0.08)`,
+              border: `1px solid ${accent}${isDark ? "0.14)" : "0.18)"}`,
+              boxShadow: isDark ? `0 0 18px ${accent}0.05)` : `0 0 18px ${accent}0.07)`,
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <PlatformLogo kind={logo} color={logoColor} size={20} />
+          </div>
+          <span className="sr-only">{name} logo</span>
+        </div>
+      ) : null}
       <span
         style={{
           fontFamily: "'Orbitron', sans-serif",
@@ -2080,6 +2108,288 @@ function BrandCard({
       </span>
     </div>
   );
+}
+
+type PlatformLogoKey =
+  | "meta"
+  | "apple"
+  | "playstation"
+  | "valve"
+  | "htc"
+  | "pico"
+  | "unity"
+  | "unreal"
+  | "magicleap"
+  | "varjo"
+  | "openxr"
+  | "webxr";
+
+function PlatformLogo({
+  kind,
+  color,
+  size = 20,
+}: {
+  kind: PlatformLogoKey;
+  color: string;
+  size?: number;
+}) {
+  const common = {
+    width: size,
+    height: size,
+    style: { display: "block" as const },
+  };
+
+  switch (kind) {
+    case "meta":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M3 12c1.6-5.6 6.2-5.6 9 0s7.4 5.6 9 0"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M21 12c-1.6-5.6-6.2-5.6-9 0S4.6 17.6 3 12"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.75"
+          />
+        </svg>
+      );
+
+    case "apple":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15.3 6.3c.9-1 1.6-2.4 1.4-3.8-1.3.1-2.8.9-3.7 1.9-.8.9-1.6 2.3-1.4 3.7 1.4.1 2.8-.7 3.7-1.8Z"
+            fill={color}
+            opacity="0.95"
+          />
+          <path
+            d="M12.2 8.2c1.9 0 2.7-1 4.3-1 1.5 0 2.8.9 3.6 2.1-1.7 1-2.4 2.8-2.1 4.6.3 2 1.9 3.6 3 4.2-.7 1.7-1.6 3.3-2.8 3.3-1.2 0-1.6-.8-3.1-.8s-2 .8-3.1.8c-1.2 0-2.5-1.7-3.4-3.4-1.8-3.4-2-7.8.9-10 .9-.7 2.1-1.1 3.2-1.1Z"
+            fill={color}
+            opacity="0.85"
+          />
+        </svg>
+      );
+
+    case "playstation":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M11 4.5v14"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M11 6.2c4.2.6 6.8 2.1 6.8 4.1 0 1.4-1.3 2.4-3.6 2.8"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M10 18.4c-3.8.1-6.5-1-6.5-2.7 0-1.3 1.6-2.4 4.2-2.9l6.9-1.4c2.5-.5 5 .1 6.2 1.4"
+            stroke={color}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.9"
+          />
+        </svg>
+      );
+
+    case "valve":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <circle cx="9" cy="14.5" r="3.2" stroke={color} strokeWidth="2" />
+          <circle cx="18.2" cy="7.2" r="2.2" fill={color} opacity="0.95" />
+          <path
+            d="M11.8 12.9 16.6 9.6"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M6.3 17.3h6.2"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            opacity="0.7"
+          />
+        </svg>
+      );
+
+    case "htc":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <text
+            x="12"
+            y="15.8"
+            textAnchor="middle"
+            fontSize="9.5"
+            fontFamily="'Orbitron', sans-serif"
+            fontWeight="800"
+            fill={color}
+            letterSpacing="1.2"
+          >
+            HTC
+          </text>
+        </svg>
+      );
+
+    case "pico":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <text
+            x="12"
+            y="15.8"
+            textAnchor="middle"
+            fontSize="10"
+            fontFamily="'Orbitron', sans-serif"
+            fontWeight="800"
+            fill={color}
+            letterSpacing="1.1"
+          >
+            PICO
+          </text>
+        </svg>
+      );
+
+    case "unity":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 3.8 19 7.9v8.2l-7 4.1-7-4.1V7.9l7-4.1Z"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M12 3.8v8.1l7 4.2M12 11.9 5 16.1"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinejoin="round"
+            opacity="0.7"
+          />
+        </svg>
+      );
+
+    case "unreal":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="2" opacity="0.9" />
+          <path
+            d="M9 8.5v6.2c0 1.8 1.4 3 3 3s3-1.2 3-3V8.5"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+
+    case "magicleap":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M6.5 17V7.8l5.5 6.2 5.5-6.2V17"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="12" cy="18.5" r="1.1" fill={color} opacity="0.9" />
+        </svg>
+      );
+
+    case "varjo":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5.5 7.2 12 18.2l6.5-11"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M8.2 7.2 12 13.8l3.8-6.6"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.65"
+          />
+        </svg>
+      );
+
+    case "openxr":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <rect
+            x="4.5"
+            y="6.5"
+            width="15"
+            height="11"
+            rx="3"
+            stroke={color}
+            strokeWidth="2"
+            opacity="0.9"
+          />
+          <text
+            x="12"
+            y="14.8"
+            textAnchor="middle"
+            fontSize="8.4"
+            fontFamily="'Orbitron', sans-serif"
+            fontWeight="800"
+            fill={color}
+            letterSpacing="1.2"
+          >
+            XR
+          </text>
+        </svg>
+      );
+
+    case "webxr":
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <circle cx="8" cy="12" r="4.2" stroke={color} strokeWidth="2" opacity="0.9" />
+          <path
+            d="M3.8 12h8.4M8 7.8c1.4 1.2 2.2 2.6 2.2 4.2S9.4 15 8 16.2"
+            stroke={color}
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            opacity="0.7"
+          />
+          <text
+            x="17.2"
+            y="14.8"
+            textAnchor="middle"
+            fontSize="8.2"
+            fontFamily="'Orbitron', sans-serif"
+            fontWeight="800"
+            fill={color}
+            letterSpacing="1"
+          >
+            XR
+          </text>
+        </svg>
+      );
+
+    default:
+      return (
+        <svg {...common} viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="2" />
+        </svg>
+      );
+  }
 }
 
 function StoryCard({

@@ -33,7 +33,8 @@ export default function Home() {
       style={{
         background: isDark
           ? "linear-gradient(180deg, #060810 0%, #080c18 20%, #0a0e1a 40%, #070b14 60%, #080c18 80%, #050810 100%)"
-          : "transparent",
+          : "linear-gradient(180deg, #faf8ff 0%, #f3eeff 20%, #ffffff 40%, #f8f4ff 60%, #f3eeff 80%, #faf8ff 100%)",
+        color: isDark ? undefined : "#1a0a2e",
         overflowX: "hidden",
       }}
     >
