@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, use } from "react";
-import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef, useState, useCallback, use, useMemo } from "react";
+import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FloatingNav } from "@/components/HUDOverlay";
@@ -144,6 +144,10 @@ function StoryCanvas({
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
     camera.position.set(0, 0, 30);
 
+    // Raycaster for interactive hover
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
     // Ambient light
     const ambient = new THREE.AmbientLight(ambientColor, 0.3);
     scene.add(ambient);
@@ -276,6 +280,9 @@ function StoryCanvas({
         floatPhase: Math.random() * Math.PI * 2,
         floatAmp: Math.random() * 0.02 + 0.005,
         baseY: mesh.position.y,
+        isHovered: false,
+        targetScale: 1,
+        initialScale: 1,
       };
       scene.add(mesh);
       shapes.push(mesh);
@@ -347,10 +354,15 @@ function StoryCanvas({
     ring2.rotation.z = Math.PI * 0.2;
     scene.add(ring2);
 
-    // Mouse handler
+    // Mouse handler for parallax and raycasting
     const onMouseMove = (e: MouseEvent) => {
+      // Parallax values
       mouseRef.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
       mouseRef.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      // Raycaster values
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
     window.addEventListener("mousemove", onMouseMove, { passive: true });
 
@@ -398,10 +410,43 @@ function StoryCanvas({
       particleGeometry.attributes.position.needsUpdate = true;
       particleMaterial.uniforms.uTime.value = time;
 
-      // Shapes
+      // Interactive raycasting for background shapes
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(shapes);
+
       shapes.forEach((s) => {
-        s.rotation.x += s.userData.rotSpeed.x;
-        s.rotation.y += s.userData.rotSpeed.y;
+        s.userData.isHovered = false;
+        s.userData.targetScale = 1;
+      });
+
+      if (intersects.length > 0) {
+        // Expand the closest intersected shape
+        const target = intersects[0].object as THREE.Mesh;
+        target.userData.isHovered = true;
+        target.userData.targetScale = 1.6; // Scale up on hover
+      }
+
+      // Shapes animation
+      shapes.forEach((s) => {
+        const mat = s.material as THREE.MeshPhongMaterial;
+
+        // Handle spring-like scale transitions
+        const currentScale = s.scale.x;
+        s.scale.setScalar(currentScale + (s.userData.targetScale - currentScale) * 0.1);
+
+        // Fast spin & opacity jump when hovered
+        if (s.userData.isHovered) {
+          s.rotation.x += s.userData.rotSpeed.x * 5;
+          s.rotation.y += s.userData.rotSpeed.y * 5;
+          mat.opacity = Math.min(0.5, mat.opacity + 0.1);
+          mat.wireframeLinewidth = 3;
+        } else {
+          s.rotation.x += s.userData.rotSpeed.x;
+          s.rotation.y += s.userData.rotSpeed.y;
+          mat.opacity = Math.max(0.12, mat.opacity - 0.02);
+          mat.wireframeLinewidth = 1;
+        }
+
         s.position.y = s.userData.baseY + Math.sin(time + s.userData.floatPhase) * s.userData.floatAmp * 30;
       });
 
@@ -453,7 +498,7 @@ function StoryCanvas({
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full"
-      style={{ zIndex: 0, pointerEvents: "none" }}
+      style={{ zIndex: 99, pointerEvents: "auto", mixBlendMode: theme === "heaven" ? "screen" : "lighten" }}
     />
   );
 }
@@ -687,6 +732,297 @@ function ChapterCard({
   );
 }
 
+// ==================== FLOATING RUNES ====================
+function FloatingRunes({ story, color1, color2 }: { story: "heaven" | "hell"; color1: string; color2: string }) {
+  const heavenRunes = ["✦", "∞", "☀", "◈", "❋", "⊕", "⟡", "✧", "⊹", "⌘"];
+  const hellRunes = ["⊗", "✕", "◉", "⚡", "⟁", "⌖", "✦", "◬", "⊘", "⋆"];
+  const runes = story === "heaven" ? heavenRunes : hellRunes;
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  const runeData = useMemo(() => runes.map((rune, i) => ({
+    rune,
+    x: 5 + (i % 5) * 22 + Math.floor(i / 5) * 10,
+    y: 8 + Math.floor(i / 5) * 60 + (i % 3) * 12,
+    scale: 0.7 + (i % 3) * 0.25,
+    duration: 3 + (i % 4) * 1.5,
+    delay: (i % 5) * 0.4,
+    driftX: (i % 2 === 0 ? 1 : -1) * (10 + (i % 3) * 8),
+    driftY: story === "heaven" ? -(15 + (i % 4) * 10) : (15 + (i % 4) * 10),
+    rotEnd: (i % 2 === 0 ? 1 : -1) * 180,
+  })), []);  // eslint-disable-line
+
+  if (!mounted) return null;
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 3 }}>
+      {runeData.map((r, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: `${r.x}vw`, y: `${r.y}vh`, scale: 0, rotate: 0 }}
+          animate={{
+            opacity: [0, 0.35, 0.2, 0.4, 0],
+            x: [`${r.x}vw`, `${r.x + r.driftX * 0.3}vw`, `${r.x + r.driftX * 0.7}vw`, `${r.x + r.driftX}vw`],
+            y: [`${r.y}vh`, `${r.y + r.driftY * 0.5}vh`, `${r.y + r.driftY}vh`],
+            scale: [0, r.scale, r.scale * 1.1, r.scale * 0.9, 0],
+            rotate: [0, r.rotEnd],
+          }}
+          transition={{
+            duration: r.duration,
+            delay: r.delay,
+            repeat: Infinity,
+            repeatDelay: 1 + (i % 3),
+            ease: "easeInOut",
+          }}
+          style={{
+            position: "absolute",
+            fontFamily: "'Orbitron', sans-serif",
+            fontSize: "18px",
+            color: i % 2 === 0 ? `${color1}0.7)` : `${color2}0.6)`,
+            textShadow: `0 0 12px ${color1}0.5)`,
+            userSelect: "none",
+          }}
+        >
+          {r.rune}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// ==================== ENERGY PULSE RINGS ====================
+function PulseRings({ color1, color2 }: { color1: string; color2: string }) {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 2 }}>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          initial={{ scale: 0.2, opacity: 0.6 }}
+          animate={{ scale: [0.2, 3.5 + i * 0.5], opacity: [0.5, 0] }}
+          transition={{
+            duration: 3.5 + i * 0.4,
+            delay: i * 0.9,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+          style={{
+            width: "200px",
+            height: "200px",
+            border: `1px solid ${i % 2 === 0 ? color1 : color2}0.35)`,
+            boxShadow: `0 0 8px ${color1}0.15)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ==================== GOD RAYS (HEAVEN) ====================
+function GodRays({ color1 }: { color1: string }) {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
+      {[...Array(8)].map((_, i) => {
+        const angle = -60 + i * 18;
+        return (
+          <motion.div
+            key={i}
+            animate={{ opacity: [0.04, 0.14, 0.06, 0.12, 0.04] }}
+            transition={{ duration: 4 + i * 0.7, delay: i * 0.3, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              position: "absolute",
+              top: "-20%",
+              left: "50%",
+              width: "3px",
+              height: "160%",
+              background: `linear-gradient(to bottom, ${color1}0.9), ${color1}0.3), transparent)`,
+              transformOrigin: "top center",
+              transform: `translateX(-50%) rotate(${angle}deg)`,
+              filter: "blur(6px)",
+            }}
+          />
+        );
+      })}
+      {/* Central golden bloom */}
+      <motion.div
+        animate={{ opacity: [0.08, 0.22, 0.08], scale: [0.8, 1.2, 0.8] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: "-10%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "600px",
+          height: "600px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${color1}0.35) 0%, transparent 70%)`,
+          filter: "blur(40px)",
+        }}
+      />
+    </div>
+  );
+}
+
+// ==================== RISING EMBERS (HELL) ====================
+function RisingEmbers({ color1, color2 }: { color1: string; color2: string }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  const embers = useMemo(() => [...Array(30)].map((_, i) => ({
+    x: 5 + (i * 3.2) % 90,
+    size: 2 + (i % 4),
+    duration: 4 + (i % 5) * 0.8,
+    delay: (i % 8) * 0.5,
+    drift: (i % 2 === 0 ? 1 : -1) * (20 + (i % 4) * 15),
+    color: i % 3 === 0 ? color1 : color2,
+  })), []);  // eslint-disable-line
+
+  if (!mounted) return null;
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
+      {/* Lava pool glow at bottom */}
+      <motion.div
+        animate={{ opacity: [0.15, 0.35, 0.15], scaleY: [1, 1.15, 1] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "200px",
+          background: `linear-gradient(to top, ${color1}0.5), ${color2}0.2), transparent)`,
+          filter: "blur(30px)",
+        }}
+      />
+      {/* Embers */}
+      {embers.map((e, i) => (
+        <motion.div
+          key={i}
+          initial={{ x: `${e.x}vw`, y: "100vh", opacity: 0, scale: 0 }}
+          animate={{
+            y: [null, "60vh", "20vh", "-10vh"],
+            x: [`${e.x}vw`, `${e.x + e.drift * 0.3}vw`, `${e.x + e.drift}vw`],
+            opacity: [0, 0.9, 0.7, 0],
+            scale: [0, 1, 0.8, 0],
+          }}
+          transition={{
+            duration: e.duration,
+            delay: e.delay,
+            repeat: Infinity,
+            repeatDelay: 1 + (i % 4) * 0.5,
+            ease: "easeOut",
+          }}
+          style={{
+            position: "absolute",
+            width: `${e.size}px`,
+            height: `${e.size}px`,
+            borderRadius: "50%",
+            background: `${e.color}1)`,
+            boxShadow: `0 0 ${e.size * 3}px ${e.color}0.8)`,
+          }}
+        />
+      ))}
+      {/* Heat shimmer bands */}
+      {[...Array(4)].map((_, i) => (
+        <motion.div
+          key={`band-${i}`}
+          animate={{ opacity: [0.04, 0.12, 0.04], y: [`${60 + i * 10}%`, `${50 + i * 10}%`, `${60 + i * 10}%`] }}
+          transition={{ duration: 2.5 + i * 0.5, delay: i * 0.4, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            height: "80px",
+            background: `linear-gradient(to top, transparent, ${color1}0.2), transparent)`,
+            filter: "blur(12px)",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ==================== HERO MOUSE GLOW ====================
+function HeroMouseGlow({ color1, color2 }: { color1: string; color2: string }) {
+  const x = useMotionValue(0.5);
+  const y = useMotionValue(0.5);
+  const smoothX = useSpring(x, { stiffness: 80, damping: 20 });
+  const smoothY = useSpring(y, { stiffness: 80, damping: 20 });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      x.set(e.clientX / window.innerWidth);
+      y.set(e.clientY / window.innerHeight);
+    };
+    window.addEventListener("mousemove", handler, { passive: true });
+    return () => window.removeEventListener("mousemove", handler);
+  }, [x, y]);
+
+  const glowX = useTransform(smoothX, [0, 1], ["0%", "100%"]);
+  const glowY = useTransform(smoothY, [0, 1], ["0%", "100%"]);
+
+  return (
+    <motion.div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        zIndex: 2,
+        background: `radial-gradient(600px circle at ${glowX} ${glowY}, ${color1}0.08), transparent 70%)`,
+      }}
+    />
+  );
+}
+
+// ==================== HERO TITLE HALO ====================
+function TitleHalo({ story, color1, color2 }: { story: "heaven" | "hell"; color1: string; color2: string }) {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 1 }}>
+      {/* Main halo */}
+      <motion.div
+        animate={{
+          scale: [1, 1.08, 1],
+          opacity: story === "heaven" ? [0.15, 0.3, 0.15] : [0.1, 0.25, 0.1],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          width: "320px",
+          height: "320px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${color1}0.3) 0%, ${color2}0.1) 50%, transparent 70%)`,
+          filter: "blur(30px)",
+        }}
+      />
+      {/* Rotating arc */}
+      <motion.div
+        animate={{ rotate: story === "heaven" ? 360 : -360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute"
+        style={{
+          width: "380px",
+          height: "380px",
+          borderRadius: "50%",
+          border: `1px solid ${color1}0.15)`,
+          borderTopColor: `${color1}0.5)`,
+          borderRightColor: `${color2}0.3)`,
+        }}
+      />
+      {/* Outer ring pulse */}
+      <motion.div
+        animate={{ rotate: story === "heaven" ? -360 : 360, scale: [1, 1.04, 1] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="absolute"
+        style={{
+          width: "500px",
+          height: "500px",
+          borderRadius: "50%",
+          border: `1px dashed ${color1}0.08)`,
+        }}
+      />
+    </div>
+  );
+}
+
 // ==================== HOOKS ====================
 function useIsMobile() {
   const [mobile, setMobile] = useState(false);
@@ -787,11 +1123,8 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
         >
           <motion.div
             className="w-full h-full relative"
-            whileHover={{
-              scale: 1.05,
-              rotate: story === "heaven" ? 1 : -1,
-            }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
+            whileHover={{ scale: 1.04, rotate: story === "heaven" ? 0.5 : -0.5 }}
+            transition={{ duration: 2, ease: "easeOut" }}
           >
             <Image
               src={data.heroImg}
@@ -804,149 +1137,242 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               }}
               priority
             />
-
             {/* Hover thematic glowing overlay */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-overlay pointer-events-none"
-              style={{
-                background: `radial-gradient(circle at center, ${data.color1}0.4) 0%, transparent 70%)`
-              }}
+              style={{ background: `radial-gradient(circle at center, ${data.color1}0.4) 0%, transparent 70%)` }}
             />
           </motion.div>
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: isDark
-                ? `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 60%, ${story === "heaven" ? "rgba(10,12,8,1)" : "rgba(12,6,4,1)"
-                } 100%)`
-                : `linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.7) 60%, ${story === "heaven" ? "rgba(240,240,230,1)" : "rgba(240,230,230,1)"
-                } 100%)`,
+                ? `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 60%, ${story === "heaven" ? "rgba(10,12,8,1)" : "rgba(12,6,4,1)"} 100%)`
+                : `linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.7) 60%, ${story === "heaven" ? "rgba(240,240,230,1)" : "rgba(240,230,230,1)"} 100%)`,
             }}
           />
         </motion.div>
 
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 flex flex-col items-center text-center px-5">
+        {/* ─── Story atmospheric effects ─── */}
+        {story === "heaven" && <GodRays color1={data.color1} />}
+        {story === "hell" && <RisingEmbers color1={data.color1} color2={data.color2} />}
+
+        {/* ─── Mouse-tracking glow ─── */}
+        <HeroMouseGlow color1={data.color1} color2={data.color2} />
+
+        {/* ─── Floating runes ─── */}
+        {!isMobile && <FloatingRunes story={story} color1={data.color1} color2={data.color2} />}
+
+        {/* ─── Pulse rings ─── */}
+        <PulseRings color1={data.color1} color2={data.color2} />
+
+        {/* ─── Title halo ─── */}
+        <TitleHalo story={story} color1={data.color1} color2={data.color2} />
+
+        <motion.div style={{ opacity: heroOpacity, zIndex: 10 }} className="relative flex flex-col items-center text-center px-5">
+          {/* Tagline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="flex items-center gap-3 mb-5"
           >
-            <div style={{ width: "40px", height: "1px", background: `linear-gradient(to right, transparent, ${data.color1}0.5))` }} />
-            <span
+            <motion.div
+              animate={{ width: ["20px", "40px", "20px"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              style={{ height: "1px", background: `linear-gradient(to right, transparent, ${data.color1}0.5))` }}
+            />
+            <motion.span
+              initial={{ letterSpacing: "0.1em", opacity: 0 }}
+              animate={{ letterSpacing: "0.4em", opacity: 1 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
               style={{
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
-                letterSpacing: "0.4em",
-                color: `${data.color1}0.6)`,
+                color: `${data.color1}0.8)`,
+                textShadow: `0 0 20px ${data.color1}0.4)`,
               }}
             >
               {data.tagline}
-            </span>
-            <div style={{ width: "40px", height: "1px", background: `linear-gradient(to left, transparent, ${data.color2}0.5))` }} />
+            </motion.span>
+            <motion.div
+              animate={{ width: ["20px", "40px", "20px"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              style={{ height: "1px", background: `linear-gradient(to left, transparent, ${data.color2}0.5))` }}
+            />
           </motion.div>
 
+          {/* Main Title */}
           <motion.h1
-            initial={{ opacity: 0, scale: 0.85, y: 30 }}
+            initial={{ opacity: 0, scale: 0.75, y: 40 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
             style={{
               fontFamily: "'Orbitron', sans-serif",
-              fontSize: isMobile ? "clamp(36px, 12vw, 52px)" : "clamp(52px, 7vw, 80px)",
-              fontWeight: 800,
-              lineHeight: 1.1,
+              fontSize: isMobile ? "clamp(40px, 14vw, 60px)" : "clamp(60px, 9vw, 100px)",
+              fontWeight: 900,
+              lineHeight: 1.0,
+              letterSpacing: "0.05em",
               color: isDark ? "#ffffff" : "#1a0a2e",
-              textShadow: isDark ? `0 0 60px ${data.color1}0.3)` : `0 0 40px ${data.color1}0.2)`,
+              textShadow: isDark
+                ? `0 0 80px ${data.color1}0.5), 0 0 160px ${data.color1}0.2), 0 4px 30px rgba(0,0,0,0.6)`
+                : `0 0 40px ${data.color1}0.25), 0 4px 20px rgba(0,0,0,0.15)`,
             }}
           >
             {data.title}
           </motion.h1>
 
+          {/* Animated gradient underline */}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              height: "2px",
+              width: "200px",
+              background: data.gradient,
+              borderRadius: "2px",
+              marginTop: "8px",
+              boxShadow: `0 0 12px ${data.color1}0.6)`,
+            }}
+          />
+
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.0 }}
+            transition={{ duration: 1, delay: 1.1 }}
             style={{
               fontFamily: "'Orbitron', sans-serif",
-              fontSize: isMobile ? "14px" : "18px",
-              color: `${data.color1}0.7)`,
-              marginTop: "12px",
-              letterSpacing: "0.15em",
+              fontSize: isMobile ? "13px" : "16px",
+              color: `${data.color1}0.9)`,
+              marginTop: "14px",
+              letterSpacing: "0.2em",
+              textShadow: `0 0 20px ${data.color1}0.4)`,
             }}
           >
-            {data.subtitle}
+            — {data.subtitle} —
           </motion.p>
 
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.4 }}
+            transition={{ duration: 1, delay: 1.5 }}
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: isMobile ? "13px" : "15px",
-              lineHeight: 1.8,
-              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.65)",
-              maxWidth: "480px",
-              marginTop: "20px",
+              lineHeight: 1.9,
+              color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
+              maxWidth: "500px",
+              marginTop: "22px",
             }}
           >
             {data.description}
           </motion.p>
 
+          {/* CTA buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.8 }}
-            className="mt-10 flex gap-4"
+            transition={{ duration: 1, delay: 1.9 }}
+            className="mt-10 flex gap-4 flex-wrap justify-center"
           >
-            <button
-              className="cursor-pointer transition-all duration-300"
+            <motion.button
+              whileHover={{ scale: 1.06, boxShadow: `0 0 50px ${data.color1}0.5)` }}
+              whileTap={{ scale: 0.97 }}
               style={{
                 fontFamily: "'Orbitron', sans-serif",
-                fontSize: "13px",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                padding: "14px 32px",
+                fontSize: "12px",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                padding: "15px 36px",
                 color: "#ffffff",
                 background: data.gradient,
                 border: "none",
                 borderRadius: "50px",
-                boxShadow: `0 0 30px ${data.color1}0.2)`,
+                boxShadow: `0 0 30px ${data.color1}0.3), 0 4px 20px rgba(0,0,0,0.3)`,
+                cursor: "pointer",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
-              Begin Journey
-            </button>
-            <button
+              {/* Shimmer sweep */}
+              <motion.span
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%)",
+                  borderRadius: "50px",
+                }}
+              />
+              {story === "heaven" ? "✦ Begin Ascent" : "⚡ Begin Descent"}
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.04, borderColor: `${data.color1}0.4)` }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => router.push("/")}
-              className="cursor-pointer transition-all duration-300"
               style={{
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "13px",
-                padding: "14px 24px",
-                color: "rgba(255,255,255,0.6)",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                padding: "15px 28px",
+                color: isDark ? "rgba(255,255,255,0.65)" : "rgba(60,40,100,0.7)",
+                background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+                border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.12)",
                 borderRadius: "50px",
+                cursor: "pointer",
               }}
             >
-              Back to Home
-            </button>
+              ← Back to Home
+            </motion.button>
+          </motion.div>
+
+          {/* Story-specific accent icons row */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 1 }}
+            className="flex items-center gap-4 mt-8"
+          >
+            {data.features.map((f, i) => (
+              <motion.div
+                key={i}
+                animate={{
+                  y: [0, story === "heaven" ? -4 : 4, 0],
+                  opacity: [0.5, 0.9, 0.5],
+                }}
+                transition={{ duration: 2 + i * 0.4, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
+                style={{
+                  fontSize: "20px",
+                  filter: `drop-shadow(0 0 6px ${data.color1}0.6))`,
+                }}
+              >
+                {f.icon}
+              </motion.div>
+            ))}
           </motion.div>
 
           {/* Scroll indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.5, duration: 1 }}
+            transition={{ delay: 2.8, duration: 1 }}
             className="absolute bottom-8 flex flex-col items-center gap-2"
           >
-            <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.2)" }}>
-              SCROLL TO EXPLORE
-            </span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
+            <motion.span
+              animate={{ opacity: [0.3, 0.7, 0.3] }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ width: "1px", height: "24px", background: `linear-gradient(to bottom, ${data.color1}0.4), transparent)` }}
+              style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: `${data.color1}0.4)` }}
+            >
+              SCROLL TO EXPLORE
+            </motion.span>
+            <motion.div
+              animate={{ y: [0, 10, 0], opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.8, repeat: Infinity }}
+              style={{ width: "1px", height: "28px", background: `linear-gradient(to bottom, ${data.color1}0.6), transparent)` }}
             />
           </motion.div>
         </motion.div>
@@ -1070,17 +1496,31 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
           ))}
         </div>
 
-        {/* Connecting line between chapters */}
+        {/* Animated connecting line between chapters */}
         <div
           className="absolute left-1/2 -translate-x-1/2 hidden md:block"
           style={{
             top: "200px",
             bottom: "100px",
             width: "1px",
-            background: `linear-gradient(to bottom, transparent, ${data.color1}${isDark ? '0.1)' : '0.4)'}, ${data.color1}${isDark ? '0.1)' : '0.4)'}, transparent)`,
+            background: `linear-gradient(to bottom, transparent, ${data.color1}${isDark ? "0.15)" : "0.4)"}, ${data.color1}${isDark ? "0.15)" : "0.4)"}, transparent)`,
             zIndex: 0,
           }}
-        />
+        >
+          {/* Traveling dot on line */}
+          <motion.div
+            animate={{ y: ["0%", "100%", "0%"] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              background: data.hex1,
+              boxShadow: `0 0 12px ${data.color1}0.8)`,
+              marginLeft: "-2.5px",
+            }}
+          />
+        </div>
       </section>
 
       {/* ====== IMMERSION STATS ====== */}
@@ -1132,9 +1572,50 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
 
       {/* ====== FINAL CTA ====== */}
       <section
-        className="relative flex flex-col items-center justify-center py-20 md:py-32 px-5"
+        className="relative flex flex-col items-center justify-center py-20 md:py-32 px-5 overflow-hidden"
         style={{ zIndex: 2, minHeight: "60vh" }}
       >
+        {/* Background ambient glow */}
+        <motion.div
+          animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.9, 1.1, 0.9] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 pointer-events-none flex items-center justify-center"
+        >
+          <div style={{
+            width: "600px",
+            height: "400px",
+            borderRadius: "50%",
+            background: `radial-gradient(ellipse, ${data.color1}0.4) 0%, ${data.color2}0.15) 50%, transparent 75%)`,
+            filter: "blur(60px)",
+          }} />
+        </motion.div>
+
+        {/* Story-specific bottom atmosphere */}
+        {story === "heaven" && (
+          <motion.div
+            animate={{ opacity: [0.1, 0.25, 0.1] }}
+            transition={{ duration: 5, repeat: Infinity }}
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "300px",
+              background: `linear-gradient(to top, ${data.color1}0.15), transparent)`,
+              filter: "blur(20px)",
+            }}
+          />
+        )}
+        {story === "hell" && (
+          <motion.div
+            animate={{ opacity: [0.12, 0.3, 0.12] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "250px",
+              background: `linear-gradient(to top, ${data.color1}0.25), ${data.color2}0.1), transparent)`,
+              filter: "blur(15px)",
+            }}
+          />
+        )}
+
         <Section>
           <div className="text-center" style={{ pointerEvents: "auto" }}>
             <h2

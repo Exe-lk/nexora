@@ -480,9 +480,10 @@ export function FloatingNav() {
           style={{
             zIndex: 199,
             backdropFilter: "blur(24px)",
-            background:
-              "linear-gradient(135deg, rgba(8,8,16,0.92), rgba(6,6,14,0.88))",
-            border: "1px solid rgba(255,255,255,0.08)",
+            background: isDark
+              ? "linear-gradient(135deg, rgba(8,8,16,0.92), rgba(6,6,14,0.88))"
+              : "linear-gradient(135deg, rgba(255,255,255,0.96), rgba(250,248,255,0.92))",
+            border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.12)",
           }}
         >
           {/* Worlds with expandable sub-items */}
@@ -534,8 +535,8 @@ export function FloatingNav() {
                       <Image src={heavenImg} alt="Swarga" fill style={{ objectFit: "cover", opacity: 0.8 }} />
                     </div>
                     <div>
-                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: "#fff" }}>Swarga</div>
-                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(220,200,100,0.5)" }}>Heaven</div>
+                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e" }}>Swarga</div>
+                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(220,200,100,0.7)" }}>Heaven</div>
                     </div>
                   </button>
                   <button
@@ -547,8 +548,8 @@ export function FloatingNav() {
                       <Image src={hellImg} alt="Naraka" fill style={{ objectFit: "cover", opacity: 0.8 }} />
                     </div>
                     <div>
-                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: "#fff" }}>Naraka</div>
-                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(230,80,60,0.5)" }}>Hell</div>
+                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e" }}>Naraka</div>
+                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(230,80,60,0.7)" }}>Hell</div>
                     </div>
                   </button>
                 </div>
@@ -1265,7 +1266,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: "rgba(255,255,255,0.35)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                   }}
                 >
                   NARRATIVE WORLDS
@@ -1285,17 +1286,19 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: isMobile ? "22px" : "32px",
                   fontWeight: 700,
-                  color: "#ffffff",
+                  color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
                 }}
               >
                 Our{" "}
                 <span
                   style={{
-                    background:
+                    backgroundImage:
                       "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
                     WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
+                    color: "transparent",
                   }}
                 >
                   Stories
@@ -1306,7 +1309,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "12px" : "14px",
-                  color: "rgba(255,255,255,0.4)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
                   maxWidth: "520px",
                   margin: "12px auto 0",
                   lineHeight: 1.7,
@@ -1375,7 +1378,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: "rgba(255,255,255,0.35)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                   }}
                 >
                   ECOSYSTEM
@@ -1395,17 +1398,19 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: isMobile ? "22px" : "32px",
                   fontWeight: 700,
-                  color: "#ffffff",
+                  color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
                 }}
               >
                 Built for the{" "}
                 <span
                   style={{
-                    background:
+                    backgroundImage:
                       "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
                     WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
+                    color: "transparent",
                   }}
                 >
                   Leading Platforms
@@ -1416,7 +1421,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "12px" : "14px",
-                  color: "rgba(255,255,255,0.4)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
                   maxWidth: "520px",
                   margin: "12px auto 0",
                   lineHeight: 1.7,
@@ -2301,8 +2306,8 @@ function WorldCapsule({
           alt={title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           style={{
-            opacity: 0.55,
-            filter: "saturate(0.6) brightness(0.55)",
+            opacity: isDark ? 0.55 : 0.75,
+            filter: isDark ? "saturate(0.6) brightness(0.55)" : "saturate(0.8) brightness(0.9)",
           }}
         />
         <div
