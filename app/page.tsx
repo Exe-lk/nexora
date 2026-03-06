@@ -2,7 +2,6 @@
 
 import { FloatingNav, HUDContent } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 export default function Home() {

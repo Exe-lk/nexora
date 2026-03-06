@@ -51,10 +51,10 @@ function useIsMobile() {
 export function FloatingNav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [expOpen, setExpOpen] = useState(false);
-  const [mobileExpOpen, setMobileExpOpen] = useState(false);
-  const expRef = useRef<HTMLDivElement>(null);
-  const expTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [worldsOpen, setWorldsOpen] = useState(false);
+  const [mobileWorldsOpen, setMobileWorldsOpen] = useState(false);
+  const worldsRef = useRef<HTMLDivElement>(null);
+  const worldsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isMobile = useIsMobile();
   const router = useRouter();
   const pathname = usePathname();
@@ -68,27 +68,27 @@ export function FloatingNav() {
   // Close dropdown on click outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (expRef.current && !expRef.current.contains(e.target as Node)) {
-        setExpOpen(false);
+      if (worldsRef.current && !worldsRef.current.contains(e.target as Node)) {
+        setWorldsOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleExpEnter = () => {
-    clearTimeout(expTimeoutRef.current);
-    setExpOpen(true);
+  const handleWorldsEnter = () => {
+    clearTimeout(worldsTimeoutRef.current);
+    setWorldsOpen(true);
   };
-  const handleExpLeave = () => {
-    expTimeoutRef.current = setTimeout(() => setExpOpen(false), 200);
+  const handleWorldsLeave = () => {
+    worldsTimeoutRef.current = setTimeout(() => setWorldsOpen(false), 200);
   };
 
   const handleNavHome = () => {
     if (pathname !== "/") router.push("/");
   };
 
-  const navItems = ["Worlds", "Pricing", "Vision", "Contact"];
+  const navItems = ["Pricing", "Vision", "About", "Contact"];
 
   return (
     <>
@@ -130,20 +130,20 @@ export function FloatingNav() {
         {/* Desktop nav items */}
         {!isMobile && (
           <>
-            {/* Experiences dropdown trigger */}
+            {/* Worlds dropdown trigger */}
             <div
-              ref={expRef}
+              ref={worldsRef}
               className="relative"
-              onMouseEnter={handleExpEnter}
-              onMouseLeave={handleExpLeave}
+              onMouseEnter={handleWorldsEnter}
+              onMouseLeave={handleWorldsLeave}
             >
               <button
                 className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1.5"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "11.5px",
-                  color: expOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
-                  background: expOpen ? "rgba(255,255,255,0.06)" : "transparent",
+                  color: worldsOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+                  background: worldsOpen ? "rgba(255,255,255,0.06)" : "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
                 }}
@@ -152,15 +152,15 @@ export function FloatingNav() {
                   e.currentTarget.style.background = "rgba(255,255,255,0.06)";
                 }}
                 onMouseLeave={(e) => {
-                  if (!expOpen) {
+                  if (!worldsOpen) {
                     e.currentTarget.style.color = "rgba(255,255,255,0.55)";
                     e.currentTarget.style.background = "transparent";
                   }
                 }}
               >
-                Experiences
+                Worlds
                 <motion.svg
-                  animate={{ rotate: expOpen ? 180 : 0 }}
+                  animate={{ rotate: worldsOpen ? 180 : 0 }}
                   transition={{ duration: 0.25 }}
                   width="10"
                   height="10"
@@ -175,7 +175,7 @@ export function FloatingNav() {
 
               {/* Dropdown */}
               <AnimatePresence>
-                {expOpen && (
+                {worldsOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -8, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -191,13 +191,13 @@ export function FloatingNav() {
                       backdropFilter: "blur(30px)",
                       boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.06)",
                     }}
-                    onMouseEnter={handleExpEnter}
-                    onMouseLeave={handleExpLeave}
+                    onMouseEnter={handleWorldsEnter}
+                    onMouseLeave={handleWorldsLeave}
                   >
                     {/* Header */}
                     <div className="px-4 pt-3 pb-2">
                       <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.3)" }}>
-                        OUR STORIES
+                        OUR WORLDS
                       </span>
                     </div>
 
@@ -207,7 +207,7 @@ export function FloatingNav() {
                       <button
                         className="flex items-center gap-4 w-full p-3 rounded-2xl transition-all duration-300 cursor-pointer group"
                         style={{ background: "transparent", border: "none", textAlign: "left" }}
-                        onClick={() => { setExpOpen(false); router.push("/story/heaven"); }}
+                        onClick={() => { setWorldsOpen(false); router.push("/story/heaven"); }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "rgba(220,200,100,0.06)";
                         }}
@@ -259,7 +259,7 @@ export function FloatingNav() {
                       <button
                         className="flex items-center gap-4 w-full p-3 rounded-2xl transition-all duration-300 cursor-pointer group"
                         style={{ background: "transparent", border: "none", textAlign: "left" }}
-                        onClick={() => { setExpOpen(false); router.push("/story/hell"); }}
+                        onClick={() => { setWorldsOpen(false); router.push("/story/hell"); }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "rgba(230,80,60,0.06)";
                         }}
@@ -309,7 +309,7 @@ export function FloatingNav() {
                     <div className="px-4 pt-2 pb-2 mt-1">
                       <div style={{ height: "1px", background: "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)", marginBottom: "8px" }} />
                       <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
-                        More stories coming soon...
+                        More worlds coming soon...
                       </span>
                     </div>
                   </motion.div>
@@ -333,6 +333,8 @@ export function FloatingNav() {
                 onClick={() => {
                   if (item === "Pricing") {
                     router.push("/pricing");
+                  } else if (item === "About") {
+                    router.push("/about");
                   } else if (pathname !== "/") {
                     router.push("/");
                   }
@@ -452,7 +454,7 @@ export function FloatingNav() {
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
-          {/* Experiences with expandable sub-items */}
+          {/* Worlds with expandable sub-items */}
           <button
             className="w-full py-3 rounded-xl transition-all cursor-pointer"
             style={{
@@ -463,12 +465,12 @@ export function FloatingNav() {
               border: "none",
               letterSpacing: "0.06em",
             }}
-            onClick={() => setMobileExpOpen(!mobileExpOpen)}
+            onClick={() => setMobileWorldsOpen(!mobileWorldsOpen)}
           >
             <span className="flex items-center justify-center gap-2">
-              Experiences
+              Worlds
               <motion.svg
-                animate={{ rotate: mobileExpOpen ? 180 : 0 }}
+                animate={{ rotate: mobileWorldsOpen ? 180 : 0 }}
                 transition={{ duration: 0.25 }}
                 width="10"
                 height="10"
@@ -483,7 +485,7 @@ export function FloatingNav() {
           </button>
 
           <AnimatePresence>
-            {mobileExpOpen && (
+            {mobileWorldsOpen && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -495,7 +497,7 @@ export function FloatingNav() {
                   <button
                     className="flex items-center gap-3 w-full p-2.5 rounded-xl cursor-pointer"
                     style={{ background: "rgba(220,200,100,0.05)", border: "1px solid rgba(220,200,100,0.1)", textAlign: "left" }}
-                    onClick={() => { setMenuOpen(false); setMobileExpOpen(false); router.push("/story/heaven"); }}
+                    onClick={() => { setMenuOpen(false); setMobileWorldsOpen(false); router.push("/story/heaven"); }}
                   >
                     <div style={{ width: "48px", height: "36px", position: "relative", borderRadius: "8px", overflow: "hidden" }}>
                       <Image src={heavenImg} alt="Swarga" fill style={{ objectFit: "cover", opacity: 0.8 }} />
@@ -508,7 +510,7 @@ export function FloatingNav() {
                   <button
                     className="flex items-center gap-3 w-full p-2.5 rounded-xl cursor-pointer"
                     style={{ background: "rgba(230,80,60,0.05)", border: "1px solid rgba(230,80,60,0.1)", textAlign: "left" }}
-                    onClick={() => { setMenuOpen(false); setMobileExpOpen(false); router.push("/story/hell"); }}
+                    onClick={() => { setMenuOpen(false); setMobileWorldsOpen(false); router.push("/story/hell"); }}
                   >
                     <div style={{ width: "48px", height: "36px", position: "relative", borderRadius: "8px", overflow: "hidden" }}>
                       <Image src={hellImg} alt="Naraka" fill style={{ objectFit: "cover", opacity: 0.8 }} />
@@ -539,6 +541,8 @@ export function FloatingNav() {
                 setMenuOpen(false);
                 if (item === "Pricing") {
                   router.push("/pricing");
+                } else if (item === "About") {
+                  router.push("/about");
                 } else if (pathname !== "/") {
                   router.push("/");
                 }

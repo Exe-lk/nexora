@@ -49,11 +49,11 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
       function project(x: number, y: number, z: number): [number, number, number] {
         // Rotate around Y axis
         const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-        let rx = x * cosY - z * sinY;
+        const rx = x * cosY - z * sinY;
         let rz = x * sinY + z * cosY;
         // Rotate around X axis
         const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-        let ry = y * cosX - rz * sinX;
+        const ry = y * cosX - rz * sinX;
         rz = y * sinX + rz * cosX;
         // Perspective
         const d = 4;

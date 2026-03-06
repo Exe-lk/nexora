@@ -512,13 +512,11 @@ function ChapterCard({
   chapter,
   index,
   color1,
-  color2,
   hex1,
 }: {
   chapter: { num: string; title: string; desc: string; stat: { label: string; value: string } };
   index: number;
   color1: string;
-  color2: string;
   hex1: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -698,12 +696,9 @@ function useIsMobile() {
 
 // ==================== MAIN STORY PAGE ====================
 export default function StoryPage({ params }: { params: { story: string } }) {
-  const story = params.story as "heaven" | "hell";
-  
-  // Validate story param
-  if (story !== "heaven" && story !== "hell") {
-    return <div>Story not found</div>;
-  }
+  const storyParam = params.story;
+  const isValidStory = storyParam === "heaven" || storyParam === "hell";
+  const story = (isValidStory ? storyParam : "heaven") as "heaven" | "hell";
 
   const data = STORIES[story];
   const router = useRouter();
@@ -714,6 +709,10 @@ export default function StoryPage({ params }: { params: { story: string } }) {
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 1.15]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  if (!isValidStory) {
+    return <div>Story not found</div>;
+  }
 
   return (
     <div
@@ -1023,7 +1022,6 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               chapter={ch}
               index={i}
               color1={data.color1}
-              color2={data.color2}
               hex1={data.hex1}
             />
           ))}
