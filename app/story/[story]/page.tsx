@@ -1,9 +1,12 @@
+"use client";
+
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
-import { useNavigate } from "react-router";
-import { FloatingNav } from "../components/HUDOverlay";
-import heavenImg from "figma:asset/9e412bed7676fd6eca791be844015e2026e1d007.png";
-import hellImg from "figma:asset/96ed3dac12da71e3c3d1a54d00d7d1945b971545.png";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { FloatingNav } from "@/components/HUDOverlay";
+import heavenImg from "@/assets/images/heaven.png";
+import hellImg from "@/assets/images/hell.png";
 import * as THREE from "three";
 
 // ==================== STORY DATA ====================
@@ -681,10 +684,29 @@ function ChapterCard({
   );
 }
 
+// ==================== HOOKS ====================
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 // ==================== MAIN STORY PAGE ====================
-export default function StoryPage({ story }: { story: "heaven" | "hell" }) {
+export default function StoryPage({ params }: { params: { story: string } }) {
+  const story = params.story as "heaven" | "hell";
+  
+  // Validate story param
+  if (story !== "heaven" && story !== "hell") {
+    return <div>Story not found</div>;
+  }
+
   const data = STORIES[story];
-  const navigate = useNavigate();
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
@@ -744,11 +766,13 @@ export default function StoryPage({ story }: { story: "heaven" | "hell" }) {
           className="absolute inset-0"
           style={{ scale: heroScale, y: parallaxY }}
         >
-          <img
+          <Image
             src={data.heroImg}
             alt={data.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
             style={{ opacity: 0.35, filter: "saturate(0.7)" }}
+            priority
           />
           <div
             className="absolute inset-0"
@@ -852,7 +876,7 @@ export default function StoryPage({ story }: { story: "heaven" | "hell" }) {
               Begin Journey
             </button>
             <button
-              onClick={() => navigate("/")}
+              onClick={() => router.push("/")}
               className="cursor-pointer transition-all duration-300"
               style={{
                 fontFamily: "'Exo 2', sans-serif",
@@ -1121,7 +1145,7 @@ export default function StoryPage({ story }: { story: "heaven" | "hell" }) {
                 Launch in VR
               </button>
               <button
-                onClick={() => navigate(story === "heaven" ? "/story/hell" : "/story/heaven")}
+                onClick={() => router.push(story === "heaven" ? "/story/hell" : "/story/heaven")}
                 className="cursor-pointer transition-all duration-300"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
@@ -1141,16 +1165,4 @@ export default function StoryPage({ story }: { story: "heaven" | "hell" }) {
       </section>
     </div>
   );
-}
-
-// ==================== HOOKS ====================
-function useIsMobile() {
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return mobile;
 }
