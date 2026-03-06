@@ -91,8 +91,28 @@ const OCCASIONS = [
     accent: "#06b6d4",
     accentSoft: "rgba(6,182,212,",
     gradient: "linear-gradient(135deg, #06b6d4, #6366f1)",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80",
   },
 ];
+
+// ─── Mouse parallax hook ──────────────────────────────────────────────────────
+function useMouseParallax() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const smoothX = useSpring(x, { stiffness: 50, damping: 20 });
+  const smoothY = useSpring(y, { stiffness: 50, damping: 20 });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      x.set((e.clientX / window.innerWidth - 0.5) * 2);
+      y.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener("mousemove", handler, { passive: true });
+    return () => window.removeEventListener("mousemove", handler);
+  }, [x, y]);
+
+  return { smoothX, smoothY };
+}
 
 // ─── Card component ──────────────────────────────────────────────────────────
 function OccasionCard({
@@ -105,7 +125,39 @@ function OccasionCard({
   isDark: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cardRef.current) {
+        const rect = cardRef.current.getBoundingClientRect();
+        setMousePosition({
+          x: (e.clientX - rect.left) / rect.width - 0.5,
+          y: (e.clientY - rect.top) / rect.height - 0.5,
+        });
+      }
+    };
+    const handleMouseLeave = () => {
+      setMousePosition({ x: 0, y: 0 });
+    };
+    const card = cardRef.current;
+    if (card) {
+      card.addEventListener("mousemove", handleMouseMove);
+      card.addEventListener("mouseleave", handleMouseLeave);
+      return () => {
+        card.removeEventListener("mousemove", handleMouseMove);
+        card.removeEventListener("mouseleave", handleMouseLeave);
+      };
+    }
+  }, []);
 
   return (
     <motion.div
@@ -125,29 +177,73 @@ function OccasionCard({
         boxShadow: isDark
           ? `0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px ${occasion.accentSoft}0.05)`
           : `0 8px 40px ${occasion.accentSoft}0.08), 0 0 0 1px ${occasion.accentSoft}0.08)`,
+        perspective: "1000px",
       }}
-      whileHover={{ y: -6, transition: { duration: 0.3 } }}
+      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
     >
+      {/* Image background with parallax */}
+      <motion.div
+        className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-700 ease-out"
+        style={{ y: imageY, scale: imageScale }}
+      >
+        <Image
+          src={occasion.image}
+          alt={occasion.title}
+          fill
+          unoptimized={true} // Bypassing Unsplash 403 blocks during rapid dev cycles just in case
+          className="object-cover"
+          style={{ filter: isDark ? "brightness(0.3) saturate(1.4)" : "brightness(0.8) saturate(1.2)" }}
+        />
+        <div
+          className="absolute inset-0 transition-colors duration-500"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, transparent 0%, ${isDark ? "rgba(10,8,20,0.9)" : "rgba(255,255,255,0.95)"} 100%)`,
+          }}
+        />
+      </motion.div>
+
       {/* Hover glow top line */}
       <div
-        className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
         style={{ backgroundImage: occasion.gradient }}
       />
 
-      <div className="p-8">
+      {/* Interactive glow effect */}
+      <motion.div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at ${50 + mousePosition.x * 100}% ${50 + mousePosition.y * 100}%, ${occasion.accentSoft}0.15), transparent 70%)`,
+        }}
+      />
+
+      <motion.div
+        ref={cardRef}
+        className="relative p-8 z-10"
+        animate={{
+          rotateX: mousePosition.y * 5,
+          rotateY: mousePosition.x * 5,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
         {/* Tag + emoji */}
         <div className="flex items-center justify-between mb-5">
           <span
+            className="tracking-[0.25em] transition-colors duration-300 group-hover:text-white"
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "9px",
-              letterSpacing: "0.25em",
-              color: isDark ? `${occasion.accentSoft}0.6)` : `${occasion.accentSoft}0.7)`,
+              color: isDark ? `${occasion.accentSoft}0.8)` : `${occasion.accentSoft}1)`,
             }}
           >
             {occasion.tag}
           </span>
-          <span className="text-3xl">{occasion.emoji}</span>
+          <motion.span
+            className="text-3xl"
+            whileHover={{ scale: 1.2, rotate: 10 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            {occasion.emoji}
+          </motion.span>
         </div>
 
         {/* Title */}
@@ -240,7 +336,7 @@ function OccasionCard({
         >
           BOOK THIS EXPERIENCE
         </motion.button>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -264,11 +360,42 @@ export default function OccasionsPage() {
     >
       <FloatingNav />
 
+      {/* ── Interactive background particles ───────────────────────────────── */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }} suppressHydrationWarning>
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: 2 + (i % 5),
+              height: 2 + (i % 5),
+              left: `${(i * 13) % 100}%`,
+              top: `${(i * 17) % 100}%`,
+              background: isDark
+                ? `rgba(${i % 2 === 0 ? "168,85,247" : "236,72,153"}, ${0.3 + (i % 4) * 0.1})`
+                : `rgba(${i % 2 === 0 ? "130,60,220" : "200,100,255"}, ${0.2 + (i % 4) * 0.1})`,
+            }}
+            animate={{
+              y: [0, (i % 7) * 10 - 30, 0],
+              x: [0, (i % 6) * 10 - 30, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + (i % 5),
+              repeat: Infinity,
+              delay: (i % 3) * 0.5,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
         className="relative flex flex-col items-center justify-center text-center px-6"
-        style={{ minHeight: "55vh", paddingTop: "120px", paddingBottom: "60px" }}
+        style={{ minHeight: "55vh", paddingTop: "120px", paddingBottom: "60px", zIndex: 1 }}
       >
         {/* Background rings */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
@@ -447,7 +574,7 @@ export default function OccasionsPage() {
       </motion.section>
 
       {/* ── Cards grid ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 pb-32">
+      <section className="mx-auto max-w-7xl px-6 pb-32" style={{ position: "relative", zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {OCCASIONS.map((occasion, i) => (
             <OccasionCard key={occasion.id} occasion={occasion} index={i} isDark={isDark} />
@@ -457,7 +584,7 @@ export default function OccasionsPage() {
 
       {/* ── CTA band ───────────────────────────────────────────── */}
       <section
-        className="relative mx-4 mb-16 rounded-3xl overflow-hidden"
+        className="relative mx-4 mb-16 rounded-[2rem] overflow-hidden group"
         style={{ maxWidth: "1200px", marginLeft: "auto", marginRight: "auto" }}
       >
         <div
@@ -469,19 +596,22 @@ export default function OccasionsPage() {
           {/* subtle noise overlay */}
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
 
-          <div className="relative text-left">
-            <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.6)", marginBottom: "10px" }}>
+          {/* Animated glow on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full" />
+
+          <div className="relative text-left z-10">
+            <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.8)", marginBottom: "10px" }}>
               READY TO BEGIN?
             </p>
-            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.4rem, 3vw, 2.2rem)", fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>
+            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.4rem, 3vw, 2.4rem)", fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>
               Let&apos;s build your perfect
               <br />XR experience together
             </h2>
           </div>
 
-          <div className="relative flex flex-col sm:flex-row gap-4 shrink-0">
+          <div className="relative flex flex-col sm:flex-row gap-4 shrink-0 z-10">
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }}
               whileTap={{ scale: 0.97 }}
               className="px-8 py-3.5 rounded-full cursor-pointer"
               style={{
@@ -498,10 +628,10 @@ export default function OccasionsPage() {
               Contact Us Now
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.25)" }}
               whileTap={{ scale: 0.97 }}
               onClick={() => router.push("/")}
-              className="px-8 py-3.5 rounded-full cursor-pointer"
+              className="px-8 py-3.5 rounded-full cursor-pointer transition-colors"
               style={{
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "13px",

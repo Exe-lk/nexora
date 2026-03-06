@@ -5,6 +5,7 @@ import { WebGLScene } from "@/components/WebGLScene";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type SectionId = "who" | "story" | "what" | "why" | "reviews";
 
@@ -128,21 +129,27 @@ function GlassPanel({
   accent = ACCENT.b,
   className = "",
   style,
+  isDark = true,
 }: {
   children: React.ReactNode;
   accent?: string;
   className?: string;
   style?: React.CSSProperties;
+  isDark?: boolean;
 }) {
   return (
     <div
       className={`relative ${className}`}
       style={{
-        background: "linear-gradient(160deg, rgba(12,10,24,0.7) 0%, rgba(8,6,18,0.5) 100%)",
-        border: `1px solid ${accent}0.1)`,
+        background: isDark
+          ? "linear-gradient(160deg, rgba(12,10,24,0.7) 0%, rgba(8,6,18,0.5) 100%)"
+          : "linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(250,248,255,0.8) 100%)",
+        border: `1px solid ${accent}${isDark ? "0.1)" : "0.15)"}`,
         borderRadius: "20px",
         backdropFilter: "blur(20px)",
-        boxShadow: `0 0 40px ${accent}0.04), inset 0 1px 0 rgba(255,255,255,0.04)`,
+        boxShadow: isDark
+          ? `0 0 40px ${accent}0.04), inset 0 1px 0 rgba(255,255,255,0.04)`
+          : `0 0 30px ${accent}0.03), inset 0 1px 0 rgba(0,0,0,0.02)`,
         overflow: "hidden",
         ...style,
       }}
@@ -413,6 +420,8 @@ function saveUserReviews(reviews: Review[]) {
 export default function AboutPage() {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
 
   useEffect(() => {
@@ -520,7 +529,7 @@ export default function AboutPage() {
         >
           NAVIGATION
         </div>
-        <GlassPanel className="p-2" accent="rgba(255,255,255,">
+        <GlassPanel className="p-2" accent="rgba(255,255,255," isDark={isDark}>
           <div className="flex flex-col gap-1" style={{ pointerEvents: "auto" }}>
             {sections.map((s) => {
               const isActive = s.id === active;
@@ -604,12 +613,13 @@ export default function AboutPage() {
     <div
       className="w-full relative"
       style={{
-        background:
-          "linear-gradient(180deg, #060810 0%, #080c18 20%, #0a0e1a 40%, #070b14 60%, #080c18 80%, #050810 100%)",
+        background: isDark
+          ? "linear-gradient(180deg, #060810 0%, #080c18 20%, #0a0e1a 40%, #070b14 60%, #080c18 80%, #050810 100%)"
+          : "linear-gradient(180deg, #faf8ff 0%, #f3eeff 20%, #ffffff 40%, #f8f4ff 60%, #f3eeff 80%, #faf8ff 100%)",
         overflowX: "hidden",
       }}
     >
-      <WebGLScene state={stateRef} />
+      <WebGLScene key={theme} state={stateRef} />
       <FloatingNav />
 
       <motion.div
@@ -626,22 +636,26 @@ export default function AboutPage() {
         }}
       />
 
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 100,
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
-          mixBlendMode: "multiply",
-        }}
-      />
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 99,
-          background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.55) 100%)",
-        }}
-      />
+      {isDark && (
+        <>
+          <div
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              zIndex: 100,
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+              mixBlendMode: "multiply",
+            }}
+          />
+          <div
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              zIndex: 99,
+              background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.55) 100%)",
+            }}
+          />
+        </>
+      )}
 
       <div className="relative" style={{ zIndex: 2 }}>
         <main className="mx-auto max-w-6xl px-5 md:px-8 pt-28 pb-24">
@@ -705,7 +719,7 @@ export default function AboutPage() {
             </div>
 
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5 max-w-4xl mx-auto">
-              <GlassPanel className="p-5" accent={ACCENT.a}>
+              <GlassPanel className="p-5" accent={ACCENT.a} isDark={isDark}>
                 <div style={{ pointerEvents: "auto" }}>
                   <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.32em", color: "rgba(255,255,255,0.32)" }}>
                     FORMAT
@@ -727,7 +741,7 @@ export default function AboutPage() {
                   </div>
                 </div>
               </GlassPanel>
-              <GlassPanel className="p-5" accent={ACCENT.b}>
+              <GlassPanel className="p-5" accent={ACCENT.b} isDark={isDark}>
                 <div style={{ pointerEvents: "auto" }}>
                   <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.32em", color: "rgba(255,255,255,0.32)" }}>
                     BUSINESS
@@ -749,7 +763,7 @@ export default function AboutPage() {
                   </div>
                 </div>
               </GlassPanel>
-              <GlassPanel className="p-5" accent={ACCENT.c}>
+              <GlassPanel className="p-5" accent={ACCENT.c} isDark={isDark}>
                 <div style={{ pointerEvents: "auto" }}>
                   <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.32em", color: "rgba(255,255,255,0.32)" }}>
                     TRUST
@@ -786,7 +800,7 @@ export default function AboutPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 md:gap-5">
                   <TiltCard accent={ACCENT.b}>
-                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.b}>
+                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.b} isDark={isDark}>
                       <div style={{ pointerEvents: "auto" }}>
                         <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>
                           NexoraXR
@@ -838,7 +852,7 @@ export default function AboutPage() {
                     </GlassPanel>
                   </TiltCard>
 
-                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.a}>
+                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.a} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.35)" }}>
                         WHAT YOU GET
@@ -888,7 +902,7 @@ export default function AboutPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                   <TiltCard accent={ACCENT.b}>
-                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.b}>
+                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.b} isDark={isDark}>
                       <div style={{ pointerEvents: "auto" }}>
                         <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>
                           Our Mission
@@ -905,7 +919,7 @@ export default function AboutPage() {
                   </TiltCard>
 
                   <TiltCard accent={ACCENT.a}>
-                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.a}>
+                    <GlassPanel className="p-7 md:p-10" accent={ACCENT.a} isDark={isDark}>
                       <div style={{ pointerEvents: "auto" }}>
                         <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>
                           Our Vision
@@ -932,7 +946,7 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-6 md:mt-7">
-                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.c}>
+                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.c} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.4)" }}>
                         HOW WE WORK
@@ -971,7 +985,7 @@ export default function AboutPage() {
                 <SectionHeader label="WHAT IS XR WALKING THEATRE?" left="rgba(230,80,160,0.3)" right="rgba(200,130,255,0.3)" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 md:gap-5">
-                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b}>
+                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "18px", fontWeight: 900, color: "#fff", lineHeight: 1.5 }}>
                         A guided XR format where the user{" "}
@@ -1038,7 +1052,7 @@ export default function AboutPage() {
                     </div>
                   </GlassPanel>
 
-                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.a}>
+                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.a} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.35)" }}>
                         WHERE IT FITS
@@ -1080,7 +1094,7 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                   {benefits.map((b) => (
                     <TiltCard key={b.title} accent={b.accent}>
-                      <GlassPanel className="p-7 md:p-8" accent={b.accent} style={{ pointerEvents: "auto" }}>
+                      <GlassPanel className="p-7 md:p-8" accent={b.accent} isDark={isDark} style={{ pointerEvents: "auto" }}>
                         <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "13px", fontWeight: 900, letterSpacing: "0.06em", color: "#fff" }}>
                           {b.title}
                         </div>
@@ -1093,7 +1107,7 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-6 md:mt-7">
-                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b}>
+                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.35)" }}>
                         QUICK COMPARISON
@@ -1156,7 +1170,7 @@ export default function AboutPage() {
                 <SectionHeader label="CUSTOMER REVIEWS" left="rgba(200,130,255,0.3)" right="rgba(120,180,255,0.3)" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 md:gap-5">
-                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b}>
+                  <GlassPanel className="p-7 md:p-10" accent={ACCENT.b} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div className="flex items-start justify-between gap-6 flex-wrap">
                         <div>
@@ -1191,7 +1205,7 @@ export default function AboutPage() {
                       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                         {allReviews.slice(0, 6).map((r, idx) => (
                           <TiltCard key={r.id} accent={idx % 3 === 0 ? ACCENT.a : idx % 3 === 1 ? ACCENT.b : ACCENT.c}>
-                            <GlassPanel className="p-6" accent={idx % 3 === 0 ? ACCENT.a : idx % 3 === 1 ? ACCENT.b : ACCENT.c}>
+                            <GlassPanel className="p-6" accent={idx % 3 === 0 ? ACCENT.a : idx % 3 === 1 ? ACCENT.b : ACCENT.c} isDark={isDark}>
                               <div style={{ pointerEvents: "auto" }}>
                                 <div className="flex items-center justify-between gap-4">
                                   <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 900, color: "#fff" }}>
@@ -1219,7 +1233,7 @@ export default function AboutPage() {
                     </div>
                   </GlassPanel>
 
-                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.c}>
+                  <GlassPanel className="p-7 md:p-8" accent={ACCENT.c} isDark={isDark}>
                     <div style={{ pointerEvents: "auto" }}>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "9px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.35)" }}>
                         LEAVE A REVIEW

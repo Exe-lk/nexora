@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, use } from "react";
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FloatingNav } from "@/components/HUDOverlay";
+import { useTheme } from "@/contexts/ThemeContext";
 import heavenImg from "@/assets/images/heaven.png";
 import hellImg from "@/assets/images/hell.png";
 import * as THREE from "three";
@@ -250,10 +251,10 @@ function StoryCanvas({
             : i % 3 === 1
               ? new THREE.TetrahedronGeometry(Math.random() * 1.2 + 0.4, 0)
               : new THREE.BoxGeometry(
-                  Math.random() * 1 + 0.3,
-                  Math.random() * 1 + 0.3,
-                  Math.random() * 1 + 0.3,
-                );
+                Math.random() * 1 + 0.3,
+                Math.random() * 1 + 0.3,
+                Math.random() * 1 + 0.3,
+              );
       }
 
       const mat = new THREE.MeshPhongMaterial({
@@ -521,6 +522,8 @@ function ChapterCard({
   color2: string;
   hex1: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const ref = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
@@ -555,7 +558,7 @@ function ChapterCard({
         style={{
           perspective: "800px",
           transformStyle: "preserve-3d",
-          background: "linear-gradient(160deg, rgba(12,10,24,0.75) 0%, rgba(8,6,18,0.55) 100%)",
+          background: isDark ? "linear-gradient(160deg, rgba(12,10,24,0.75) 0%, rgba(8,6,18,0.55) 100%)" : "linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(250,250,255,0.7) 100%)",
           border: `1px solid ${color1}${hovering ? "0.2)" : "0.08)"}`,
           borderRadius: "22px",
           backdropFilter: "blur(20px)",
@@ -572,8 +575,8 @@ function ChapterCard({
                 width: "44px",
                 height: "44px",
                 borderRadius: "12px",
-                background: `${color1}0.08)`,
-                border: `1px solid ${color1}0.15)`,
+                background: `${color1}${isDark ? "0.08)" : "0.2)"}`,
+                border: `1px solid ${color1}${isDark ? "0.15)" : "0.3)"}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -590,7 +593,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "9px",
                 letterSpacing: "0.3em",
-                color: `${color1}0.45)`,
+                color: isDark ? `${color1}0.45)` : `${color1}0.8)`,
               }}
             >
               CHAPTER {chapter.num}
@@ -613,7 +616,7 @@ function ChapterCard({
             fontFamily: "'Orbitron', sans-serif",
             fontSize: "20px",
             fontWeight: 700,
-            color: "#ffffff",
+            color: isDark ? "#ffffff" : "#1a0a2e",
             marginBottom: "12px",
           }}
         >
@@ -624,7 +627,7 @@ function ChapterCard({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "13px",
             lineHeight: 1.8,
-            color: "rgba(255,255,255,0.4)",
+            color: isDark ? "rgba(255,255,255,0.4)" : "rgba(60,40,100,0.6)",
             marginBottom: "20px",
           }}
         >
@@ -639,7 +642,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "8px",
                 letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.25)",
+                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.4)",
                 marginBottom: "4px",
               }}
             >
@@ -650,7 +653,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "22px",
                 fontWeight: 800,
-                color: `${color1}0.75)`,
+                color: isDark ? `${color1}0.75)` : `${color1}1)`,
               }}
             >
               {chapter.stat.value}
@@ -697,29 +700,41 @@ function useIsMobile() {
 }
 
 // ==================== MAIN STORY PAGE ====================
-export default function StoryPage({ params }: { params: { story: string } }) {
-  const story = params.story as "heaven" | "hell";
-  
-  // Validate story param
-  if (story !== "heaven" && story !== "hell") {
-    return <div>Story not found</div>;
-  }
+export default function StoryPage({ params }: { params: Promise<{ story: string }> }) {
+  const resolvedParams = use(params);
+  const routeStory = resolvedParams.story;
+  const isValid = routeStory === "heaven" || routeStory === "hell";
+  const story = isValid ? (routeStory as "heaven" | "hell") : "heaven";
 
   const data = STORIES[story];
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 1.15]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
+  // Validate story param
+  if (!isValid) {
+    return <div className="min-h-screen flex items-center justify-center text-white text-2xl">Story not found</div>;
+  }
+
   return (
     <div
       ref={containerRef}
       className="w-full relative min-h-screen"
-      style={{ background: data.bgGradient, overflowX: "hidden" }}
+      style={{
+        background: isDark
+          ? data.bgGradient
+          : story === "heaven"
+            ? "linear-gradient(180deg, #faf8f0 0%, #f5f0e8 15%, #f0e8e0 30%, #faf8f0 50%, #f5f0e8 70%, #faf8f0 100%)"
+            : "linear-gradient(180deg, #faf0f0 0%, #f5e8e8 15%, #f0e0e0 30%, #faf0f0 50%, #f5e8e8 70%, #faf0f0 100%)",
+        overflowX: "hidden",
+      }}
     >
       {/* 3D canvas background */}
       <StoryCanvas
@@ -736,25 +751,29 @@ export default function StoryPage({ params }: { params: { story: string } }) {
       <FloatingNav />
 
       {/* Scanline overlay */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 100,
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
-          mixBlendMode: "multiply",
-        }}
-      />
+      {isDark && (
+        <div
+          className="fixed inset-0 pointer-events-none"
+          style={{
+            zIndex: 100,
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+            mixBlendMode: "multiply",
+          }}
+        />
+      )}
 
       {/* Vignette */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 99,
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.6) 100%)",
-        }}
-      />
+      {isDark && (
+        <div
+          className="fixed inset-0 pointer-events-none"
+          style={{
+            zIndex: 99,
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.6) 100%)",
+          }}
+        />
+      )}
 
       {/* ====== HERO ====== */}
       <section
@@ -763,23 +782,45 @@ export default function StoryPage({ params }: { params: { story: string } }) {
       >
         {/* Background image with parallax */}
         <motion.div
-          className="absolute inset-0"
+          className="absolute inset-0 group"
           style={{ scale: heroScale, y: parallaxY }}
         >
-          <Image
-            src={data.heroImg}
-            alt={data.title}
-            fill
-            className="object-cover"
-            style={{ opacity: 0.35, filter: "saturate(0.7)" }}
-            priority
-          />
+          <motion.div
+            className="w-full h-full relative"
+            whileHover={{
+              scale: 1.05,
+              rotate: story === "heaven" ? 1 : -1,
+            }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          >
+            <Image
+              src={data.heroImg}
+              alt={data.title}
+              fill
+              className="object-cover transition-all duration-1000 group-hover:brightness-125"
+              style={{
+                opacity: isDark ? 0.35 : 0.6,
+                filter: isDark ? "saturate(0.7)" : "saturate(0.8) brightness(1.1)",
+              }}
+              priority
+            />
+
+            {/* Hover thematic glowing overlay */}
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-overlay pointer-events-none"
+              style={{
+                background: `radial-gradient(circle at center, ${data.color1}0.4) 0%, transparent 70%)`
+              }}
+            />
+          </motion.div>
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              background: `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 60%, ${
-                story === "heaven" ? "rgba(10,12,8,1)" : "rgba(12,6,4,1)"
-              } 100%)`,
+              background: isDark
+                ? `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 60%, ${story === "heaven" ? "rgba(10,12,8,1)" : "rgba(12,6,4,1)"
+                } 100%)`
+                : `linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.7) 60%, ${story === "heaven" ? "rgba(240,240,230,1)" : "rgba(240,230,230,1)"
+                } 100%)`,
             }}
           />
         </motion.div>
@@ -814,8 +855,8 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               fontSize: isMobile ? "clamp(36px, 12vw, 52px)" : "clamp(52px, 7vw, 80px)",
               fontWeight: 800,
               lineHeight: 1.1,
-              color: "#ffffff",
-              textShadow: `0 0 60px ${data.color1}0.3)`,
+              color: isDark ? "#ffffff" : "#1a0a2e",
+              textShadow: isDark ? `0 0 60px ${data.color1}0.3)` : `0 0 40px ${data.color1}0.2)`,
             }}
           >
             {data.title}
@@ -844,7 +885,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               fontFamily: "'Exo 2', sans-serif",
               fontSize: isMobile ? "13px" : "15px",
               lineHeight: 1.8,
-              color: "rgba(255,255,255,0.5)",
+              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.65)",
               maxWidth: "480px",
               marginTop: "20px",
             }}
@@ -923,7 +964,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: `${data.color1}0.4)`,
+                color: isDark ? `${data.color1}0.4)` : `${data.color1}0.9)`,
               }}
             >
               THE EXPERIENCE
@@ -934,7 +975,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: isMobile ? "16px" : "20px",
                 lineHeight: 1.9,
-                color: "rgba(255,255,255,0.55)",
+                color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
               }}
             >
               {data.longDescription}
@@ -949,7 +990,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               <div
                 className="group flex flex-col items-center text-center p-5 rounded-2xl transition-all duration-300 hover:-translate-y-1 cursor-default"
                 style={{
-                  background: "linear-gradient(160deg, rgba(12,10,24,0.6), rgba(8,6,18,0.35))",
+                  background: isDark ? "linear-gradient(160deg, rgba(12,10,24,0.6), rgba(8,6,18,0.35))" : "linear-gradient(160deg, rgba(255,255,255,0.8), rgba(240,240,250,0.6))",
                   border: `1px solid ${data.color1}0.08)`,
                   backdropFilter: "blur(14px)",
                 }}
@@ -968,7 +1009,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "11px",
                     fontWeight: 700,
-                    color: "#ffffff",
+                    color: isDark ? "#ffffff" : "#1a0a2e",
                     marginBottom: "4px",
                   }}
                 >
@@ -978,7 +1019,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                   style={{
                     fontFamily: "'Exo 2', sans-serif",
                     fontSize: "10px",
-                    color: `${data.color1}0.5)`,
+                    color: isDark ? `${data.color1}0.5)` : `${data.color1}0.9)`,
                   }}
                 >
                   {f.desc}
@@ -995,7 +1036,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
           <div className="text-center mb-12 md:mb-20">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div style={{ width: "40px", height: "1px", background: `linear-gradient(to right, transparent, ${data.color1}0.3))` }} />
-              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.4em", color: "rgba(255,255,255,0.35)" }}>
+              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.4em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)" }}>
                 STORY ARC
               </span>
               <div style={{ width: "40px", height: "1px", background: `linear-gradient(to left, transparent, ${data.color2}0.3))` }} />
@@ -1005,7 +1046,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: isMobile ? "22px" : "32px",
                 fontWeight: 700,
-                color: "#ffffff",
+                color: isDark ? "#ffffff" : "#1a0a2e",
               }}
             >
               Three{" "}
@@ -1036,7 +1077,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
             top: "200px",
             bottom: "100px",
             width: "1px",
-            background: `linear-gradient(to bottom, transparent, ${data.color1}0.1), ${data.color1}0.1), transparent)`,
+            background: `linear-gradient(to bottom, transparent, ${data.color1}${isDark ? '0.1)' : '0.4)'}, ${data.color1}${isDark ? '0.1)' : '0.4)'}, transparent)`,
             zIndex: 0,
           }}
         />
@@ -1048,7 +1089,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
           <div
             className="max-w-[900px] mx-auto p-8 md:p-12 rounded-3xl relative"
             style={{
-              background: "linear-gradient(160deg, rgba(12,10,24,0.75), rgba(8,6,18,0.55))",
+              background: isDark ? "linear-gradient(160deg, rgba(12,10,24,0.75), rgba(8,6,18,0.55))" : "linear-gradient(160deg, rgba(255,255,255,0.9), rgba(240,240,250,0.7))",
               border: `1px solid ${data.color1}0.1)`,
               backdropFilter: "blur(20px)",
             }}
@@ -1058,7 +1099,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
             <div className="absolute bottom-0 right-0" style={{ width: "40px", height: "40px", borderBottom: `1px solid ${data.color2}0.15)`, borderRight: `1px solid ${data.color2}0.15)`, borderRadius: "0 0 20px 0" }} />
 
             <div className="text-center mb-10">
-              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.35em", color: "rgba(255,255,255,0.35)" }}>
+              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.35em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)" }}>
                 TECHNICAL SPECS
               </span>
             </div>
@@ -1072,13 +1113,13 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               ].map((s, i) => (
                 <Section key={s.label} delay={0.1 + i * 0.1}>
                   <div className="text-center">
-                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: "rgba(255,255,255,0.25)", marginBottom: "8px" }}>
+                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.4)", marginBottom: "8px" }}>
                       {s.label}
                     </div>
                     <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? "28px" : "36px", fontWeight: 800, background: data.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                       {s.value}
                     </div>
-                    <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: `${data.color1}0.4)`, marginTop: "4px" }}>
+                    <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: isDark ? `${data.color1}0.4)` : `${data.color1}0.9)`, marginTop: "4px" }}>
                       {s.unit}
                     </div>
                   </div>
@@ -1101,7 +1142,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: isMobile ? "clamp(24px, 8vw, 36px)" : "clamp(32px, 4vw, 48px)",
                 fontWeight: 800,
-                color: "#ffffff",
+                color: isDark ? "#ffffff" : "#1a0a2e",
                 lineHeight: 1.2,
                 marginBottom: "16px",
               }}
@@ -1116,7 +1157,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               style={{
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "14px",
-                color: "rgba(255,255,255,0.45)",
+                color: isDark ? "rgba(255,255,255,0.45)" : "rgba(60,40,100,0.7)",
                 maxWidth: "400px",
                 margin: "0 auto 32px",
                 lineHeight: 1.8,
@@ -1128,7 +1169,7 @@ export default function StoryPage({ params }: { params: { story: string } }) {
             </p>
             <div className={`flex gap-4 justify-center ${isMobile ? "flex-col items-center" : ""}`}>
               <button
-                className="cursor-pointer transition-all duration-300"
+                className="cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "13px",
@@ -1146,14 +1187,14 @@ export default function StoryPage({ params }: { params: { story: string } }) {
               </button>
               <button
                 onClick={() => router.push(story === "heaven" ? "/story/hell" : "/story/heaven")}
-                className="cursor-pointer transition-all duration-300"
+                className="cursor-pointer transition-all duration-300 hover:bg-slate-800/20"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "13px",
                   padding: "16px 28px",
-                  color: "rgba(255,255,255,0.6)",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(60,40,100,0.7)",
+                  background: isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)",
+                  border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
                   borderRadius: "50px",
                 }}
               >
