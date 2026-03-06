@@ -298,7 +298,7 @@ interface SceneState {
   mouseY: number;
 }
 
-export function WebGLScene({ state }: { state: React.MutableRefObject<SceneState> }) {
+export function WebGLScene({ state, isDark = true }: { state: React.MutableRefObject<SceneState>; isDark?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const initRef = useRef<(() => void) | null>(null);
@@ -559,7 +559,12 @@ export function WebGLScene({ state }: { state: React.MutableRefObject<SceneState
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0, display: "block" }}
+      style={{
+        zIndex: 0,
+        display: "block",
+        opacity: isDark ? 1 : 0.35,
+        mixBlendMode: isDark ? "normal" : "multiply",
+      }}
     />
   );
 }

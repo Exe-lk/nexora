@@ -94,7 +94,7 @@ export default function PricingPage() {
         overflowX: "hidden",
       }}
     >
-      <WebGLScene key={theme} state={stateRef} />
+      <WebGLScene key={theme} state={stateRef} isDark={isDark} />
       <FloatingNav />
 
       {isDark && (

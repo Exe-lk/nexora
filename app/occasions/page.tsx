@@ -309,7 +309,7 @@ function OccasionCard({
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "12px",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(60,40,100,0.6)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(60,40,100,0.7)",
                   lineHeight: 1.5,
                 }}
               >
@@ -562,7 +562,7 @@ export default function OccasionsPage() {
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.65)",
                   marginTop: "4px",
                 }}
               >

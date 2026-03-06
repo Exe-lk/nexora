@@ -214,7 +214,7 @@ export function FloatingNav() {
                   >
                     {/* Header */}
                     <div className="px-4 pt-3 pb-2">
-                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.4)" }}>
+                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)" }}>
                         EXPLORE WORLDS
                       </span>
                     </div>
@@ -253,7 +253,7 @@ export function FloatingNav() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: "rgba(220,200,100,0.5)" }}>
+                            <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(220,200,100,0.5)" : "rgba(120,90,0,0.75)" }}>
                               HEAVEN
                             </span>
                             <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(220,200,100,0.4)" }} />
@@ -261,7 +261,7 @@ export function FloatingNav() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Swarga: The Celestial Realm
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
                             Golden temples &amp; divine wonder
                           </div>
                         </div>
@@ -305,7 +305,7 @@ export function FloatingNav() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: "rgba(230,80,60,0.5)" }}>
+                            <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(230,80,60,0.5)" : "rgba(180,40,20,0.75)" }}>
                               HELL
                             </span>
                             <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(230,80,60,0.4)" }} />
@@ -313,7 +313,7 @@ export function FloatingNav() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Naraka: The Infernal Depths
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
                             Volcanic wastelands &amp; rivers of fire
                           </div>
                         </div>
@@ -326,7 +326,7 @@ export function FloatingNav() {
                     {/* Footer */}
                     <div className="px-4 pt-2 pb-2 mt-1">
                       <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)", marginBottom: "8px" }} />
-                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)", letterSpacing: "0.1em" }}>
+                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.65)", letterSpacing: "0.1em" }}>
                         More worlds coming soon...
                       </span>
                     </div>
@@ -537,7 +537,7 @@ export function FloatingNav() {
                     </div>
                     <div>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e" }}>Swarga</div>
-                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(220,200,100,0.7)" }}>Heaven</div>
+                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(220,200,100,0.7)" : "rgba(120,90,0,0.75)" }}>Heaven</div>
                     </div>
                   </button>
                   <button
@@ -550,7 +550,7 @@ export function FloatingNav() {
                     </div>
                     <div>
                       <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e" }}>Naraka</div>
-                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(230,80,60,0.7)" }}>Hell</div>
+                      <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(230,80,60,0.7)" : "rgba(180,40,20,0.8)" }}>Hell</div>
                     </div>
                   </button>
                 </div>
@@ -914,7 +914,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "8px",
                     letterSpacing: "0.2em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                   }}
                 >
                   SYSTEM STATUS
@@ -924,14 +924,14 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)",
                   lineHeight: 2,
                 }}
               >
                 <div>
                   RENDER ENGINE{" "}
                   <span
-                    style={{ color: "rgba(80,220,140,0.6)" }}
+                    style={{ color: isDark ? "rgba(80,220,140,0.6)" : "rgba(20,120,60,0.85)" }}
                   >
                     ACTIVE
                   </span>
@@ -939,7 +939,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 <div>
                   XR PIPELINE{" "}
                   <span
-                    style={{ color: "rgba(80,220,140,0.6)" }}
+                    style={{ color: isDark ? "rgba(80,220,140,0.6)" : "rgba(20,120,60,0.85)" }}
                   >
                     ONLINE
                   </span>
@@ -947,7 +947,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 <div>
                   WORLD SYNC{" "}
                   <span
-                    style={{ color: "rgba(180,120,255,0.6)" }}
+                    style={{ color: isDark ? "rgba(180,120,255,0.6)" : "rgba(100,40,180,0.9)" }}
                   >
                     98.7%
                   </span>
@@ -976,7 +976,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "8px",
                   letterSpacing: "0.2em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                 }}
               >
                 SCENE DEPTH
@@ -986,14 +986,14 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)",
                   lineHeight: 2,
                 }}
               >
                 <div>
                   OBJECTS{" "}
                   <span
-                    style={{ color: "rgba(200,130,255,0.6)" }}
+                    style={{ color: isDark ? "rgba(200,130,255,0.6)" : "rgba(120,60,200,0.9)" }}
                   >
                     2,847
                   </span>
@@ -1001,7 +1001,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 <div>
                   DRAW CALLS{" "}
                   <span
-                    style={{ color: "rgba(200,130,255,0.6)" }}
+                    style={{ color: isDark ? "rgba(200,130,255,0.6)" : "rgba(120,60,200,0.9)" }}
                   >
                     124
                   </span>
@@ -1009,7 +1009,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 <div>
                   FPS{" "}
                   <span
-                    style={{ color: "rgba(80,220,140,0.6)" }}
+                    style={{ color: isDark ? "rgba(80,220,140,0.6)" : "rgba(20,120,60,0.85)" }}
                   >
                     120
                   </span>
@@ -1031,7 +1031,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "9px",
                 letterSpacing: "0.3em",
-                color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
+                color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.55)",
               }}
             >
               SCROLL TO EXPLORE
@@ -1071,7 +1071,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                   }}
                 >
                   NARRATIVE WORLDS
@@ -1183,7 +1183,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                 }}
               >
                 CORE EXPERIENCE ZONES
@@ -1250,7 +1250,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                 }}
               >
                 EXPERIENCE HIGHLIGHTS
@@ -1302,7 +1302,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                 }}
               >
                 FEATURED WORLDS
@@ -1382,7 +1382,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                   }}
                 >
                   ECOSYSTEM
@@ -1492,7 +1492,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
                 }}
               >
                 MANIFESTO
@@ -1525,7 +1525,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -1582,7 +1582,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.5)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -1602,7 +1602,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               >
                 To develop innovative{" "}
                 <span
-                  style={{ color: "rgba(200,160,255,0.9)" }}
+                  style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}
                 >
                   digital worlds and experiences
                 </span>{" "}
@@ -1629,7 +1629,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
+                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
               }}
             >
               INITIALIZE
@@ -1713,7 +1713,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.6)",
             }}
           >
             2026
@@ -1729,7 +1729,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.6)",
             }}
           >
             Immersive Reality Platform
@@ -1896,7 +1896,7 @@ function ServiceModule({
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "9px",
               letterSpacing: "0.25em",
-              color: `${accent}0.5)`,
+              color: isDark ? `${accent}0.5)` : `${accent}0.9)`,
             }}
           >
             {tag}
@@ -1945,7 +1945,7 @@ function ServiceModule({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "8px",
                 letterSpacing: "0.2em",
-                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(80,50,140,0.4)",
+                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(80,50,140,0.55)",
                 marginBottom: "4px",
               }}
             >
@@ -1956,7 +1956,7 @@ function ServiceModule({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "16px",
                 fontWeight: 700,
-                color: `${accent}${isDark ? "0.75)" : "0.85)"}`,
+                color: isDark ? `${accent}0.75)` : `${accent}1)`,
               }}
             >
               {s.value}
@@ -2100,7 +2100,7 @@ function BrandCard({
           fontFamily: "'Exo 2', sans-serif",
           fontSize: "9px",
           letterSpacing: "0.2em",
-          color: `${accent}0.55)`,
+          color: isDark ? `${accent}0.55)` : `${accent}0.9)`,
           textTransform: "uppercase",
         }}
       >
@@ -2478,7 +2478,7 @@ function StoryCard({
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "9px",
               letterSpacing: "0.25em",
-              color: `${accent}0.8)`,
+              color: isDark ? `${accent}0.8)` : `${accent}1)`,
             }}
           >
             {subtitle}
@@ -2541,7 +2541,7 @@ function StoryCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.12em",
-                color: `${accent}0.75)`,
+                color: isDark ? `${accent}0.75)` : `${accent}1)`,
               }}
             >
               Enter Story
@@ -2560,7 +2560,7 @@ function StoryCard({
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.65)",
               letterSpacing: "0.1em",
             }}
           >

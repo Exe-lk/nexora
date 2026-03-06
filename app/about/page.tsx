@@ -180,7 +180,7 @@ export default function AboutPage() {
         overflowX: "hidden",
       }}
     >
-      <WebGLScene key={theme} state={stateRef} />
+      <WebGLScene key={theme} state={stateRef} isDark={isDark} />
       <FloatingNav />
 
       {isDark && (
@@ -327,7 +327,7 @@ export default function AboutPage() {
                     fontFamily: "'Exo 2', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.1em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.65)",
                     marginTop: "4px",
                   }}
                 >
@@ -439,7 +439,7 @@ export default function AboutPage() {
 
         <div className="mt-12 flex items-center justify-center gap-4 flex-wrap">
           <div style={{ height: "1px", width: "40px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.08))" : "linear-gradient(to right, transparent, rgba(60,40,100,0.14))" }} />
-          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "11px", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.45)", letterSpacing: "0.08em" }}>
+          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "11px", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.6)", letterSpacing: "0.08em" }}>
             NexoraXR • About • 2026
           </div>
           <div style={{ height: "1px", width: "40px", background: isDark ? "linear-gradient(to left, transparent, rgba(255,255,255,0.08))" : "linear-gradient(to left, transparent, rgba(60,40,100,0.14))" }} />

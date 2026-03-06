@@ -122,6 +122,8 @@ function StoryCanvas({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const { theme: uiTheme } = useTheme();
+  const isDarkUI = uiTheme === "dark";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -498,7 +500,14 @@ function StoryCanvas({
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full"
-      style={{ zIndex: 99, pointerEvents: "auto", mixBlendMode: theme === "heaven" ? "screen" : "lighten" }}
+      style={{
+        zIndex: 99,
+        pointerEvents: "auto",
+        mixBlendMode: isDarkUI
+          ? (theme === "heaven" ? "screen" : "lighten")
+          : "multiply",
+        opacity: isDarkUI ? 1 : 0.45,
+      }}
     />
   );
 }
@@ -628,7 +637,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "16px",
                 fontWeight: 800,
-                color: hex1,
+                color: isDark ? hex1 : "#1a0a2e",
               }}
             >
               {chapter.num}
@@ -638,7 +647,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "9px",
                 letterSpacing: "0.3em",
-                color: isDark ? `${color1}0.45)` : `${color1}0.8)`,
+                color: isDark ? `${color1}0.45)` : "rgba(80,50,140,0.65)",
               }}
             >
               CHAPTER {chapter.num}
@@ -687,7 +696,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "8px",
                 letterSpacing: "0.2em",
-                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.4)",
+                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.6)",
                 marginBottom: "4px",
               }}
             >
@@ -698,7 +707,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "22px",
                 fontWeight: 800,
-                color: isDark ? `${color1}0.75)` : `${color1}1)`,
+                color: isDark ? `${color1}0.75)` : "#1a0a2e",
               }}
             >
               {chapter.stat.value}
@@ -1189,8 +1198,8 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               style={{
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
-                color: `${data.color1}0.8)`,
-                textShadow: `0 0 20px ${data.color1}0.4)`,
+                color: isDark ? `${data.color1}0.8)` : "rgba(80,50,140,0.75)",
+                textShadow: isDark ? `0 0 20px ${data.color1}0.4)` : "none",
               }}
             >
               {data.tagline}
@@ -1245,10 +1254,10 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: isMobile ? "13px" : "16px",
-              color: `${data.color1}0.9)`,
+              color: isDark ? `${data.color1}0.9)` : "rgba(80,50,140,0.8)",
               marginTop: "14px",
               letterSpacing: "0.2em",
-              textShadow: `0 0 20px ${data.color1}0.4)`,
+              textShadow: isDark ? `0 0 20px ${data.color1}0.4)` : "none",
             }}
           >
             — {data.subtitle} —
@@ -1365,7 +1374,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             <motion.span
               animate={{ opacity: [0.3, 0.7, 0.3] }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: `${data.color1}0.4)` }}
+              style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: isDark ? `${data.color1}0.4)` : "rgba(80,50,140,0.5)" }}
             >
               SCROLL TO EXPLORE
             </motion.span>
@@ -1390,7 +1399,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: isDark ? `${data.color1}0.4)` : `${data.color1}0.9)`,
+                color: isDark ? `${data.color1}0.4)` : "rgba(80,50,140,0.65)",
               }}
             >
               THE EXPERIENCE
@@ -1445,7 +1454,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
                   style={{
                     fontFamily: "'Exo 2', sans-serif",
                     fontSize: "10px",
-                    color: isDark ? `${data.color1}0.5)` : `${data.color1}0.9)`,
+                    color: isDark ? `${data.color1}0.5)` : "rgba(60,40,100,0.65)",
                   }}
                 >
                   {f.desc}
@@ -1462,7 +1471,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
           <div className="text-center mb-12 md:mb-20">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div style={{ width: "40px", height: "1px", background: `linear-gradient(to right, transparent, ${data.color1}0.3))` }} />
-              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.4em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)" }}>
+              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.4em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.65)" }}>
                 STORY ARC
               </span>
               <div style={{ width: "40px", height: "1px", background: `linear-gradient(to left, transparent, ${data.color2}0.3))` }} />
@@ -1539,7 +1548,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             <div className="absolute bottom-0 right-0" style={{ width: "40px", height: "40px", borderBottom: `1px solid ${data.color2}0.15)`, borderRight: `1px solid ${data.color2}0.15)`, borderRadius: "0 0 20px 0" }} />
 
             <div className="text-center mb-10">
-              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.35em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.5)" }}>
+              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.35em", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.65)" }}>
                 TECHNICAL SPECS
               </span>
             </div>
@@ -1553,13 +1562,13 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               ].map((s, i) => (
                 <Section key={s.label} delay={0.1 + i * 0.1}>
                   <div className="text-center">
-                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.4)", marginBottom: "8px" }}>
+                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.6)", marginBottom: "8px" }}>
                       {s.label}
                     </div>
                     <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? "28px" : "36px", fontWeight: 800, background: data.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                       {s.value}
                     </div>
-                    <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: isDark ? `${data.color1}0.4)` : `${data.color1}0.9)`, marginTop: "4px" }}>
+                    <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: isDark ? `${data.color1}0.4)` : "rgba(60,40,100,0.65)", marginTop: "4px" }}>
                       {s.unit}
                     </div>
                   </div>
