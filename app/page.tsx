@@ -1,11 +1,15 @@
 "use client"
 
 import { FloatingNav, HUDContent } from "@/components/HUDOverlay";
+import { HeroPortal } from "@/components/HeroPortal";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useEffect, useRef } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Home() {
-   const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
+  const { theme } = useTheme();
+  const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
+  const isDark = theme === "dark";
 
   useEffect(() => {
     const onScroll = () => {
@@ -27,35 +31,44 @@ export default function Home() {
     <div
       className="w-full relative"
       style={{
-        background:
-          "linear-gradient(180deg, #060810 0%, #080c18 20%, #0a0e1a 40%, #070b14 60%, #080c18 80%, #050810 100%)",
+        background: isDark
+          ? "linear-gradient(180deg, #060810 0%, #080c18 20%, #0a0e1a 40%, #070b14 60%, #080c18 80%, #050810 100%)"
+          : "transparent",
         overflowX: "hidden",
       }}
     >
-      <WebGLScene state={stateRef} />
+      <WebGLScene key={theme} state={stateRef} />
       <FloatingNav />
 
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 100,
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
-          mixBlendMode: "multiply",
-        }}
-      />
+      {isDark && (
+        <>
+          <div
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              zIndex: 100,
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+              mixBlendMode: "multiply",
+            }}
+          />
 
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 99,
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.5) 100%)",
-        }}
-      />
+          <div
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              zIndex: 99,
+              background:
+                "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(3,4,8,0.5) 100%)",
+            }}
+          />
+        </>
+      )}
 
-      <div className="relative" style={{ zIndex: 2 }}>
-        <HUDContent />
+      <div className="relative" style={{ zIndex: 10 }}>
+        {/* Hero section with portal */}
+        <HeroPortal />
+        
+        {/* Rest of the content */}
+        <HUDContent skipHero />
       </div>
     </div>
   );

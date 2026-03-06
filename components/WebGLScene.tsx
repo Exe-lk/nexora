@@ -301,6 +301,7 @@ interface SceneState {
 export function WebGLScene({ state }: { state: React.MutableRefObject<SceneState> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const initRef = useRef<(() => void) | null>(null);
 
   const init = useCallback(() => {
     const canvas = canvasRef.current;
@@ -546,14 +547,19 @@ export function WebGLScene({ state }: { state: React.MutableRefObject<SceneState
 
   useEffect(() => {
     const cleanup = init();
-    return () => cleanup?.();
+    return () => {
+      cleanup?.();
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current);
+      }
+    };
   }, [init]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full"
-      style={{ zIndex: 0 }}
+      className="fixed inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 0, display: "block" }}
     />
   );
 }

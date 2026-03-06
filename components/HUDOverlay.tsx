@@ -8,6 +8,8 @@ import nexoraLogo from "../assets/images/logo.png";
 import heavenImg from "../assets/images/heaven.png";
 import hellImg from "../assets/images/hell.png";
 import { VRHeadset3D } from "./VRHeadset";
+import { ThemeToggle } from "./ThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 
 // --- Hook for mouse position ---
 function useMouseParallax() {
@@ -49,12 +51,14 @@ function useIsMobile() {
 
 // --- Floating Nav ---
 export function FloatingNav() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [worldsOpen, setWorldsOpen] = useState(false);
-  const [mobileWorldsOpen, setMobileWorldsOpen] = useState(false);
-  const worldsRef = useRef<HTMLDivElement>(null);
-  const worldsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [expOpen, setExpOpen] = useState(false);
+  const [mobileExpOpen, setMobileExpOpen] = useState(false);
+  const expRef = useRef<HTMLDivElement>(null);
+  const expTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isMobile = useIsMobile();
   const router = useRouter();
   const pathname = usePathname();
@@ -68,27 +72,27 @@ export function FloatingNav() {
   // Close dropdown on click outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (worldsRef.current && !worldsRef.current.contains(e.target as Node)) {
-        setWorldsOpen(false);
+      if (expRef.current && !expRef.current.contains(e.target as Node)) {
+        setExpOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleWorldsEnter = () => {
-    clearTimeout(worldsTimeoutRef.current);
-    setWorldsOpen(true);
+  const handleExpEnter = () => {
+    clearTimeout(expTimeoutRef.current);
+    setExpOpen(true);
   };
-  const handleWorldsLeave = () => {
-    worldsTimeoutRef.current = setTimeout(() => setWorldsOpen(false), 200);
+  const handleExpLeave = () => {
+    expTimeoutRef.current = setTimeout(() => setExpOpen(false), 200);
   };
 
   const handleNavHome = () => {
     if (pathname !== "/") router.push("/");
   };
 
-  const navItems = ["Pricing", "Vision", "About", "Contact"];
+  const navItems = ["Occasions", "Pricing", "About", "Contact"];
 
   return (
     <>
@@ -100,15 +104,21 @@ export function FloatingNav() {
         style={{
           zIndex: 200,
           backdropFilter: "blur(24px)",
-          background: scrolled
-            ? "linear-gradient(135deg, rgba(8,8,16,0.88) 0%, rgba(6,6,14,0.78) 100%)"
-            : "linear-gradient(135deg, rgba(8,8,16,0.5) 0%, rgba(6,6,14,0.35) 100%)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: isDark
+            ? scrolled
+              ? "linear-gradient(135deg, rgba(8,8,16,0.88) 0%, rgba(6,6,14,0.78) 100%)"
+              : "linear-gradient(135deg, rgba(8,8,16,0.5) 0%, rgba(6,6,14,0.35) 100%)"
+            : scrolled
+              ? "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(250,248,255,0.9) 100%)"
+              : "linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(250,248,255,0.6) 100%)",
+          border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
           borderRadius: "60px",
           padding: isMobile
             ? "6px 10px 6px 14px"
             : "7px 7px 7px 16px",
-          boxShadow: "0 4px 40px rgba(180,100,220,0.06)",
+          boxShadow: isDark
+            ? "0 4px 40px rgba(180,100,220,0.06)"
+            : "0 4px 40px rgba(130,90,220,0.08), 0 0 0 1px rgba(130,90,220,0.05)",
           transition: "background 0.4s",
           maxWidth: "calc(100vw - 24px)",
         }}
@@ -132,35 +142,39 @@ export function FloatingNav() {
           <>
             {/* Worlds dropdown trigger */}
             <div
-              ref={worldsRef}
+              ref={expRef}
               className="relative"
-              onMouseEnter={handleWorldsEnter}
-              onMouseLeave={handleWorldsLeave}
+              onMouseEnter={handleExpEnter}
+              onMouseLeave={handleExpLeave}
             >
               <button
                 className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1.5"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "11.5px",
-                  color: worldsOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
-                  background: worldsOpen ? "rgba(255,255,255,0.06)" : "transparent",
+                  color: isDark
+                    ? expOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)"
+                    : expOpen ? "rgba(80,50,140,0.95)" : "rgba(80,50,140,0.6)",
+                  background: expOpen
+                    ? isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)"
+                    : "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.95)";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.95)" : "rgba(80,50,140,0.95)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)";
                 }}
                 onMouseLeave={(e) => {
-                  if (!worldsOpen) {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+                  if (!expOpen) {
+                    e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)";
                     e.currentTarget.style.background = "transparent";
                   }
                 }}
               >
                 Worlds
                 <motion.svg
-                  animate={{ rotate: worldsOpen ? 180 : 0 }}
+                  animate={{ rotate: expOpen ? 180 : 0 }}
                   transition={{ duration: 0.25 }}
                   width="10"
                   height="10"
@@ -175,7 +189,7 @@ export function FloatingNav() {
 
               {/* Dropdown */}
               <AnimatePresence>
-                {worldsOpen && (
+                {expOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -8, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -186,18 +200,22 @@ export function FloatingNav() {
                       width: "360px",
                       padding: "8px",
                       borderRadius: "20px",
-                      background: "linear-gradient(160deg, rgba(10,10,20,0.95), rgba(6,6,14,0.92))",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      background: isDark
+                        ? "linear-gradient(160deg, rgba(10,10,20,0.95), rgba(6,6,14,0.92))"
+                        : "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,248,255,0.95))",
+                      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
                       backdropFilter: "blur(30px)",
-                      boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.06)",
+                      boxShadow: isDark
+                        ? "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.06)"
+                        : "0 20px 60px rgba(130,90,220,0.15), 0 0 40px rgba(180,100,220,0.08)",
                     }}
-                    onMouseEnter={handleWorldsEnter}
-                    onMouseLeave={handleWorldsLeave}
+                    onMouseEnter={handleExpEnter}
+                    onMouseLeave={handleExpLeave}
                   >
                     {/* Header */}
                     <div className="px-4 pt-3 pb-2">
-                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.3)" }}>
-                        OUR WORLDS
+                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.4)" }}>
+                        EXPLORE WORLDS
                       </span>
                     </div>
 
@@ -207,7 +225,7 @@ export function FloatingNav() {
                       <button
                         className="flex items-center gap-4 w-full p-3 rounded-2xl transition-all duration-300 cursor-pointer group"
                         style={{ background: "transparent", border: "none", textAlign: "left" }}
-                        onClick={() => { setWorldsOpen(false); router.push("/story/heaven"); }}
+                        onClick={() => { setExpOpen(false); router.push("/story/heaven"); }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "rgba(220,200,100,0.06)";
                         }}
@@ -240,10 +258,10 @@ export function FloatingNav() {
                             </span>
                             <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(220,200,100,0.4)" }} />
                           </div>
-                          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: "#fff", marginBottom: "2px" }}>
+                          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Swarga: The Celestial Realm
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.35)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)" }}>
                             Golden temples &amp; divine wonder
                           </div>
                         </div>
@@ -253,13 +271,13 @@ export function FloatingNav() {
                       </button>
 
                       {/* Divider */}
-                      <div className="mx-4" style={{ height: "1px", background: "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" }} />
+                      <div className="mx-4" style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)" }} />
 
                       {/* Hell */}
                       <button
                         className="flex items-center gap-4 w-full p-3 rounded-2xl transition-all duration-300 cursor-pointer group"
                         style={{ background: "transparent", border: "none", textAlign: "left" }}
-                        onClick={() => { setWorldsOpen(false); router.push("/story/hell"); }}
+                        onClick={() => { setExpOpen(false); router.push("/story/hell"); }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "rgba(230,80,60,0.06)";
                         }}
@@ -292,10 +310,10 @@ export function FloatingNav() {
                             </span>
                             <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(230,80,60,0.4)" }} />
                           </div>
-                          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: "#fff", marginBottom: "2px" }}>
+                          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Naraka: The Infernal Depths
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.35)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)" }}>
                             Volcanic wastelands &amp; rivers of fire
                           </div>
                         </div>
@@ -307,8 +325,8 @@ export function FloatingNav() {
 
                     {/* Footer */}
                     <div className="px-4 pt-2 pb-2 mt-1">
-                      <div style={{ height: "1px", background: "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)", marginBottom: "8px" }} />
-                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
+                      <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)", marginBottom: "8px" }} />
+                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)", letterSpacing: "0.1em" }}>
                         More worlds coming soon...
                       </span>
                     </div>
@@ -325,7 +343,7 @@ export function FloatingNav() {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "11.5px",
-                  color: "rgba(255,255,255,0.55)",
+                  color: isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)",
                   background: "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
@@ -333,6 +351,8 @@ export function FloatingNav() {
                 onClick={() => {
                   if (item === "Pricing") {
                     router.push("/pricing");
+                  } else if (item === "Occasions") {
+                    router.push("/occasions");
                   } else if (item === "About") {
                     router.push("/about");
                   } else if (pathname !== "/") {
@@ -340,11 +360,11 @@ export function FloatingNav() {
                   }
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.95)";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.95)" : "rgba(80,50,140,0.95)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)";
                   e.currentTarget.style.background = "transparent";
                 }}
               >
@@ -352,6 +372,13 @@ export function FloatingNav() {
               </button>
             ))}
           </>
+        )}
+
+        {/* Theme Toggle */}
+        {!isMobile && (
+          <div className="ml-2">
+            <ThemeToggle />
+          </div>
         )}
 
         {/* Desktop CTA */}
@@ -362,20 +389,24 @@ export function FloatingNav() {
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "11.5px",
               color: "#ffffff",
-              background:
-                "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))",
-              border: "1px solid rgba(200,120,220,0.2)",
+              background: isDark
+                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
+                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))",
+              border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
               letterSpacing: "0.06em",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background =
-                "linear-gradient(135deg, rgba(140,100,220,0.45), rgba(230,80,160,0.35))";
-              e.currentTarget.style.boxShadow =
-                "0 0 20px rgba(180,100,220,0.15)";
+              e.currentTarget.style.background = isDark
+                ? "linear-gradient(135deg, rgba(140,100,220,0.45), rgba(230,80,160,0.35))"
+                : "linear-gradient(135deg, rgba(130,90,220,0.9), rgba(200,100,255,0.8))";
+              e.currentTarget.style.boxShadow = isDark
+                ? "0 0 20px rgba(180,100,220,0.15)"
+                : "0 0 20px rgba(130,90,220,0.25)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background =
-                "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))";
+              e.currentTarget.style.background = isDark
+                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
+                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))";
               e.currentTarget.style.boxShadow = "none";
             }}
           >
@@ -400,33 +431,33 @@ export function FloatingNav() {
                   rotate: menuOpen ? 45 : 0,
                   y: menuOpen ? 5 : 0,
                 }}
-                style={{
-                  width: "16px",
-                  height: "1.5px",
-                  background: "rgba(255,255,255,0.7)",
-                  borderRadius: "2px",
-                }}
+                  style={{
+                    width: "16px",
+                    height: "1.5px",
+                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    borderRadius: "2px",
+                  }}
               />
               <motion.div
                 animate={{ opacity: menuOpen ? 0 : 1 }}
-                style={{
-                  width: "16px",
-                  height: "1.5px",
-                  background: "rgba(255,255,255,0.7)",
-                  borderRadius: "2px",
-                }}
+                  style={{
+                    width: "16px",
+                    height: "1.5px",
+                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    borderRadius: "2px",
+                  }}
               />
               <motion.div
                 animate={{
                   rotate: menuOpen ? -45 : 0,
                   y: menuOpen ? -5 : 0,
                 }}
-                style={{
-                  width: "16px",
-                  height: "1.5px",
-                  background: "rgba(255,255,255,0.7)",
-                  borderRadius: "2px",
-                }}
+                  style={{
+                    width: "16px",
+                    height: "1.5px",
+                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    borderRadius: "2px",
+                  }}
               />
             </div>
           </button>
@@ -460,17 +491,17 @@ export function FloatingNav() {
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "13px",
-              color: "rgba(255,255,255,0.6)",
+              color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
               background: "transparent",
               border: "none",
               letterSpacing: "0.06em",
             }}
-            onClick={() => setMobileWorldsOpen(!mobileWorldsOpen)}
+            onClick={() => setMobileExpOpen(!mobileExpOpen)}
           >
             <span className="flex items-center justify-center gap-2">
               Worlds
               <motion.svg
-                animate={{ rotate: mobileWorldsOpen ? 180 : 0 }}
+                animate={{ rotate: mobileExpOpen ? 180 : 0 }}
                 transition={{ duration: 0.25 }}
                 width="10"
                 height="10"
@@ -485,7 +516,7 @@ export function FloatingNav() {
           </button>
 
           <AnimatePresence>
-            {mobileWorldsOpen && (
+            {mobileExpOpen && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -497,7 +528,7 @@ export function FloatingNav() {
                   <button
                     className="flex items-center gap-3 w-full p-2.5 rounded-xl cursor-pointer"
                     style={{ background: "rgba(220,200,100,0.05)", border: "1px solid rgba(220,200,100,0.1)", textAlign: "left" }}
-                    onClick={() => { setMenuOpen(false); setMobileWorldsOpen(false); router.push("/story/heaven"); }}
+                    onClick={() => { setMenuOpen(false); setMobileExpOpen(false); router.push("/story/heaven"); }}
                   >
                     <div style={{ width: "48px", height: "36px", position: "relative", borderRadius: "8px", overflow: "hidden" }}>
                       <Image src={heavenImg} alt="Swarga" fill style={{ objectFit: "cover", opacity: 0.8 }} />
@@ -510,7 +541,7 @@ export function FloatingNav() {
                   <button
                     className="flex items-center gap-3 w-full p-2.5 rounded-xl cursor-pointer"
                     style={{ background: "rgba(230,80,60,0.05)", border: "1px solid rgba(230,80,60,0.1)", textAlign: "left" }}
-                    onClick={() => { setMenuOpen(false); setMobileWorldsOpen(false); router.push("/story/hell"); }}
+                    onClick={() => { setMenuOpen(false); setMobileExpOpen(false); router.push("/story/hell"); }}
                   >
                     <div style={{ width: "48px", height: "36px", position: "relative", borderRadius: "8px", overflow: "hidden" }}>
                       <Image src={hellImg} alt="Naraka" fill style={{ objectFit: "cover", opacity: 0.8 }} />
@@ -532,7 +563,7 @@ export function FloatingNav() {
               style={{
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.6)",
+                color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
                 background: "transparent",
                 border: "none",
                 letterSpacing: "0.06em",
@@ -541,6 +572,8 @@ export function FloatingNav() {
                 setMenuOpen(false);
                 if (item === "Pricing") {
                   router.push("/pricing");
+                } else if (item === "Occasions") {
+                  router.push("/occasions");
                 } else if (item === "About") {
                   router.push("/about");
                 } else if (pathname !== "/") {
@@ -551,15 +584,19 @@ export function FloatingNav() {
               {item}
             </button>
           ))}
+          <div className="w-full flex items-center justify-center py-3 mt-1">
+            <ThemeToggle />
+          </div>
           <button
             className="w-full py-3 mt-1 rounded-full cursor-pointer"
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "13px",
               color: "#ffffff",
-              background:
-                "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))",
-              border: "1px solid rgba(200,120,220,0.2)",
+              background: isDark
+                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
+                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))",
+              border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
               letterSpacing: "0.06em",
             }}
             onClick={() => setMenuOpen(false)}
@@ -641,16 +678,21 @@ function GlassPanel({
   accent?: string;
   style?: React.CSSProperties;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <div
       className={`relative ${className}`}
       style={{
-        background:
-          "linear-gradient(160deg, rgba(12,10,24,0.7) 0%, rgba(8,6,18,0.5) 100%)",
-        border: `1px solid ${accent}0.1)`,
+        background: isDark
+          ? "linear-gradient(160deg, rgba(12,10,24,0.7) 0%, rgba(8,6,18,0.5) 100%)"
+          : "linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(250,248,255,0.8) 100%)",
+        border: `1px solid ${accent}${isDark ? "0.1)" : "0.2)"}`,
         borderRadius: "20px",
         backdropFilter: "blur(20px)",
-        boxShadow: `0 0 40px ${accent}0.04), inset 0 1px 0 rgba(255,255,255,0.04)`,
+        boxShadow: isDark
+          ? `0 0 40px ${accent}0.04), inset 0 1px 0 rgba(255,255,255,0.04)`
+          : `0 0 40px ${accent}0.08), inset 0 1px 0 rgba(255,255,255,0.5)`,
         overflow: "hidden",
         ...style,
       }}
@@ -668,7 +710,9 @@ function GlassPanel({
 }
 
 // --- Main HUD Content ---
-export function HUDContent() {
+export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const isMobile = useIsMobile();
   const { smoothX, smoothY, rawX, rawY } = useMouseParallax();
   const [mouseXRaw, setMouseXRaw] = useState(0);
@@ -699,7 +743,7 @@ export function HUDContent() {
       style={{ zIndex: 10, pointerEvents: "none" }}
     >
       {/* ===== 1. HERO / PORTAL ENTRY ===== */}
-      <section
+      {!skipHero && <section
         className="flex items-center justify-center relative"
         style={{
           height: "100vh",
@@ -736,8 +780,9 @@ export function HUDContent() {
               style={{
                 width: "30px",
                 height: "1px",
-                background:
-                  "linear-gradient(to right, transparent, rgba(180,120,220,0.4))",
+                  background: isDark
+                    ? "linear-gradient(to right, transparent, rgba(180,120,220,0.4))"
+                    : "linear-gradient(to right, transparent, rgba(130,90,220,0.5))",
               }}
             />
             <span
@@ -745,7 +790,7 @@ export function HUDContent() {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: isMobile ? "8px" : "10px",
                 letterSpacing: "0.35em",
-                color: "rgba(255,255,255,0.5)",
+                color: isDark ? "rgba(255,255,255,0.5)" : "rgba(80,50,140,0.6)",
                 textTransform: "uppercase",
               }}
             >
@@ -755,8 +800,9 @@ export function HUDContent() {
               style={{
                 width: "30px",
                 height: "1px",
-                background:
-                  "linear-gradient(to left, transparent, rgba(230,80,160,0.4))",
+                background: isDark
+                  ? "linear-gradient(to left, transparent, rgba(230,80,160,0.4))"
+                  : "linear-gradient(to left, transparent, rgba(200,100,255,0.5))",
               }}
             />
           </motion.div>
@@ -777,9 +823,10 @@ export function HUDContent() {
                 : "clamp(36px, 5vw, 64px)",
               fontWeight: 800,
               lineHeight: 1.1,
-              color: "#ffffff",
-              textShadow:
-                "0 0 60px rgba(180,100,220,0.2), 0 0 120px rgba(120,180,255,0.08)",
+              color: isDark ? "#ffffff" : "#1a0a2e",
+              textShadow: isDark
+                ? "0 0 60px rgba(180,100,220,0.2), 0 0 120px rgba(120,180,255,0.08)"
+                : "0 0 40px rgba(130,90,220,0.15)",
               letterSpacing: "0.03em",
             }}
           >
@@ -787,12 +834,14 @@ export function HUDContent() {
             <br />
             <span
               style={{
-                background:
-                  "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 40%, #E84393 100%)",
+                background: isDark
+                  ? "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 40%, #E84393 100%)"
+                  : "linear-gradient(135deg, #4a6fd8 0%, #7b52c4 40%, #c44a8f 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                filter:
-                  "drop-shadow(0 0 20px rgba(180,100,220,0.3))",
+                filter: isDark
+                  ? "drop-shadow(0 0 20px rgba(180,100,220,0.3))"
+                  : "drop-shadow(0 0 15px rgba(130,90,220,0.2))",
               }}
             >
               New Worlds
@@ -808,7 +857,7 @@ export function HUDContent() {
               fontFamily: "'Exo 2', sans-serif",
               fontSize: isMobile ? "13px" : "15px",
               lineHeight: 1.8,
-              color: "rgba(255,255,255,0.5)",
+              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(80,50,140,0.6)",
               maxWidth: "420px",
               marginTop: isMobile ? "14px" : "20px",
               letterSpacing: "0.02em",
@@ -860,7 +909,7 @@ export function HUDContent() {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "8px",
                     letterSpacing: "0.2em",
-                    color: "rgba(255,255,255,0.35)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                   }}
                 >
                   SYSTEM STATUS
@@ -870,7 +919,7 @@ export function HUDContent() {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: "rgba(255,255,255,0.3)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.5)",
                   lineHeight: 2,
                 }}
               >
@@ -922,7 +971,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "8px",
                   letterSpacing: "0.2em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                 }}
               >
                 SCENE DEPTH
@@ -932,7 +981,7 @@ export function HUDContent() {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: "rgba(255,255,255,0.3)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.5)",
                   lineHeight: 2,
                 }}
               >
@@ -972,16 +1021,16 @@ export function HUDContent() {
           transition={{ delay: 3.5, duration: 1 }}
           className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span
-            style={{
-              fontFamily: "'Exo 2', sans-serif",
-              fontSize: "9px",
-              letterSpacing: "0.3em",
-              color: "rgba(255,255,255,0.2)",
-            }}
-          >
-            SCROLL TO EXPLORE
-          </span>
+            <span
+              style={{
+                fontFamily: "'Exo 2', sans-serif",
+                fontSize: "9px",
+                letterSpacing: "0.3em",
+                color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
+              }}
+            >
+              SCROLL TO EXPLORE
+            </span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -993,7 +1042,7 @@ export function HUDContent() {
             }}
           />
         </motion.div>
-      </section>
+      </section>}
 
       {/* ===== 2. CORE EXPERIENCE ZONES ===== */}
       <section
@@ -1007,8 +1056,9 @@ export function HUDContent() {
                 style={{
                   width: "40px",
                   height: "1px",
-                  background:
-                    "linear-gradient(to right, transparent, rgba(120,180,255,0.3))",
+                  background: isDark
+                    ? "linear-gradient(to right, transparent, rgba(120,180,255,0.3))"
+                    : "linear-gradient(to right, transparent, rgba(130,90,220,0.4))",
                 }}
               />
               <span
@@ -1016,7 +1066,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                 }}
               >
                 CORE EXPERIENCE ZONES
@@ -1025,8 +1075,9 @@ export function HUDContent() {
                 style={{
                   width: "40px",
                   height: "1px",
-                  background:
-                    "linear-gradient(to left, transparent, rgba(230,80,160,0.3))",
+                  background: isDark
+                    ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
+                    : "linear-gradient(to left, transparent, rgba(200,100,255,0.4))",
                 }}
               />
             </div>
@@ -1082,7 +1133,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                 }}
               >
                 EXPERIENCE HIGHLIGHTS
@@ -1093,7 +1144,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: isMobile ? "22px" : "28px",
                   fontWeight: 700,
-                  color: "#ffffff",
+                  color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
                 }}
               >
@@ -1134,7 +1185,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                 }}
               >
                 FEATURED WORLDS
@@ -1145,7 +1196,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: isMobile ? "22px" : "28px",
                   fontWeight: 700,
-                  color: "#ffffff",
+                  color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
                 }}
               >
@@ -1431,7 +1482,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.4em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
                 }}
               >
                 MANIFESTO
@@ -1464,7 +1515,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: "rgba(255,255,255,0.4)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.5)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -1477,7 +1528,7 @@ export function HUDContent() {
                   fontSize: isMobile ? "18px" : "24px",
                   fontWeight: 700,
                   lineHeight: 1.6,
-                  color: "#ffffff",
+                  color: isDark ? "#ffffff" : "#1a0a2e",
                   maxWidth: "600px",
                   margin: "0 auto",
                 }}
@@ -1521,7 +1572,7 @@ export function HUDContent() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: "rgba(255,255,255,0.4)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.5)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -1534,7 +1585,7 @@ export function HUDContent() {
                   fontSize: isMobile ? "15px" : "18px",
                   fontWeight: 400,
                   lineHeight: 1.8,
-                  color: "rgba(255,255,255,0.6)",
+                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
                   maxWidth: "600px",
                   margin: "0 auto",
                 }}
@@ -1568,7 +1619,7 @@ export function HUDContent() {
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: "rgba(255,255,255,0.35)",
+                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.5)",
               }}
             >
               INITIALIZE
@@ -1582,16 +1633,19 @@ export function HUDContent() {
                   : "clamp(28px, 4vw, 42px)",
                 fontWeight: 800,
                 lineHeight: 1.25,
-                color: "#ffffff",
+                color: isDark ? "#ffffff" : "#1a0a2e",
               }}
             >
               Build With{" "}
               <span
                 style={{
-                  background:
-                    "linear-gradient(135deg, #7BB8FF, #C77DFF, #E84393)",
+                  backgroundImage: isDark
+                    ? "linear-gradient(135deg, #7BB8FF, #C77DFF, #E84393)"
+                    : "linear-gradient(135deg, #4a6fd8, #7b52c4, #c44a8f)",
                   WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
+                  color: "transparent",
                 }}
               >
                 NexoraXR
@@ -1603,7 +1657,7 @@ export function HUDContent() {
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: isMobile ? "13px" : "14px",
                 lineHeight: 1.8,
-                color: "rgba(255,255,255,0.45)",
+                color: isDark ? "rgba(255,255,255,0.45)" : "rgba(80,50,140,0.6)",
                 maxWidth: "400px",
               }}
             >
@@ -1642,14 +1696,14 @@ export function HUDContent() {
             style={{
               width: "1px",
               height: "10px",
-              background: "rgba(255,255,255,0.1)",
+              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(130,90,220,0.15)",
             }}
           />
           <span
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: "rgba(255,255,255,0.2)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
             }}
           >
             2026
@@ -1658,14 +1712,14 @@ export function HUDContent() {
             style={{
               width: "1px",
               height: "10px",
-              background: "rgba(255,255,255,0.1)",
+              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(130,90,220,0.15)",
             }}
           />
           <span
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: "rgba(255,255,255,0.2)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
             }}
           >
             Immersive Reality Platform
@@ -1687,6 +1741,8 @@ function CTAButton({
   primary?: boolean;
   large?: boolean;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <button
       className="cursor-pointer transition-all duration-300"
@@ -1698,41 +1754,59 @@ function CTAButton({
         fontWeight: primary ? 600 : 500,
         letterSpacing: primary ? "0.1em" : "0.06em",
         padding: large ? "14px 32px" : "12px 24px",
-        color: primary ? "#ffffff" : "rgba(255,255,255,0.6)",
+        color: primary
+          ? "#ffffff"
+          : isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
         background: primary
-          ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.22))"
-          : "rgba(255,255,255,0.04)",
+          ? isDark
+            ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.22))"
+            : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))"
+          : isDark
+            ? "rgba(255,255,255,0.04)"
+            : "rgba(130,90,220,0.08)",
         border: primary
-          ? "1px solid rgba(200,130,255,0.22)"
-          : "1px solid rgba(255,255,255,0.08)",
+          ? isDark
+            ? "1px solid rgba(200,130,255,0.22)"
+            : "1px solid rgba(130,90,220,0.3)"
+          : isDark
+            ? "1px solid rgba(255,255,255,0.08)"
+            : "1px solid rgba(130,90,220,0.2)",
         borderRadius: "50px",
         boxShadow: primary
-          ? "0 0 24px rgba(180,100,220,0.1)"
+          ? isDark
+            ? "0 0 24px rgba(180,100,220,0.1)"
+            : "0 0 24px rgba(130,90,220,0.15)"
           : "none",
         whiteSpace: "nowrap",
       }}
       onMouseEnter={(e) => {
         if (primary) {
-          e.currentTarget.style.boxShadow =
-            "0 0 40px rgba(180,100,220,0.2)";
-          e.currentTarget.style.borderColor =
-            "rgba(200,130,255,0.35)";
+          e.currentTarget.style.boxShadow = isDark
+            ? "0 0 40px rgba(180,100,220,0.2)"
+            : "0 0 40px rgba(130,90,220,0.25)";
+          e.currentTarget.style.borderColor = isDark
+            ? "rgba(200,130,255,0.35)"
+            : "rgba(130,90,220,0.4)";
         } else {
-          e.currentTarget.style.color = "#ffffff";
-          e.currentTarget.style.borderColor =
-            "rgba(255,255,255,0.2)";
+          e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(80,50,140,0.9)";
+          e.currentTarget.style.borderColor = isDark
+            ? "rgba(255,255,255,0.2)"
+            : "rgba(130,90,220,0.3)";
         }
       }}
       onMouseLeave={(e) => {
         if (primary) {
-          e.currentTarget.style.boxShadow =
-            "0 0 24px rgba(180,100,220,0.1)";
-          e.currentTarget.style.borderColor =
-            "rgba(200,130,255,0.22)";
+          e.currentTarget.style.boxShadow = isDark
+            ? "0 0 24px rgba(180,100,220,0.1)"
+            : "0 0 24px rgba(130,90,220,0.15)";
+          e.currentTarget.style.borderColor = isDark
+            ? "rgba(200,130,255,0.22)"
+            : "rgba(130,90,220,0.3)";
         } else {
-          e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-          e.currentTarget.style.borderColor =
-            "rgba(255,255,255,0.08)";
+          e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)";
+          e.currentTarget.style.borderColor = isDark
+            ? "rgba(255,255,255,0.08)"
+            : "rgba(130,90,220,0.2)";
         }
       }}
     >
@@ -1748,13 +1822,16 @@ function HUDChip({
   children: React.ReactNode;
   accent?: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <div
       style={{
         padding: "14px 18px",
-        background:
-          "linear-gradient(135deg, rgba(12,10,24,0.6), rgba(8,6,18,0.4))",
-        border: `1px solid ${accent}0.08)`,
+        background: isDark
+          ? "linear-gradient(135deg, rgba(12,10,24,0.6), rgba(8,6,18,0.4))"
+          : "linear-gradient(135deg, rgba(255,255,255,0.8), rgba(250,248,255,0.7))",
+        border: `1px solid ${accent}${isDark ? "0.08)" : "0.15)"}`,
         borderRadius: "12px",
         backdropFilter: "blur(12px)",
       }}
@@ -1779,6 +1856,8 @@ function ServiceModule({
   accent: string;
   icon: React.ReactNode;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <GlassPanel
       accent={accent}
@@ -1830,7 +1909,7 @@ function ServiceModule({
           fontSize: "18px",
           fontWeight: 700,
           lineHeight: 1.4,
-          color: "#ffffff",
+          color: isDark ? "#ffffff" : "#1a0a2e",
           whiteSpace: "pre-line",
           marginBottom: "12px",
         }}
@@ -1842,7 +1921,7 @@ function ServiceModule({
           fontFamily: "'Exo 2', sans-serif",
           fontSize: "13px",
           lineHeight: 1.8,
-          color: "rgba(255,255,255,0.4)",
+          color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
           marginBottom: "20px",
         }}
       >
@@ -1856,7 +1935,7 @@ function ServiceModule({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "8px",
                 letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.25)",
+                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(80,50,140,0.4)",
                 marginBottom: "4px",
               }}
             >
@@ -1867,7 +1946,7 @@ function ServiceModule({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "16px",
                 fontWeight: 700,
-                color: `${accent}0.75)`,
+                color: `${accent}${isDark ? "0.75)" : "0.85)"}`,
               }}
             >
               {s.value}
@@ -1892,37 +1971,43 @@ function DataNode({
   label: string;
   icon: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <div
       className="group cursor-pointer flex items-center gap-3 px-4 md:px-5 py-2.5 md:py-3 transition-all duration-300 hover:scale-105"
       style={{
-        background:
-          "linear-gradient(135deg, rgba(12,10,24,0.5), rgba(8,6,18,0.3))",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: isDark
+          ? "linear-gradient(135deg, rgba(12,10,24,0.5), rgba(8,6,18,0.3))"
+          : "linear-gradient(135deg, rgba(255,255,255,0.7), rgba(250,248,255,0.6))",
+        border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(130,90,220,0.15)",
         borderRadius: "40px",
         backdropFilter: "blur(12px)",
         pointerEvents: "auto",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor =
-          "rgba(200,130,255,0.18)";
-        e.currentTarget.style.boxShadow =
-          "0 0 20px rgba(180,100,220,0.08)";
+        e.currentTarget.style.borderColor = isDark
+          ? "rgba(200,130,255,0.18)"
+          : "rgba(130,90,220,0.3)";
+        e.currentTarget.style.boxShadow = isDark
+          ? "0 0 20px rgba(180,100,220,0.08)"
+          : "0 0 20px rgba(130,90,220,0.12)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor =
-          "rgba(255,255,255,0.06)";
+        e.currentTarget.style.borderColor = isDark
+          ? "rgba(255,255,255,0.06)"
+          : "rgba(130,90,220,0.15)";
         e.currentTarget.style.boxShadow = "none";
       }}
     >
-      <span style={{ fontSize: "14px", opacity: 0.6 }}>
+      <span style={{ fontSize: "14px", opacity: isDark ? 0.6 : 0.7 }}>
         {icon}
       </span>
       <span
         style={{
           fontFamily: "'Exo 2', sans-serif",
           fontSize: "12px",
-          color: "rgba(255,255,255,0.6)",
+          color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
           letterSpacing: "0.04em",
         }}
       >
@@ -1941,23 +2026,26 @@ function BrandCard({
   tag: string;
   accent: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <div
       className="group cursor-default flex flex-col items-center justify-center text-center p-5 md:p-6 rounded-2xl transition-all duration-300"
       style={{
-        background:
-          "linear-gradient(160deg, rgba(12,10,24,0.55), rgba(8,6,18,0.35))",
-        border: `1px solid ${accent}0.08)`,
+        background: isDark
+          ? "linear-gradient(160deg, rgba(12,10,24,0.55), rgba(8,6,18,0.35))"
+          : "linear-gradient(160deg, rgba(255,255,255,0.8), rgba(250,248,255,0.7))",
+        border: `1px solid ${accent}${isDark ? "0.08)" : "0.15)"}`,
         backdropFilter: "blur(14px)",
         minHeight: "110px",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = `${accent}0.22)`;
-        e.currentTarget.style.boxShadow = `0 0 28px ${accent}0.08)`;
+        e.currentTarget.style.borderColor = `${accent}${isDark ? "0.22)" : "0.3)"}`;
+        e.currentTarget.style.boxShadow = `0 0 28px ${accent}${isDark ? "0.08)" : "0.12)"}`;
         e.currentTarget.style.transform = "translateY(-3px)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = `${accent}0.08)`;
+        e.currentTarget.style.borderColor = `${accent}${isDark ? "0.08)" : "0.15)"}`;
         e.currentTarget.style.boxShadow = "none";
         e.currentTarget.style.transform = "translateY(0)";
       }}
@@ -1967,7 +2055,7 @@ function BrandCard({
           fontFamily: "'Orbitron', sans-serif",
           fontSize: "13px",
           fontWeight: 700,
-          color: "#ffffff",
+          color: isDark ? "#ffffff" : "#1a0a2e",
           marginBottom: "8px",
           letterSpacing: "0.02em",
         }}
@@ -2008,6 +2096,8 @@ function StoryCard({
   isMobile?: boolean;
   link?: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const router = useRouter();
   return (
     <div
@@ -2017,11 +2107,12 @@ function StoryCard({
         flex: 1,
         maxWidth: isMobile ? "100%" : "460px",
         borderRadius: "22px",
-        background:
-          "linear-gradient(160deg, rgba(12,10,24,0.75) 0%, rgba(8,6,18,0.55) 100%)",
-        border: `1px solid ${accent}0.1)`,
+        background: isDark
+          ? "linear-gradient(160deg, rgba(12,10,24,0.75) 0%, rgba(8,6,18,0.55) 100%)"
+          : "linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(250,248,255,0.85) 100%)",
+        border: `1px solid ${accent}${isDark ? "0.1)" : "0.2)"}`,
         backdropFilter: "blur(20px)",
-        boxShadow: `0 0 40px ${accent}0.04)`,
+        boxShadow: `0 0 40px ${accent}${isDark ? "0.04)" : "0.08)"}`,
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = `${accent}0.25)`;
@@ -2050,7 +2141,9 @@ function StoryCard({
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to bottom, transparent 30%, rgba(8,6,18,0.95) 100%), linear-gradient(135deg, ${accent}0.05), transparent 60%)`,
+            background: isDark
+              ? `linear-gradient(to bottom, transparent 30%, rgba(8,6,18,0.95) 100%), linear-gradient(135deg, ${accent}0.05), transparent 60%)`
+              : `linear-gradient(to bottom, transparent 30%, rgba(250,248,255,0.95) 100%), linear-gradient(135deg, ${accent}0.08), transparent 60%)`,
           }}
         />
         <div
@@ -2060,8 +2153,8 @@ function StoryCard({
         <div
           className="absolute top-4 left-4 px-3 py-1.5 rounded-full"
           style={{
-            background: "rgba(6,6,14,0.65)",
-            border: `1px solid ${accent}0.2)`,
+            background: isDark ? "rgba(6,6,14,0.65)" : "rgba(255,255,255,0.8)",
+            border: `1px solid ${accent}${isDark ? "0.2)" : "0.25)"}`,
             backdropFilter: "blur(10px)",
           }}
         >
@@ -2102,7 +2195,7 @@ function StoryCard({
             fontFamily: "'Orbitron', sans-serif",
             fontSize: isMobile ? "16px" : "18px",
             fontWeight: 700,
-            color: "#ffffff",
+            color: isDark ? "#ffffff" : "#1a0a2e",
             marginBottom: "10px",
             lineHeight: 1.3,
           }}
@@ -2114,7 +2207,7 @@ function StoryCard({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: isMobile ? "12px" : "13px",
             lineHeight: 1.8,
-            color: "rgba(255,255,255,0.4)",
+            color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
             marginBottom: "20px",
           }}
         >
@@ -2152,7 +2245,7 @@ function StoryCard({
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: "rgba(255,255,255,0.2)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.3)",
               letterSpacing: "0.1em",
             }}
           >
@@ -2188,6 +2281,8 @@ function WorldCapsule({
   img: string;
   isMobile?: boolean;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <GlassPanel
       accent={accent}
@@ -2213,7 +2308,9 @@ function WorldCapsule({
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to bottom, transparent 20%, rgba(6,6,14,0.9) 100%), linear-gradient(135deg, ${accent}0.06), transparent 60%)`,
+            background: isDark
+              ? `linear-gradient(to bottom, transparent 20%, rgba(6,6,14,0.9) 100%), linear-gradient(135deg, ${accent}0.06), transparent 60%)`
+              : `linear-gradient(to bottom, transparent 20%, rgba(250,248,255,0.9) 100%), linear-gradient(135deg, ${accent}0.1), transparent 60%)`,
           }}
         />
         <div
@@ -2223,8 +2320,8 @@ function WorldCapsule({
         <div
           className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
           style={{
-            background: "rgba(6,6,14,0.6)",
-            border: `1px solid ${accent}0.15)`,
+            background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
+            border: `1px solid ${accent}${isDark ? "0.15)" : "0.2)"}`,
             backdropFilter: "blur(8px)",
           }}
         >
@@ -2246,7 +2343,7 @@ function WorldCapsule({
             fontFamily: "'Orbitron', sans-serif",
             fontSize: "15px",
             fontWeight: 700,
-            color: "#ffffff",
+            color: isDark ? "#ffffff" : "#1a0a2e",
             marginBottom: "8px",
           }}
         >
@@ -2257,7 +2354,7 @@ function WorldCapsule({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "12px",
             lineHeight: 1.7,
-            color: "rgba(255,255,255,0.38)",
+            color: isDark ? "rgba(255,255,255,0.38)" : "rgba(80,50,140,0.6)",
           }}
         >
           {desc}
