@@ -49,6 +49,25 @@ function useIsMobile() {
   return mobile;
 }
 
+// --- Screen size hook for full responsive awareness ---
+function useScreenSize() {
+  const [size, setSize] = useState<"mobile" | "tablet" | "laptop" | "desktop" | "wide">("laptop");
+  useEffect(() => {
+    const check = () => {
+      const w = window.innerWidth;
+      if (w < 640) setSize("mobile");
+      else if (w < 1024) setSize("tablet");
+      else if (w < 1440) setSize("laptop");
+      else if (w < 1920) setSize("desktop");
+      else setSize("wide");
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return size;
+}
+
 // --- Floating Nav ---
 export function FloatingNav() {
   const { theme } = useTheme();
@@ -60,6 +79,14 @@ export function FloatingNav() {
   const expRef = useRef<HTMLDivElement>(null);
   const expTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isMobile = useIsMobile();
+  // Use tablet breakpoint for collapsing nav items on smaller screens
+  const [isTabletOrSmall, setIsTabletOrSmall] = useState(false);
+  useEffect(() => {
+    const check = () => setIsTabletOrSmall(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -114,13 +141,16 @@ export function FloatingNav() {
           border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
           borderRadius: "60px",
           padding: isMobile
-            ? "6px 10px 6px 14px"
-            : "7px 7px 7px 16px",
+            ? "8px 12px 8px 14px"
+            : isTabletOrSmall
+              ? "8px 14px 8px 18px"
+              : "10px 10px 10px 22px",
           boxShadow: isDark
             ? "0 4px 40px rgba(180,100,220,0.06)"
             : "0 4px 40px rgba(130,90,220,0.08), 0 0 0 1px rgba(130,90,220,0.05)",
           transition: "background 0.4s",
           maxWidth: "calc(100vw - 24px)",
+          overflow: "visible",
         }}
       >
         <Image
@@ -129,16 +159,18 @@ export function FloatingNav() {
           className="select-none cursor-pointer"
           onClick={handleNavHome}
           style={{
-            height: isMobile ? "44px" : "56px",
+            height: isMobile ? "62px" : isTabletOrSmall ? "78px" : "116px",
             width: "auto",
-            opacity: 0.95,
-            marginRight: isMobile ? "10px" : "18px",
+            opacity: 0.97,
+            marginRight: isMobile ? "6px" : isTabletOrSmall ? "10px" : "20px",
+            marginTop: isMobile ? "-8px" : isTabletOrSmall ? "-10px" : "-15px",
+            marginBottom: isMobile ? "-8px" : isTabletOrSmall ? "-10px" : "-15px",
           }}
           priority
         />
 
         {/* Desktop nav items */}
-        {!isMobile && (
+        {!isTabletOrSmall && (
           <>
             {/* Worlds dropdown trigger */}
             <div
@@ -148,10 +180,10 @@ export function FloatingNav() {
               onMouseLeave={handleExpLeave}
             >
               <button
-                className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
-                  fontSize: "11.5px",
+                  fontSize: "15px",
                   color: isDark
                     ? expOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)"
                     : expOpen ? "rgba(80,50,140,0.95)" : "rgba(80,50,140,0.6)",
@@ -339,10 +371,10 @@ export function FloatingNav() {
             {navItems.map((item) => (
               <button
                 key={item}
-                className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
+                className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer shrink-0 whitespace-nowrap"
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
-                  fontSize: "11.5px",
+                  fontSize: "15px",
                   color: isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)",
                   background: "transparent",
                   border: "none",
@@ -375,25 +407,27 @@ export function FloatingNav() {
         )}
 
         {/* Theme Toggle */}
-        {!isMobile && (
+        {!isTabletOrSmall && (
           <div className="ml-2">
             <ThemeToggle />
           </div>
         )}
 
         {/* Desktop CTA */}
-        {!isMobile && (
+        {!isTabletOrSmall && (
           <button
-            className="ml-2 px-5 py-2 rounded-full cursor-pointer transition-all duration-300"
+            className="ml-2 px-5 py-2 rounded-full cursor-pointer transition-all duration-300 shrink-0 whitespace-nowrap"
             style={{
               fontFamily: "'Exo 2', sans-serif",
-              fontSize: "11.5px",
+              fontSize: "15px",
+              fontWeight: 600,
               color: "#ffffff",
               background: isDark
                 ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
                 : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))",
               border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
               letterSpacing: "0.06em",
+              lineHeight: 1,
             }}
             onClick={() => router.push("/book-now")}
             onMouseEnter={(e) => {
@@ -415,10 +449,10 @@ export function FloatingNav() {
           </button>
         )}
 
-        {/* Mobile hamburger */}
-        {isMobile && (
+        {/* Tablet/Mobile hamburger */}
+        {isTabletOrSmall && (
           <button
-            className="p-2 rounded-full cursor-pointer"
+            className="p-2.5 rounded-full cursor-pointer"
             style={{
               background: "transparent",
               border: "none",
@@ -426,37 +460,37 @@ export function FloatingNav() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Menu"
           >
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5">
               <motion.div
                 animate={{
                   rotate: menuOpen ? 45 : 0,
-                  y: menuOpen ? 5 : 0,
+                  y: menuOpen ? 6 : 0,
                 }}
                   style={{
-                    width: "16px",
-                    height: "1.5px",
-                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    width: "22px",
+                    height: "2px",
+                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
                     borderRadius: "2px",
                   }}
               />
               <motion.div
                 animate={{ opacity: menuOpen ? 0 : 1 }}
                   style={{
-                    width: "16px",
-                    height: "1.5px",
-                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    width: "22px",
+                    height: "2px",
+                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
                     borderRadius: "2px",
                   }}
               />
               <motion.div
                 animate={{
                   rotate: menuOpen ? -45 : 0,
-                  y: menuOpen ? -5 : 0,
+                  y: menuOpen ? -6 : 0,
                 }}
                   style={{
-                    width: "16px",
-                    height: "1.5px",
-                    background: isDark ? "rgba(255,255,255,0.7)" : "rgba(80,50,140,0.7)",
+                    width: "22px",
+                    height: "2px",
+                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
                     borderRadius: "2px",
                   }}
               />
@@ -465,8 +499,8 @@ export function FloatingNav() {
         )}
       </motion.nav>
 
-      {/* Mobile dropdown */}
-      {isMobile && (
+      {/* Tablet/Mobile dropdown */}
+      {isTabletOrSmall && (
         <motion.div
           initial={false}
           animate={{
@@ -477,7 +511,7 @@ export function FloatingNav() {
               : ("none" as const),
           }}
           transition={{ duration: 0.3 }}
-          className="fixed top-16 left-4 right-4 flex flex-col items-center gap-1 py-4 px-3 rounded-2xl"
+          className="fixed top-[5.5rem] left-4 right-4 flex flex-col items-center gap-1 py-5 px-4 rounded-2xl"
           style={{
             zIndex: 199,
             backdropFilter: "blur(24px)",
@@ -489,10 +523,10 @@ export function FloatingNav() {
         >
           {/* Worlds with expandable sub-items */}
           <button
-            className="w-full py-3 rounded-xl transition-all cursor-pointer"
+            className="w-full py-3.5 rounded-xl transition-all cursor-pointer"
             style={{
               fontFamily: "'Exo 2', sans-serif",
-              fontSize: "13px",
+              fontSize: "15px",
               color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
               background: "transparent",
               border: "none",
@@ -561,10 +595,10 @@ export function FloatingNav() {
           {navItems.map((item) => (
             <button
               key={item}
-              className="w-full py-3 rounded-xl transition-all cursor-pointer"
+              className="w-full py-3.5 rounded-xl transition-all cursor-pointer"
               style={{
                 fontFamily: "'Exo 2', sans-serif",
-                fontSize: "13px",
+                fontSize: "15px",
                 color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
                 background: "transparent",
                 border: "none",
@@ -590,10 +624,11 @@ export function FloatingNav() {
             <ThemeToggle />
           </div>
           <button
-            className="w-full py-3 mt-1 rounded-full cursor-pointer"
+            className="w-full py-3.5 mt-1 rounded-full cursor-pointer"
             style={{
               fontFamily: "'Exo 2', sans-serif",
-              fontSize: "13px",
+              fontSize: "15px",
+              fontWeight: 600,
               color: "#ffffff",
               background: isDark
                 ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
@@ -719,9 +754,17 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
   const { smoothX, smoothY, rawX, rawY } = useMouseParallax();
   const [mouseXRaw, setMouseXRaw] = useState(0);
   const [mouseYRaw, setMouseYRaw] = useState(0);
+
+  // Headset size: responsive across all breakpoints
+  const headsetSize =
+    screenSize === "mobile" ? "clamp(200px, 70vw, 280px)" :
+    screenSize === "tablet" ? "clamp(280px, 40vw, 380px)" :
+    screenSize === "laptop" ? "500px" :
+    screenSize === "desktop" ? "560px" : "600px";
 
   // Hoist all useTransform calls to top level (hooks can't be conditional)
   const headsetX = useTransform(smoothX, [-1, 1], [-20, 20]);
@@ -760,8 +803,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         <motion.div
           style={{
             position: "absolute",
-            width: isMobile ? "280px" : "500px",
-            height: isMobile ? "280px" : "500px",
+            width: headsetSize,
+            height: headsetSize,
             x: headsetX,
             y: headsetY,
             zIndex: 0,
@@ -771,7 +814,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </motion.div>
 
         <div
-          className="flex flex-col items-center text-center relative px-5"
+          className="flex flex-col items-center text-center relative px-4 sm:px-5 w-full max-w-[min(48rem,90vw)]"
           style={{ pointerEvents: "auto", zIndex: 1 }}
         >
           {/* Micro label */}
@@ -824,8 +867,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: isMobile
-                ? "clamp(28px, 9vw, 40px)"
-                : "clamp(36px, 5vw, 64px)",
+                ? "clamp(24px, 9vw, 40px)"
+                : "clamp(32px, 4.5vw, 64px)",
               fontWeight: 800,
               lineHeight: 1.1,
               color: isDark ? "#ffffff" : "#1a0a2e",
@@ -878,7 +921,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 2.2 }}
-            className={`flex gap-3 md:gap-4 ${isMobile ? "mt-6 flex-col items-center" : "mt-9"}`}
+            className={`flex gap-3 sm:gap-4 ${isMobile ? "mt-6 flex-col items-center w-full" : "mt-9 flex-wrap justify-center"}`}
           >
             <CTAButton primary>Explore Experiences</CTAButton>
             <CTAButton>View VR Games</CTAButton>
@@ -1049,14 +1092,107 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </motion.div>
       </section>}
 
+      {/* ===== WELCOME TO NEXORA XR ===== */}
+      <section
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto", pointerEvents: "auto" }}
+      >
+        <ParallaxLayer speed={-0.08}>
+          <Section delay={0.05}>
+            <div className="text-center w-full max-w-[min(720px,92vw)] mx-auto">
+              <h2
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: isMobile ? "clamp(20px, 6vw, 26px)" : "clamp(26px, 3vw, 38px)",
+                  fontWeight: 700,
+                  color: isDark ? "#ffffff" : "#1a0a2e",
+                  lineHeight: 1.2,
+                  marginBottom: "8px",
+                }}
+              >
+                What is Nexora XR?
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: isMobile ? "14px" : "16px",
+                  fontWeight: 600,
+                  color: isDark ? "rgba(255,255,255,0.85)" : "rgba(80,50,140,0.9)",
+                  letterSpacing: "0.02em",
+                  marginBottom: "24px",
+                }}
+              >
+                Nexora XR is Sri Lanka&apos;s first XR theatre.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "15px" : "17px",
+                  fontWeight: 600,
+                  lineHeight: 1.6,
+                  color: isDark ? "rgba(255,255,255,0.9)" : "rgba(40,20,80,0.95)",
+                  marginBottom: "20px",
+                }}
+              >
+                An immersive extended reality experience where you step beyond traditional cinema into living, breathing stories.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "14px" : "15px",
+                  lineHeight: 1.75,
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  marginBottom: "16px",
+                }}
+              >
+                With Nexora XR, you are placed at the center of the experience, surrounded by interactive worlds that respond to your presence and movement.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "14px" : "15px",
+                  lineHeight: 1.75,
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  marginBottom: "16px",
+                }}
+              >
+                It blends theatre, gaming, and cinematic storytelling into one seamless XR format, designed from the ground up for exploration and immersion.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "14px" : "15px",
+                  lineHeight: 1.75,
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  marginBottom: "16px",
+                }}
+              >
+                You don&apos;t just watch; you inhabit the story world, move through it, and feel as if the narrative is unfolding all around you in real time.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "15px" : "16px",
+                  fontWeight: 600,
+                  lineHeight: 1.6,
+                  color: isDark ? "rgba(255,255,255,0.9)" : "rgba(80,50,140,0.95)",
+                }}
+              >
+                Are you ready to step beyond reality?
+              </p>
+            </div>
+          </Section>
+        </ParallaxLayer>
+      </section>
+
       {/* ===== 4.25 OUR STORIES ===== */}
       <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "auto" }}
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.1}>
           <Section>
-            <div className="text-center mb-10 md:mb-14">
+            <div className="text-center mb-8 md:mb-10 lg:mb-14">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div
                   style={{
@@ -1095,7 +1231,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                   lineHeight: 1.3,
                 }}
               >
-                Our{" "}
+                Discover Our{" "}
                 <span
                   style={{
                     backgroundImage:
@@ -1106,7 +1242,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                     color: "transparent",
                   }}
                 >
-                  Stories
+                  Worlds
                 </span>
               </h2>
               <p
@@ -1128,7 +1264,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className={`flex ${isMobile ? "flex-col" : ""} gap-6 md:gap-8 w-full max-w-[960px] justify-center items-stretch`}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-[min(960px,95vw)]"
           style={{ pointerEvents: "auto", perspective: "1000px" }}
         >
           {/* Heaven Card */}
@@ -1163,12 +1299,12 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 2. CORE EXPERIENCE ZONES ===== */}
       <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "100vh" }}
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.15}>
           <Section>
-            <div className="flex items-center gap-3 mb-10 md:mb-16">
+            <div className="flex items-center gap-3 mb-8 md:mb-12 lg:mb-16">
               <div
                 style={{
                   width: "40px",
@@ -1202,7 +1338,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className={`flex ${isMobile ? "flex-col" : ""} gap-6 md:gap-10 items-stretch w-full max-w-[860px]`}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 w-full max-w-[min(860px,95vw)]"
           style={{
             pointerEvents: "auto",
             perspective: "800px",
@@ -1239,8 +1375,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 3. EXPERIENCE HIGHLIGHTS ===== */}
       <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "80vh" }}
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.1}>
           <Section>
@@ -1259,7 +1395,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 className="mt-3"
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "22px" : "28px",
+                  fontSize: isMobile ? "clamp(18px, 5.5vw, 22px)" : "clamp(22px, 2.5vw, 28px)",
                   fontWeight: 700,
                   color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
@@ -1272,7 +1408,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl"
+          className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-[min(56rem,95vw)]"
           style={{ pointerEvents: "auto" }}
         >
           {[
@@ -1291,8 +1427,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 4. FEATURED WORLDS ===== */}
       <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "100vh" }}
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.12}>
           <Section>
@@ -1311,7 +1447,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
                 className="mt-3"
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "22px" : "28px",
+                  fontSize: isMobile ? "clamp(18px, 5.5vw, 22px)" : "clamp(22px, 2.5vw, 28px)",
                   fontWeight: 700,
                   color: isDark ? "#ffffff" : "#1a0a2e",
                   lineHeight: 1.3,
@@ -1324,7 +1460,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className={`flex ${isMobile ? "flex-col items-center" : ""} gap-5 md:gap-7 w-full max-w-[1020px] justify-center`}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-[min(1020px,95vw)]"
           style={{
             pointerEvents: "auto",
             perspective: "1000px",
@@ -1362,8 +1498,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 4.5 VR & XR BRANDS ===== */}
       <section
-        className="flex flex-col items-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "auto" }}
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.1}>
           <Section>
@@ -1441,7 +1577,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
         <Section delay={0.15}>
           <div
-            className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-4"} gap-4 md:gap-5 w-full max-w-[900px]`}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-[min(900px,95vw)]"
             style={{ pointerEvents: "auto" }}
           >
             {([
@@ -1473,8 +1609,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 5. VISION & MISSION ===== */}
       <section
-        className="flex flex-col items-center justify-center py-16 md:py-24 px-5 md:px-8"
-        style={{ minHeight: isMobile ? "auto" : "90vh" }}
+        className="flex flex-col items-center justify-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto" }}
       >
         <ParallaxLayer speed={-0.1}>
           <Section>
@@ -1510,13 +1646,13 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-col items-center gap-6 w-full max-w-3xl"
+          className="flex flex-col items-center gap-6 w-full max-w-[min(48rem,95vw)]"
           style={{ pointerEvents: "auto" }}
         >
           <Section delay={0.2}>
             <GlassPanel
               accent="rgba(200,130,255,"
-              className={`${isMobile ? "p-7" : "p-12"} text-center`}
+              className="p-6 sm:p-8 md:p-12 text-center w-full"
               style={{ position: "relative" }}
             >
               <CornerAccents />
@@ -1535,7 +1671,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               <h2
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "18px" : "24px",
+                  fontSize: isMobile ? "clamp(15px, 4.5vw, 18px)" : "clamp(18px, 2vw, 24px)",
                   fontWeight: 700,
                   lineHeight: 1.6,
                   color: isDark ? "#ffffff" : "#1a0a2e",
@@ -1573,7 +1709,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
           <Section delay={0.5}>
             <GlassPanel
               accent="rgba(120,180,255,"
-              className={`${isMobile ? "p-7" : "p-12"} text-center`}
+              className="p-6 sm:p-8 md:p-12 text-center w-full"
               style={{ position: "relative" }}
             >
               <CornerAccents flip />
@@ -1592,7 +1728,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               <p
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
-                  fontSize: isMobile ? "15px" : "18px",
+                  fontSize: isMobile ? "clamp(13px, 3.5vw, 15px)" : "clamp(15px, 1.5vw, 18px)",
                   fontWeight: 400,
                   lineHeight: 1.8,
                   color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
@@ -1616,12 +1752,12 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 6. FINAL CTA ===== */}
       <section
-        className="flex flex-col items-center justify-center py-16 md:py-24 px-5 md:px-8 relative"
-        style={{ minHeight: isMobile ? "70vh" : "80vh" }}
+        className="flex flex-col items-center justify-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 relative"
+        style={{ minHeight: "auto" }}
       >
         <Section>
           <div
-            className="flex flex-col items-center text-center"
+            className="flex flex-col items-center text-center w-full max-w-[min(40rem,95vw)]"
             style={{ pointerEvents: "auto" }}
           >
             <span
@@ -1678,7 +1814,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
             </p>
 
             <div
-              className={`flex gap-4 md:gap-5 ${isMobile ? "flex-col items-center" : ""}`}
+              className={`flex gap-4 md:gap-5 ${isMobile ? "flex-col items-center w-full" : "flex-wrap justify-center"}`}
             >
               <CTAButton primary large>
                 Start Your XR Journey
@@ -1690,7 +1826,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
         {/* Footer */}
         <div
-          className={`${isMobile ? "mt-16" : "absolute bottom-6 left-1/2 -translate-x-1/2"} flex items-center gap-4 md:gap-5 flex-wrap justify-center`}
+          className="mt-16 md:mt-20 flex items-center gap-4 md:gap-5 flex-wrap justify-center"
           style={{ pointerEvents: "auto" }}
         >
           <Image
@@ -1755,7 +1891,7 @@ function CTAButton({
   const isDark = theme === "dark";
   return (
     <button
-      className="cursor-pointer transition-all duration-300"
+      className="cursor-pointer transition-all duration-300 w-full sm:w-auto"
       style={{
         fontFamily: primary
           ? "'Orbitron', sans-serif"
@@ -1872,7 +2008,7 @@ function ServiceModule({
     <GlassPanel
       accent={accent}
       className="group cursor-pointer transition-transform duration-500 hover:scale-[1.02] w-full"
-      style={{ maxWidth: "440px", padding: "28px 24px" }}
+      style={{ padding: "24px 20px", maxWidth: "100%" }}
     >
       <div className="flex items-center justify-between mb-5 md:mb-6">
         <div className="flex items-center gap-3">
@@ -2050,7 +2186,7 @@ function BrandCard({
           : "linear-gradient(160deg, rgba(255,255,255,0.8), rgba(250,248,255,0.7))",
         border: `1px solid ${accent}${isDark ? "0.08)" : "0.15)"}`,
         backdropFilter: "blur(14px)",
-        minHeight: "110px",
+        minHeight: "clamp(90px, 10vw, 110px)",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = `${accent}${isDark ? "0.22)" : "0.3)"}`;
@@ -2417,10 +2553,8 @@ function StoryCard({
   return (
     <div
       onClick={() => link && router.push(link)}
-      className="group relative cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-2"
+      className="group relative cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-2 w-full h-full"
       style={{
-        flex: 1,
-        maxWidth: isMobile ? "100%" : "460px",
         borderRadius: "22px",
         background: isDark
           ? "linear-gradient(160deg, rgba(12,10,24,0.75) 0%, rgba(8,6,18,0.55) 100%)"
@@ -2442,7 +2576,7 @@ function StoryCard({
       <div
         className="relative overflow-hidden"
         style={{
-          height: isMobile ? "200px" : "260px",
+          height: "clamp(180px, 28vw, 260px)",
           borderRadius: "22px 22px 0 0",
         }}
       >
@@ -2504,11 +2638,11 @@ function StoryCard({
       </div>
 
       {/* Content */}
-      <div style={{ padding: isMobile ? "20px" : "26px 28px 28px" }}>
+      <div style={{ padding: "clamp(16px, 3vw, 28px)" }}>
         <h3
           style={{
             fontFamily: "'Orbitron', sans-serif",
-            fontSize: isMobile ? "16px" : "18px",
+            fontSize: "clamp(14px, 2vw, 18px)",
             fontWeight: 700,
             color: isDark ? "#ffffff" : "#1a0a2e",
             marginBottom: "10px",
@@ -2520,7 +2654,7 @@ function StoryCard({
         <p
           style={{
             fontFamily: "'Exo 2', sans-serif",
-            fontSize: isMobile ? "12px" : "13px",
+            fontSize: "clamp(11px, 1.5vw, 13px)",
             lineHeight: 1.8,
             color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
             marginBottom: "20px",
@@ -2601,15 +2735,14 @@ function WorldCapsule({
   return (
     <GlassPanel
       accent={accent}
-      className="group cursor-pointer overflow-hidden transition-transform duration-500 hover:-translate-y-2"
+      className="group cursor-pointer overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
       style={{
-        width: isMobile ? "100%" : "320px",
-        maxWidth: "340px",
+        maxWidth: "100%",
       }}
     >
       <div
         className="relative overflow-hidden"
-        style={{ height: isMobile ? "160px" : "180px" }}
+        style={{ height: "clamp(140px, 18vw, 180px)" }}
       >
         <img
           src={img}

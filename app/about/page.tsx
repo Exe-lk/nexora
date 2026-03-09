@@ -204,7 +204,7 @@ export default function AboutPage() {
         </>
       )}
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-20">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-28 pb-20">
         {/* Hero */}
         <section className="text-center">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
@@ -238,12 +238,13 @@ export default function AboutPage() {
               directed—not confusing
             </h1>
             <p
-              className="mx-auto max-w-xl"
+              className="mx-auto"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "1rem",
                 lineHeight: 1.7,
                 color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.65)",
+                maxWidth: "min(520px, 92vw)",
               }}
             >
               Premium, story-led XR for culture, brands, learning, and events—built for clarity, comfort, and performance.
@@ -382,7 +383,7 @@ export default function AboutPage() {
         <section className="mt-14">
           <div className="relative rounded-2xl overflow-hidden">
             <div
-              className="relative flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-10"
+              className="relative flex flex-col sm:flex-row items-center justify-between gap-6 px-5 sm:px-8 py-8 sm:py-10"
               style={{
                 backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)",
               }}

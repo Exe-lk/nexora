@@ -124,10 +124,32 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    min-height: 100dvh;
+    /* Prevent horizontal overflow on all viewports */
+    max-width: 100vw;
+  }
+
+  /* Touch-action for interactive elements */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent image overflow */
+  img, video, canvas {
+    max-width: 100%;
   }
 
   /**

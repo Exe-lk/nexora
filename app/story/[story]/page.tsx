@@ -616,7 +616,7 @@ function ChapterCard({
           border: `1px solid ${color1}${hovering ? "0.2)" : "0.08)"}`,
           borderRadius: "22px",
           backdropFilter: "blur(20px)",
-          padding: "32px 28px",
+          padding: "clamp(20px, 4vw, 32px) clamp(16px, 3.5vw, 28px)",
           boxShadow: hovering ? `0 20px 60px ${color1}0.1)` : "none",
           transition: "border-color 0.3s, box-shadow 0.3s",
         }}
@@ -668,7 +668,7 @@ function ChapterCard({
         <h3
           style={{
             fontFamily: "'Orbitron', sans-serif",
-            fontSize: "20px",
+            fontSize: "clamp(16px, 2.5vw, 20px)",
             fontWeight: 700,
             color: isDark ? "#ffffff" : "#1a0a2e",
             marginBottom: "12px",
@@ -817,8 +817,8 @@ function PulseRings({ color1, color2 }: { color1: string; color2: string }) {
             ease: "easeOut",
           }}
           style={{
-            width: "200px",
-            height: "200px",
+            width: "clamp(120px, 25vw, 200px)",
+            height: "clamp(120px, 25vw, 200px)",
             border: `1px solid ${i % 2 === 0 ? color1 : color2}0.35)`,
             boxShadow: `0 0 8px ${color1}0.15)`,
           }}
@@ -995,8 +995,8 @@ function TitleHalo({ story, color1, color2 }: { story: "heaven" | "hell"; color1
         }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         style={{
-          width: "320px",
-          height: "320px",
+          width: "clamp(200px, 40vw, 320px)",
+          height: "clamp(200px, 40vw, 320px)",
           borderRadius: "50%",
           background: `radial-gradient(circle, ${color1}0.3) 0%, ${color2}0.1) 50%, transparent 70%)`,
           filter: "blur(30px)",
@@ -1008,8 +1008,8 @@ function TitleHalo({ story, color1, color2 }: { story: "heaven" | "hell"; color1
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute"
         style={{
-          width: "380px",
-          height: "380px",
+          width: "clamp(240px, 48vw, 380px)",
+          height: "clamp(240px, 48vw, 380px)",
           borderRadius: "50%",
           border: `1px solid ${color1}0.15)`,
           borderTopColor: `${color1}0.5)`,
@@ -1022,8 +1022,8 @@ function TitleHalo({ story, color1, color2 }: { story: "heaven" | "hell"; color1
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
         className="absolute"
         style={{
-          width: "500px",
-          height: "500px",
+          width: "clamp(300px, 60vw, 500px)",
+          height: "clamp(300px, 60vw, 500px)",
           borderRadius: "50%",
           border: `1px dashed ${color1}0.08)`,
         }}
@@ -1273,7 +1273,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               fontSize: isMobile ? "13px" : "15px",
               lineHeight: 1.9,
               color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
-              maxWidth: "500px",
+              maxWidth: "min(500px, 90vw)",
               marginTop: "22px",
             }}
           >
@@ -1408,7 +1408,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               className="mt-6"
               style={{
                 fontFamily: "'Exo 2', sans-serif",
-                fontSize: isMobile ? "16px" : "20px",
+                fontSize: "clamp(14px, 2.5vw, 20px)",
                 lineHeight: 1.9,
                 color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
               }}
@@ -1419,7 +1419,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
         </Section>
 
         {/* Feature grid */}
-        <div className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-4"} gap-4 md:gap-5 mt-16 max-w-[800px] w-full`}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mt-16 max-w-[800px] w-full">
           {data.features.map((f, i) => (
             <Section key={f.label} delay={0.1 + i * 0.08}>
               <div
@@ -1479,7 +1479,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             <h2
               style={{
                 fontFamily: "'Orbitron', sans-serif",
-                fontSize: isMobile ? "22px" : "32px",
+                fontSize: "clamp(20px, 4vw, 32px)",
                 fontWeight: 700,
                 color: isDark ? "#ffffff" : "#1a0a2e",
               }}
@@ -1553,7 +1553,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               </span>
             </div>
 
-            <div className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-4"} gap-6`}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
                 { label: "FRAMERATE", value: "120", unit: "FPS" },
                 { label: "RESOLUTION", value: "4K+", unit: "PER EYE" },
@@ -1565,7 +1565,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
                     <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.2em", color: isDark ? "rgba(255,255,255,0.25)" : "rgba(60,40,100,0.6)", marginBottom: "8px" }}>
                       {s.label}
                     </div>
-                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? "28px" : "36px", fontWeight: 800, background: data.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                    <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? "28px" : "clamp(28px, 4vw, 36px)", fontWeight: 800, background: data.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                       {s.value}
                     </div>
                     <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: isDark ? `${data.color1}0.4)` : "rgba(60,40,100,0.65)", marginTop: "4px" }}>
@@ -1657,7 +1657,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
                 ? "Put on your headset and rise beyond the clouds. Swarga awaits."
                 : "Steel your nerves and descend into the abyss. Naraka awaits."}
             </p>
-            <div className={`flex gap-4 justify-center ${isMobile ? "flex-col items-center" : ""}`}>
+            <div className="flex gap-4 justify-center flex-col sm:flex-row items-center">
               <button
                 className="cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 style={{

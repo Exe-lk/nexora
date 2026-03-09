@@ -11,7 +11,7 @@ const tickets = [
     id: "adult",
     title: "Adult Pass",
     age: "Ages 16+",
-    price: 2500,
+    price: 1000,
     description: "The complete NexoraXR immersive experience.",
     features: ["Full immersive experience", "Access to all VR zones", "Free locker access"],
     color: "from-cyan-500/20 to-blue-600/20",
@@ -22,7 +22,7 @@ const tickets = [
     id: "child",
     title: "Children Pass",
     age: "Ages 4-15",
-    price: 1500,
+    price: 300,
     description: "Curated experiences tailored for younger users.",
     features: ["Kid-friendly VR zones", "Supervised activities", "Complimentary drink"],
     color: "from-pink-500/20 to-purple-600/20",
@@ -33,7 +33,7 @@ const tickets = [
     id: "family",
     title: "Family Bundle",
     age: "2 Adults + 2 Kids",
-    price: 6500,
+    price: 2200,
     description: "The best value to bring the whole family together.",
     features: ["All individual perks", "Discounted total rate", "Priority line access"],
     color: "from-emerald-500/20 to-teal-600/20",
@@ -119,7 +119,7 @@ export default function PricingPage() {
         </>
       )}
 
-      <div className="relative pt-32 pb-48 px-4 z-10 max-w-7xl mx-auto flex flex-col items-center">
+      <div className="relative pt-28 md:pt-32 pb-24 md:pb-48 px-4 z-10 max-w-7xl mx-auto flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

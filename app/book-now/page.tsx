@@ -89,7 +89,7 @@ export default function BookNowPage() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative z-10 w-full max-w-5xl grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start"
+        className="relative z-10 w-full max-w-5xl xl:max-w-6xl grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start"
       >
         {/* Left copy */}
         <div className="space-y-6 md:space-y-8">
@@ -151,7 +151,7 @@ export default function BookNowPage() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.8 }}
-            className="grid gap-4 text-xs md:text-sm md:grid-cols-3"
+            className="grid gap-4 text-xs md:text-sm grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
           >
             <div
               className="rounded-2xl p-3.5 md:p-4"

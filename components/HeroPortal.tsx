@@ -7,6 +7,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 export function HeroPortal() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [windowW, setWindowW] = useState(1200);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -22,7 +23,21 @@ export function HeroPortal() {
 
   useEffect(() => {
     setMounted(true);
+    const updateW = () => setWindowW(window.innerWidth);
+    updateW();
+    window.addEventListener("resize", updateW);
+    return () => window.removeEventListener("resize", updateW);
   }, []);
+
+  // Responsive ring sizing: clamp to viewport width so rings never overflow
+  const ringBase = Math.min(windowW * 0.72, 620);
+  const ring1Size = ringBase;
+  const ring2Size = ringBase * (440 / 620);
+  const ring3Size = ringBase * (320 / 620);
+  const coreSize  = ringBase * (260 / 620);
+  const innerSize = ringBase * (100 / 620);
+  // Dot orbit radius
+  const ring1Orbit = ring1Size / 2;
 
   const particles = useMemo(() => {
     if (!mounted) return [];
@@ -145,7 +160,7 @@ export function HeroPortal() {
         {/* Ring 1 - rotating with dots */}
         <motion.div
           className="relative"
-          style={{ width: 620, height: 620 }}
+          style={{ width: ring1Size, height: ring1Size }}
           animate={{ rotate: 360 }}
           transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
         >
@@ -158,14 +173,14 @@ export function HeroPortal() {
               key={deg}
               className="absolute rounded-full"
               style={{
-                width: deg % 90 === 0 ? 10 : 5,
-                height: deg % 90 === 0 ? 10 : 5,
+                width: deg % 90 === 0 ? Math.max(6, ring1Size * 0.016) : Math.max(4, ring1Size * 0.008),
+                height: deg % 90 === 0 ? Math.max(6, ring1Size * 0.016) : Math.max(4, ring1Size * 0.008),
                 backgroundImage: deg % 90 === 0 ? dotGradient : undefined,
                 backgroundColor: deg % 90 === 0 ? undefined : dotColor,
                 boxShadow: deg % 90 === 0 ? dotShadow : `0 0 8px ${dotColor}`,
                 top: "50%",
                 left: "50%",
-                transform: `rotate(${deg}deg) translateX(310px) translate(-50%, -50%)`,
+                transform: `rotate(${deg}deg) translateX(${ring1Orbit}px) translate(-50%, -50%)`,
               }}
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 2, repeat: Infinity, delay: deg * 0.005 }}
@@ -176,7 +191,7 @@ export function HeroPortal() {
         {/* Ring 2 */}
         <motion.div
           className="absolute rounded-full"
-          style={{ width: 440, height: 440, border: ring2Border, boxShadow: ring2Shadow }}
+          style={{ width: ring2Size, height: ring2Size, border: ring2Border, boxShadow: ring2Shadow }}
           animate={{ rotate: -360 }}
           transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
         />
@@ -184,7 +199,7 @@ export function HeroPortal() {
         {/* Ring 3 */}
         <motion.div
           className="absolute rounded-full"
-          style={{ width: 320, height: 320, border: ring3Border }}
+          style={{ width: ring3Size, height: ring3Size, border: ring3Border }}
           animate={{ rotate: 360 }}
           transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
         />
@@ -192,13 +207,13 @@ export function HeroPortal() {
         {/* Core glow */}
         <div
           className="absolute rounded-full"
-          style={{ width: 260, height: 260, backgroundImage: coreGlow, boxShadow: coreShadow }}
+          style={{ width: coreSize, height: coreSize, backgroundImage: coreGlow, boxShadow: coreShadow }}
         />
 
         {/* Inner pulse */}
         <motion.div
           className="absolute rounded-full"
-          style={{ width: 100, height: 100, backgroundImage: innerGlow }}
+          style={{ width: innerSize, height: innerSize, backgroundImage: innerGlow }}
           animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0.9, 0.5] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -228,7 +243,7 @@ export function HeroPortal() {
 
       {/* Content (push down so fixed nav never overlaps hero text) */}
       <motion.div
-        className="relative z-10 text-center max-w-4xl px-8 pt-28 md:pt-32"
+        className="relative z-10 text-center w-full max-w-[min(56rem,90vw)] mx-auto px-4 sm:px-6 md:px-8 pt-28 md:pt-32"
         style={{ y: contentY, opacity }}
       >
         <motion.div
@@ -238,7 +253,7 @@ export function HeroPortal() {
         >
           <p
             className="tracking-[0.4em] uppercase mb-6"
-            style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "0.8rem", fontWeight: 500, color: taglineColor }}
+            style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(0.55rem, 1.2vw, 0.8rem)", fontWeight: 500, color: taglineColor }}
           >
             Immersive XR/VR Experiences
           </p>
@@ -250,11 +265,10 @@ export function HeroPortal() {
           transition={{ duration: 1, delay: 0.5 }}
           style={{
             fontFamily: "'Orbitron', sans-serif",
-            fontSize: "clamp(2.8rem, 5.5vw, 5rem)",
+            fontSize: "clamp(2rem, 6vw, 5rem)",
             fontWeight: 800,
             lineHeight: 1.05,
             letterSpacing: "-0.02em",
-            /* gradient clipped to text — using backgroundImage avoids the shorthand conflict */
             backgroundImage: headingGradient,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -269,8 +283,8 @@ export function HeroPortal() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
-          className="mt-7 max-w-xl mx-auto"
-          style={{ fontFamily: "'Inter', sans-serif", fontSize: "1.1rem", lineHeight: 1.75, fontWeight: 400, color: textColor }}
+          className="mt-6 md:mt-7 max-w-xl mx-auto px-2"
+          style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(0.9rem, 2vw, 1.1rem)", lineHeight: 1.75, fontWeight: 400, color: textColor }}
         >
           NexoraXR creates breathtaking immersive XR/VR experiences for events and develops genre-defining VR games
           that push the boundaries of reality.
@@ -280,15 +294,15 @@ export function HeroPortal() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.9 }}
-          className="flex items-center justify-center gap-4 mt-10"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 md:mt-10"
         >
           <motion.button
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.97 }}
-            className="px-9 py-4 rounded-full text-white cursor-pointer"
+            className="w-full sm:w-auto px-7 md:px-9 py-3.5 md:py-4 rounded-full text-white cursor-pointer"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "0.92rem",
+              fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)",
               fontWeight: 600,
               letterSpacing: "0.03em",
               backgroundImage: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
@@ -300,10 +314,10 @@ export function HeroPortal() {
           <motion.button
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.97 }}
-            className="px-9 py-4 rounded-full cursor-pointer"
+            className="w-full sm:w-auto px-7 md:px-9 py-3.5 md:py-4 rounded-full cursor-pointer"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "0.92rem",
+              fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)",
               fontWeight: 600,
               letterSpacing: "0.03em",
               color: button2Color,
@@ -321,7 +335,7 @@ export function HeroPortal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="mt-20 flex flex-col items-center gap-2"
+          className="mt-16 md:mt-20 flex flex-col items-center gap-2"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}

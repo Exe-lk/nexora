@@ -218,7 +218,7 @@ function OccasionCard({
 
       <motion.div
         ref={cardRef}
-        className="relative p-8 z-10"
+        className="relative p-5 md:p-8 z-10"
         animate={{
           rotateX: mousePosition.y * 5,
           rotateY: mousePosition.x * 5,
@@ -347,6 +347,14 @@ export default function OccasionsPage() {
   const isDark = theme === "dark";
   const router = useRouter();
   const heroRef = useRef<HTMLDivElement>(null);
+  const [viewW, setViewW] = useState(0);
+
+  useEffect(() => {
+    const update = () => setViewW(window.innerWidth);
+    update();
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   return (
     <div
@@ -394,14 +402,18 @@ export default function OccasionsPage() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex flex-col items-center justify-center text-center px-6"
-        style={{ minHeight: "55vh", paddingTop: "120px", paddingBottom: "60px", zIndex: 1 }}
+        className="relative flex flex-col items-center justify-center text-center px-4 sm:px-6"
+        style={{ minHeight: "55vh", paddingTop: "clamp(80px, 14vw, 120px)", paddingBottom: "60px", zIndex: 1 }}
       >
         {/* Background rings */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          {[520, 360, 220].map((size, i) => (
+          {([
+            Math.min((viewW || 800) * 0.65, 520),
+            Math.min((viewW || 800) * 0.45, 360),
+            Math.min((viewW || 800) * 0.28, 220),
+          ] as number[]).map((size, i) => (
             <motion.div
-              key={size}
+              key={i}
               className="absolute rounded-full"
               style={{
                 width: size,
@@ -469,7 +481,7 @@ export default function OccasionsPage() {
             fontSize: "1.05rem",
             lineHeight: 1.8,
             color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.65)",
-            maxWidth: "520px",
+            maxWidth: "min(520px, 92vw)",
           }}
         >
           From intimate birthday celebrations to massive festival stages — NexoraXR crafts immersive experiences tailored to every moment that matters.
@@ -522,7 +534,7 @@ export default function OccasionsPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.7 }}
-        className="mx-auto max-w-5xl px-6 mb-20"
+        className="mx-auto max-w-5xl px-4 sm:px-6 mb-16 md:mb-20"
       >
         <div
           className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden"
@@ -574,7 +586,7 @@ export default function OccasionsPage() {
       </motion.section>
 
       {/* ── Cards grid ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 pb-32" style={{ position: "relative", zIndex: 1 }}>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 pb-20 md:pb-32" style={{ position: "relative", zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {OCCASIONS.map((occasion, i) => (
             <OccasionCard key={occasion.id} occasion={occasion} index={i} isDark={isDark} />
@@ -588,7 +600,7 @@ export default function OccasionsPage() {
         style={{ maxWidth: "1200px", marginLeft: "auto", marginRight: "auto" }}
       >
         <div
-          className="relative flex flex-col md:flex-row items-center justify-between gap-8 px-10 py-14"
+          className="relative flex flex-col md:flex-row items-center justify-between gap-8 px-5 sm:px-8 md:px-10 py-10 sm:py-12 md:py-14"
           style={{
             backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)",
           }}
