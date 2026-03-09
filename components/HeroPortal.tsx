@@ -243,7 +243,7 @@ export function HeroPortal() {
 
       {/* Content (push down so fixed nav never overlaps hero text) */}
       <motion.div
-        className="relative z-10 text-center w-full max-w-[min(56rem,90vw)] mx-auto px-4 sm:px-6 md:px-8 pt-28 md:pt-32"
+        className="relative z-10 text-center w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-28 md:pt-32"
         style={{ y: contentY, opacity }}
       >
         <motion.div

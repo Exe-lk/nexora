@@ -127,7 +127,7 @@ export function FloatingNav() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 0.5 }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center gap-1"
+        className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between gap-1"
         style={{
           zIndex: 200,
           backdropFilter: "blur(24px)",
@@ -149,7 +149,7 @@ export function FloatingNav() {
             ? "0 4px 40px rgba(180,100,220,0.06)"
             : "0 4px 40px rgba(130,90,220,0.08), 0 0 0 1px rgba(130,90,220,0.05)",
           transition: "background 0.4s",
-          maxWidth: "calc(100vw - 24px)",
+          width: "min(960px, 95vw)",
           overflow: "visible",
         }}
       >
@@ -159,12 +159,14 @@ export function FloatingNav() {
           className="select-none cursor-pointer"
           onClick={handleNavHome}
           style={{
-            height: isMobile ? "62px" : isTabletOrSmall ? "78px" : "116px",
+            // Mobile logo size is significantly larger for readability,
+            // while tablet and desktop sizes remain unchanged.
+            height: isMobile ? "110px" : isTabletOrSmall ? "78px" : "116px",
             width: "auto",
             opacity: 0.97,
             marginRight: isMobile ? "6px" : isTabletOrSmall ? "10px" : "20px",
-            marginTop: isMobile ? "-8px" : isTabletOrSmall ? "-10px" : "-15px",
-            marginBottom: isMobile ? "-8px" : isTabletOrSmall ? "-10px" : "-15px",
+            marginTop: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
+            marginBottom: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
           }}
           priority
         />
@@ -413,42 +415,6 @@ export function FloatingNav() {
           </div>
         )}
 
-        {/* Desktop CTA */}
-        {!isTabletOrSmall && (
-          <button
-            className="ml-2 px-5 py-2 rounded-full cursor-pointer transition-all duration-300 shrink-0 whitespace-nowrap"
-            style={{
-              fontFamily: "'Exo 2', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#ffffff",
-              background: isDark
-                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
-                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))",
-              border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
-              letterSpacing: "0.06em",
-              lineHeight: 1,
-            }}
-            onClick={() => router.push("/book-now")}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = isDark
-                ? "linear-gradient(135deg, rgba(140,100,220,0.45), rgba(230,80,160,0.35))"
-                : "linear-gradient(135deg, rgba(130,90,220,0.9), rgba(200,100,255,0.8))";
-              e.currentTarget.style.boxShadow = isDark
-                ? "0 0 20px rgba(180,100,220,0.15)"
-                : "0 0 20px rgba(130,90,220,0.25)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = isDark
-                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
-                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Book Now
-          </button>
-        )}
-
         {/* Tablet/Mobile hamburger */}
         {isTabletOrSmall && (
           <button
@@ -623,26 +589,6 @@ export function FloatingNav() {
           <div className="w-full flex items-center justify-center py-3 mt-1">
             <ThemeToggle />
           </div>
-          <button
-            className="w-full py-3.5 mt-1 rounded-full cursor-pointer"
-            style={{
-              fontFamily: "'Exo 2', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#ffffff",
-              background: isDark
-                ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.2))"
-                : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))",
-              border: isDark ? "1px solid rgba(200,120,220,0.2)" : "1px solid rgba(130,90,220,0.3)",
-              letterSpacing: "0.06em",
-            }}
-            onClick={() => {
-              setMenuOpen(false);
-              router.push("/book-now");
-            }}
-          >
-            Book Now
-          </button>
         </motion.div>
       )}
     </>
@@ -759,6 +705,33 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
   const [mouseXRaw, setMouseXRaw] = useState(0);
   const [mouseYRaw, setMouseYRaw] = useState(0);
 
+  const galleryImages = [
+    {
+      src: "/vr home 1.jpeg",
+      alt: "Family experiencing an XR moment together in a living room.",
+    },
+    {
+      src: "/vr home 2.jpeg",
+      alt: "Group of children and adults celebrating while wearing VR headsets.",
+    },
+    {
+      src: "/vr home 3.jpeg",
+      alt: "Team playing an immersive VR game experience together.",
+    },
+    {
+      src: "/vr home 4.jpeg",
+      alt: "Guests exploring an XR installation with handheld controllers.",
+    },
+    {
+      src: "/vr home 5.jpeg",
+      alt: "Visitors walking across a large XR play space.",
+    },
+    {
+      src: "/vr home 6.jpeg",
+      alt: "Family interacting inside a shared XR environment.",
+    },
+  ];
+
   // Headset size: responsive across all breakpoints
   const headsetSize =
     screenSize === "mobile" ? "clamp(200px, 70vw, 280px)" :
@@ -814,7 +787,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </motion.div>
 
         <div
-          className="flex flex-col items-center text-center relative px-4 sm:px-5 w-full max-w-[min(48rem,90vw)]"
+          className="flex flex-col items-center text-center relative px-4 sm:px-5 w-full max-w-6xl"
           style={{ pointerEvents: "auto", zIndex: 1 }}
         >
           {/* Micro label */}
@@ -1099,7 +1072,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
       >
         <ParallaxLayer speed={-0.08}>
           <Section delay={0.05}>
-            <div className="text-center w-full max-w-[min(720px,92vw)] mx-auto">
+            <div className="text-center w-full max-w-6xl mx-auto">
               <h2
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
@@ -1185,6 +1158,174 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
       </section>
 
+      {/* ===== HOME EXPERIENCE GALLERY ===== */}
+      <section
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-10 lg:px-12"
+        style={{ minHeight: "auto", pointerEvents: "auto" }}
+      >
+        <ParallaxLayer speed={-0.06}>
+          <Section>
+            <div className="text-center w-full max-w-7xl mx-auto mb-10 md:mb-14">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background: isDark
+                      ? "linear-gradient(to right, transparent, rgba(120,180,255,0.3))"
+                      : "linear-gradient(to right, transparent, rgba(130,90,220,0.4))",
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "'Orbitron', sans-serif",
+                    fontSize: "10px",
+                    letterSpacing: "0.4em",
+                    textTransform: "uppercase",
+                    color: isDark
+                      ? "rgba(255,255,255,0.35)"
+                      : "rgba(80,50,140,0.65)",
+                  }}
+                >
+                  Inside the Experience
+                </span>
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background: isDark
+                      ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
+                      : "linear-gradient(to left, transparent, rgba(200,100,255,0.4))",
+                  }}
+                />
+              </div>
+              <h2
+                className="mt-2"
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: isMobile ? "22px" : "32px",
+                  fontWeight: 700,
+                  lineHeight: 1.3,
+                  color: isDark ? "#ffffff" : "#1a0a2e",
+                }}
+              >
+                A glimpse of{" "}
+                <span
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    color: "transparent",
+                  }}
+                >
+                  Nexora XR
+                </span>{" "}
+                in motion
+              </h2>
+              <p
+                className="mt-3"
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "12px" : "14px",
+                  lineHeight: 1.7,
+                  color: isDark
+                    ? "rgba(255,255,255,0.4)"
+                    : "rgba(80,50,140,0.6)",
+                  maxWidth: "560px",
+                  margin: "12px auto 0",
+                }}
+              >
+                Real groups, families, and teams fully immersed in shared XR
+                moments — giving you a feel for how Nexora XR looks and feels
+                beyond the screen.
+              </p>
+            </div>
+          </Section>
+
+          <Section delay={0.15}>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-7xl mx-auto"
+              style={{ pointerEvents: "auto" }}
+            >
+              {galleryImages.map((image, index) => (
+                <GlassPanel
+                  key={image.src}
+                  accent="rgba(120,180,255,"
+                  className="group overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
+                  style={{ padding: 0 }}
+                >
+                  <div
+                    className="relative overflow-hidden"
+                    style={{ height: "clamp(200px, 22vw, 280px)" }}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 96vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      priority={index === 0}
+                    />
+                    {/* Gradient overlay */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: isDark
+                          ? "linear-gradient(to bottom, transparent 40%, rgba(6,6,14,0.85) 100%)"
+                          : "linear-gradient(to bottom, transparent 40%, rgba(250,248,255,0.9) 100%)",
+                      }}
+                    />
+                    {/* Hover border */}
+                    <div
+                      className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
+                      style={{ border: "1px solid rgba(120,180,255,0.12)" }}
+                    />
+                    {/* Index badge */}
+                    <div
+                      className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
+                      style={{
+                        background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
+                        border: "1px solid rgba(120,180,255,0.15)",
+                        backdropFilter: "blur(8px)",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "'Orbitron', sans-serif",
+                          fontSize: "8px",
+                          letterSpacing: "0.2em",
+                          color: "rgba(120,180,255,0.7)",
+                        }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    {/* Caption overlay */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
+                    >
+                      <p
+                        style={{
+                          fontFamily: "'Exo 2', sans-serif",
+                          fontSize: "11px",
+                          lineHeight: 1.5,
+                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.8)",
+                          margin: 0,
+                        }}
+                      >
+                        {image.alt}
+                      </p>
+                    </div>
+                  </div>
+                </GlassPanel>
+              ))}
+            </div>
+          </Section>
+        </ParallaxLayer>
+      </section>
+
       {/* ===== 4.25 OUR STORIES ===== */}
       <section
         className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
@@ -1264,7 +1405,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-[min(960px,95vw)]"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-6xl"
           style={{ pointerEvents: "auto", perspective: "1000px" }}
         >
           {/* Heaven Card */}
@@ -1338,7 +1479,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 w-full max-w-[min(860px,95vw)]"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 w-full max-w-6xl"
           style={{
             pointerEvents: "auto",
             perspective: "800px",
@@ -1355,6 +1496,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               ]}
               accent="rgba(120,180,255,"
               icon={<EyeIcon />}
+              imageSrc="/xr experianse.jpeg"
+              imageAlt="Immersive XR/VR experiences for events"
             />
           </Section>
           <Section delay={0.35}>
@@ -1368,6 +1511,8 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               ]}
               accent="rgba(200,100,220,"
               icon={<GamepadIcon />}
+              imageSrc="/vr game.jpeg"
+              imageAlt="VR game development experience"
             />
           </Section>
         </div>
@@ -1408,7 +1553,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-[min(56rem,95vw)]"
+          className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-6xl"
           style={{ pointerEvents: "auto" }}
         >
           {[
@@ -1460,7 +1605,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-[min(1020px,95vw)]"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-6xl"
           style={{
             pointerEvents: "auto",
             perspective: "1000px",
@@ -1577,7 +1722,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
         <Section delay={0.15}>
           <div
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-[min(900px,95vw)]"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-6xl"
             style={{ pointerEvents: "auto" }}
           >
             {([
@@ -1646,7 +1791,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-col items-center gap-6 w-full max-w-[min(48rem,95vw)]"
+          className="flex flex-col items-center gap-6 w-full max-w-6xl"
           style={{ pointerEvents: "auto" }}
         >
           <Section delay={0.2}>
@@ -1757,7 +1902,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
       >
         <Section>
           <div
-            className="flex flex-col items-center text-center w-full max-w-[min(40rem,95vw)]"
+            className="flex flex-col items-center text-center w-full max-w-6xl"
             style={{ pointerEvents: "auto" }}
           >
             <span
@@ -1994,6 +2139,8 @@ function ServiceModule({
   stats,
   accent,
   icon,
+  imageSrc,
+  imageAlt,
 }: {
   tag: string;
   title: string;
@@ -2001,6 +2148,8 @@ function ServiceModule({
   stats: { label: string; value: string }[];
   accent: string;
   icon: React.ReactNode;
+  imageSrc?: string;
+  imageAlt?: string;
 }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -2062,6 +2211,20 @@ function ServiceModule({
       >
         {title}
       </h3>
+      {imageSrc && (
+        <div
+          className="relative w-full mb-4 overflow-hidden rounded-xl"
+          style={{ height: "190px" }}
+        >
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? title.replace("\n", " ")}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 420px, (min-width: 768px) 50vw, 100vw"
+          />
+        </div>
+      )}
       <p
         style={{
           fontFamily: "'Exo 2', sans-serif",

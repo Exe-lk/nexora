@@ -5,6 +5,7 @@ import { WebGLScene } from "@/components/WebGLScene";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const tickets = [
   {
@@ -41,6 +42,27 @@ const tickets = [
     accent: "text-emerald-400",
   },
 ];
+
+const ticketImages: Record<
+  string,
+  {
+    src: string;
+    alt: string;
+  }
+> = {
+  adult: {
+    src: "/adult pass.jpeg",
+    alt: "Adult pass",
+  },
+  child: {
+    src: "/children pass.jpeg",
+    alt: "Children pass",
+  },
+  family: {
+    src: "/familly pass.jpeg",
+    alt: "Family bundle",
+  },
+};
 
 export default function PricingPage() {
   const { theme } = useTheme();
@@ -156,194 +178,210 @@ export default function PricingPage() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl relative z-20">
-          {tickets.map((ticket, i) => (
-            <motion.div
-              key={ticket.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 * i, ease: "easeOut" }}
-              className="group relative"
-            >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${ticket.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-              />
-              <div
-                className="relative h-full flex flex-col p-8 rounded-3xl backdrop-blur-xl transition-colors duration-500"
-                style={{
-                  background: isDark
-                    ? "rgba(15,23,42,0.6)"
-                    : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                  border: isDark
-                    ? "1px solid rgba(51,65,85,1)"
-                    : "1px solid rgba(14,165,233,0.2)",
-                  boxShadow: isDark ? undefined : "0 16px 50px rgba(14,165,233,0.08)",
-                }}
-              >
-                <div className="mb-8">
-                  <h3
-                    className="text-2xl font-bold mb-2"
-                    style={{ color: isDark ? "#fff" : "#1a0a2e" }}
-                  >
-                    {ticket.title}
-                  </h3>
-                  <p
-                    className="text-sm mb-6"
-                    style={{
-                      color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.55)",
-                    }}
-                  >
-                    {ticket.age}
-                  </p>
-                  <div className="flex items-baseline gap-2">
-                    <span
-                      className="text-sm font-semibold"
-                      style={{
-                        color: isDark ? "rgba(148,163,184,1)" : "rgba(60,40,100,0.6)",
-                      }}
-                    >
-                      LKR
-                    </span>
-                    <span
-                      className="text-5xl font-extrabold"
-                      style={{
-                        color:
-                          ticket.id === "adult"
-                            ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
-                            : ticket.id === "child"
-                              ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
-                              : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)",
-                      }}
-                    >
-                      {ticket.price.toLocaleString()}
-                    </span>
-                  </div>
-                  <p
-                    className="mt-4 text-sm min-h-[40px]"
-                    style={{
-                      color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
-                    }}
-                  >
-                    {ticket.description}
-                  </p>
-                </div>
+          {tickets.map((ticket, i) => {
+            const image = ticketImages[ticket.id];
 
-                <div className="flex-grow">
-                  <ul className="space-y-3 mb-8">
-                    {ticket.features.map((feature, j) => (
-                      <li
-                        key={j}
-                        className="flex items-start"
+            return (
+              <motion.div
+                key={ticket.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 * i, ease: "easeOut" }}
+                className="group relative"
+              >
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${ticket.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                />
+                <div
+                  className="relative h-full flex flex-col p-8 rounded-3xl backdrop-blur-xl transition-colors duration-500"
+                  style={{
+                    background: isDark
+                      ? "rgba(15,23,42,0.6)"
+                      : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
+                    border: isDark
+                      ? "1px solid rgba(51,65,85,1)"
+                      : "1px solid rgba(14,165,233,0.2)",
+                    boxShadow: isDark ? undefined : "0 16px 50px rgba(14,165,233,0.08)",
+                  }}
+                >
+                  <div className="mb-8">
+                    {image && (
+                      <div className="relative w-full h-40 mb-6 overflow-hidden rounded-2xl">
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          fill
+                          sizes="(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw"
+                          className="object-cover"
+                          priority={ticket.id === "adult"}
+                        />
+                      </div>
+                    )}
+                    <h3
+                      className="text-2xl font-bold mb-2"
+                      style={{ color: isDark ? "#fff" : "#1a0a2e" }}
+                    >
+                      {ticket.title}
+                    </h3>
+                    <p
+                      className="text-sm mb-6"
+                      style={{
+                        color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.55)",
+                      }}
+                    >
+                      {ticket.age}
+                    </p>
+                    <div className="flex items-baseline gap-2">
+                      <span
+                        className="text-sm font-semibold"
                         style={{
-                          color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.75)",
+                          color: isDark ? "rgba(148,163,184,1)" : "rgba(60,40,100,0.6)",
                         }}
                       >
-                        <svg
-                          className="w-5 h-5 mr-3 mt-0.5 shrink-0"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke={
+                        LKR
+                      </span>
+                      <span
+                        className="text-5xl font-extrabold"
+                        style={{
+                          color:
                             ticket.id === "adult"
                               ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
                               : ticket.id === "child"
                                 ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
-                                : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)"
-                          }
+                                : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)",
+                        }}
+                      >
+                        {ticket.price.toLocaleString()}
+                      </span>
+                    </div>
+                    <p
+                      className="mt-4 text-sm min-h-[40px]"
+                      style={{
+                        color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
+                      }}
+                    >
+                      {ticket.description}
+                    </p>
+                  </div>
+
+                  <div className="flex-grow">
+                    <ul className="space-y-3 mb-8">
+                      {ticket.features.map((feature, j) => (
+                        <li
+                          key={j}
+                          className="flex items-start"
+                          style={{
+                            color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.75)",
+                          }}
+                        >
+                          <svg
+                            className="w-5 h-5 mr-3 mt-0.5 shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke={
+                              ticket.id === "adult"
+                                ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
+                                : ticket.id === "child"
+                                  ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
+                                  : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)"
+                            }
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          <span className="text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className="pt-6 border-t flex items-center justify-between"
+                    style={{
+                      borderColor: isDark ? "rgba(51,65,85,1)" : "rgba(148,163,184,0.35)",
+                    }}
+                  >
+                    <span
+                      className="font-medium"
+                      style={{
+                        color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.8)",
+                      }}
+                    >
+                      Quantity
+                    </span>
+                    <div
+                      className="flex items-center gap-4 rounded-full p-1 shadow-inner"
+                      style={{
+                        background: isDark ? "rgba(2,6,23,0.5)" : "rgba(248,250,252,0.9)",
+                        border: isDark ? "1px solid rgba(51,65,85,0.5)" : "1px solid rgba(148,163,184,0.4)",
+                      }}
+                    >
+                      <button
+                        onClick={() => updateQty(ticket.id, -1)}
+                        className="w-10 h-10 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                          background: isDark ? "rgb(30,41,59)" : "rgba(255,255,255,0.9)",
+                          color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.8)",
+                        }}
+                        disabled={quantities[ticket.id] === 0}
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
                         >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M5 13l4 4L19 7"
+                            d="M20 12H4"
                           />
                         </svg>
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div
-                  className="pt-6 border-t flex items-center justify-between"
-                  style={{
-                    borderColor: isDark ? "rgba(51,65,85,1)" : "rgba(148,163,184,0.35)",
-                  }}
-                >
-                  <span
-                    className="font-medium"
-                    style={{
-                      color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.8)",
-                    }}
-                  >
-                    Quantity
-                  </span>
-                  <div
-                    className="flex items-center gap-4 rounded-full p-1 shadow-inner"
-                    style={{
-                      background: isDark ? "rgba(2,6,23,0.5)" : "rgba(248,250,252,0.9)",
-                      border: isDark ? "1px solid rgba(51,65,85,0.5)" : "1px solid rgba(148,163,184,0.4)",
-                    }}
-                  >
-                    <button
-                      onClick={() => updateQty(ticket.id, -1)}
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{
-                        background: isDark ? "rgb(30,41,59)" : "rgba(255,255,255,0.9)",
-                        color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.8)",
-                      }}
-                      disabled={quantities[ticket.id] === 0}
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                      </button>
+                      <span
+                        className="w-6 text-center text-lg font-bold"
+                        style={{ color: isDark ? "#fff" : "#1a0a2e" }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20 12H4"
-                        />
-                      </svg>
-                    </button>
-                    <span
-                      className="w-6 text-center text-lg font-bold"
-                      style={{ color: isDark ? "#fff" : "#1a0a2e" }}
-                    >
-                      {quantities[ticket.id]}
-                    </span>
-                    <button
-                      onClick={() => updateQty(ticket.id, 1)}
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                      style={{
-                        background: isDark ? "rgb(30,41,59)" : "rgba(255,255,255,0.9)",
-                        color:
-                          ticket.id === "adult"
-                            ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
-                            : ticket.id === "child"
-                              ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
-                              : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)",
-                      }}
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                        {quantities[ticket.id]}
+                      </span>
+                      <button
+                        onClick={() => updateQty(ticket.id, 1)}
+                        className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                        style={{
+                          background: isDark ? "rgb(30,41,59)" : "rgba(255,255,255,0.9)",
+                          color:
+                            ticket.id === "adult"
+                              ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
+                              : ticket.id === "child"
+                                ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
+                                : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)",
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Floating Cart Panel */}

@@ -16,21 +16,24 @@ type Feature = {
 
 const FEATURES: Feature[] = [
   {
-    icon: "🎭",
-    title: "Staged storytelling",
-    description: "Theatre-like pacing so users feel guided—never lost.",
+    icon: "🚀",
+    title: "Be among the first",
+    description:
+      "Immersia XR is pioneering Walking XR Theatre—an entirely new way to experience live, story-driven worlds.",
     accent: "violet",
   },
   {
-    icon: "🧭",
-    title: "Clarity in 30 seconds",
-    description: "First moments show what to do, where to look, why it matters.",
+    icon: "🎭",
+    title: "Step inside the story",
+    description:
+      "You don’t just watch. You walk, explore, and inhabit cinematic worlds that react to you and your group.",
     accent: "cyan",
   },
   {
-    icon: "🫧",
-    title: "Comfort-first interaction",
-    description: "Premium feel, reduced discomfort across audiences.",
+    icon: "👥",
+    title: "Share the journey",
+    description:
+      "Designed for families, friends, dates, and teams—everyone moves together, laughs together, and remembers it together.",
     accent: "pink",
   },
 ];
@@ -162,10 +165,10 @@ export default function AboutPage() {
 
   const stats = useMemo(
     () => [
-      { value: "Guided", label: "Story-led worlds" },
-      { value: "Comfort", label: "Designed for audiences" },
-      { value: "Premium", label: "Polish & performance" },
-      { value: "Repeatable", label: "Delivery system" },
+      { value: "Walking", label: "Not seated or static" },
+      { value: "Immersive", label: "All around you" },
+      { value: "Interactive", label: "You shape moments" },
+      { value: "Shared", label: "Move as a group" },
     ],
     [],
   );
@@ -216,7 +219,7 @@ export default function AboutPage() {
                 color: isDark ? "rgba(125,211,252,0.95)" : "rgba(109,40,217,0.9)",
               }}
             >
-              About NexoraXR
+              Immersia XR • About
             </div>
             <h1
               style={{
@@ -233,9 +236,9 @@ export default function AboutPage() {
                 marginBottom: "14px",
               }}
             >
-              XR experiences that feel
+              Pioneering XR Walking Theatre
               <br />
-              directed—not confusing
+              where stories move with you
             </h1>
             <p
               className="mx-auto"
@@ -247,7 +250,8 @@ export default function AboutPage() {
                 maxWidth: "min(520px, 92vw)",
               }}
             >
-              Premium, story-led XR for culture, brands, learning, and events—built for clarity, comfort, and performance.
+              At Immersia XR, we merge theatre, VR, and interactive entertainment into Walking XR Theatre—live, shared journeys
+              where audiences step inside legendary stories and move through them together.
             </p>
             <div className="flex gap-3 mt-8 flex-wrap justify-center">
               <motion.button
@@ -263,9 +267,9 @@ export default function AboutPage() {
                   boxShadow: "0 6px 30px rgba(168,85,247,0.35)",
                   border: "none",
                 }}
-                onClick={() => router.push("/story/heaven")}
+                onClick={() => router.push("/book-now")}
               >
-                Explore Worlds
+                Book Your Adventure
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -280,9 +284,9 @@ export default function AboutPage() {
                   background: isDark ? "rgba(124,58,237,0.12)" : "rgba(255,255,255,0.85)",
                   border: isDark ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(109,40,217,0.2)",
                 }}
-                onClick={() => router.push("/pricing")}
+                onClick={() => router.push("/#experiences")}
               >
-                View Pricing
+                Explore Experiences
               </motion.button>
             </div>
           </motion.div>
@@ -339,6 +343,131 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
+        {/* Who we are / mission */}
+        <section className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+          <div className="lg:col-span-2">
+            <div
+              style={{
+                fontFamily: "'Orbitron', sans-serif",
+                fontSize: "10px",
+                letterSpacing: "0.35em",
+                textTransform: "uppercase",
+                color: isDark ? "rgba(56,189,248,0.75)" : "rgba(37,99,235,0.75)",
+              }}
+            >
+              Who we are
+            </div>
+            <h2
+              className="mt-2"
+              style={{
+                fontFamily: "'Orbitron', sans-serif",
+                fontSize: "clamp(1.4rem, 2.8vw, 2rem)",
+                fontWeight: 800,
+                color: isDark ? "#fff" : "#1a0a2e",
+              }}
+            >
+              Storytellers, technologists, and experience designers
+            </h2>
+            <p
+              className="mt-4"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.98rem",
+                lineHeight: 1.8,
+                color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
+              }}
+            >
+              Immersia XR was born from a simple question: what if you could walk through a story instead of just watching it?
+              We saw a gap between traditional theatre, VR attractions, and interactive installations, and created Walking XR
+              Theatre to bridge all three.
+            </p>
+            <p
+              className="mt-3"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.98rem",
+                lineHeight: 1.8,
+                color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
+              }}
+            >
+              With a team of world-class creatives, technologists, and experience designers, we craft living story worlds—like
+              Alice in Wonderland, Tales of Aladdin, and Moon Landing—where every step, gesture, and glance is part of the
+              narrative.
+            </p>
+          </div>
+
+          <div className="space-y-5">
+            <div
+              className="rounded-3xl p-5"
+              style={{
+                background: isDark
+                  ? "linear-gradient(150deg, rgba(15,23,42,0.96), rgba(30,64,175,0.85))"
+                  : "linear-gradient(150deg, rgba(239,246,255,0.98), rgba(221,239,253,0.96))",
+                border: isDark ? "1px solid rgba(56,189,248,0.35)" : "1px solid rgba(59,130,246,0.28)",
+                boxShadow: isDark ? "0 18px 45px rgba(15,23,42,0.7)" : "0 18px 45px rgba(59,130,246,0.25)",
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: "0.9rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: isDark ? "rgba(191,219,254,0.95)" : "rgba(30,64,175,0.98)",
+                }}
+              >
+                Our mission
+              </h3>
+              <p
+                className="mt-3"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.8,
+                  color: isDark ? "rgba(226,232,240,0.85)" : "rgba(30,64,175,0.9)",
+                }}
+              >
+                To redefine storytelling by merging cutting-edge XR technology with live, interactive performance—so audiences
+                don&apos;t just watch worlds, they walk inside them.
+              </p>
+            </div>
+            <div
+              className="rounded-3xl p-5"
+              style={{
+                background: isDark
+                  ? "linear-gradient(150deg, rgba(24,20,45,0.96), rgba(109,40,217,0.9))"
+                  : "linear-gradient(150deg, rgba(245,243,255,0.98), rgba(221,214,254,0.96))",
+                border: isDark ? "1px solid rgba(168,85,247,0.4)" : "1px solid rgba(129,140,248,0.35)",
+                boxShadow: isDark ? "0 18px 45px rgba(30,64,175,0.6)" : "0 18px 45px rgba(129,140,248,0.25)",
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: "0.9rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: isDark ? "rgba(233,213,255,0.95)" : "rgba(91,33,182,0.98)",
+                }}
+              >
+                Our vision
+              </h3>
+              <p
+                className="mt-3"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.8,
+                  color: isDark ? "rgba(237,233,254,0.85)" : "rgba(76,29,149,0.9)",
+                }}
+              >
+                A world where immersive, walkable stories sit alongside cinema and theatre as a new pillar of culture—and
+                where venues everywhere can host XR adventures that feel truly unforgettable.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* What we do */}
         <section className="mt-14">
           <div className="text-center mb-6">
@@ -351,7 +480,7 @@ export default function AboutPage() {
                 color: isDark ? "rgba(168,85,247,0.7)" : "rgba(109,40,217,0.65)",
               }}
             >
-              What we optimize for
+              Why XR walking theatre
             </div>
             <h2
               className="mt-2"
@@ -362,7 +491,7 @@ export default function AboutPage() {
                 color: isDark ? "#fff" : "#1a0a2e",
               }}
             >
-              Premium XR, built like a show
+              Why people fall in love with the experience
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -391,11 +520,24 @@ export default function AboutPage() {
               <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
               <div className="relative text-center sm:text-left z-10">
                 <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.85)", marginBottom: "6px" }}>
-                  READY TO BUILD?
+                  YOUR JOURNEY STARTS HERE
                 </p>
                 <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.2rem, 2.5vw, 1.9rem)", fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>
-                  Let's create an XR experience people will talk about
+                  Walk the story. Live the experience.
                 </h2>
+                <p
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.7,
+                    color: "rgba(255,255,255,0.78)",
+                    marginTop: "8px",
+                    maxWidth: "26rem",
+                  }}
+                >
+                  Ready to leave the ordinary behind? Step into another world, become the main character, and share a story
+                  that moves with you.
+                </p>
               </div>
               <div className="relative flex gap-3 shrink-0 z-10">
                 <motion.button
@@ -412,9 +554,9 @@ export default function AboutPage() {
                     border: "none",
                     boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
                   }}
-                  onClick={() => router.push("/pricing")}
+                  onClick={() => router.push("/book-now")}
                 >
-                  Get Pricing
+                  Book Now
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.25)" }}
@@ -431,7 +573,7 @@ export default function AboutPage() {
                   }}
                   onClick={() => router.push("/book-now")}
                 >
-                  Book Now
+                  Partner With Us
                 </motion.button>
               </div>
             </div>

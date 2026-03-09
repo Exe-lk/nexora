@@ -3,7 +3,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -21,7 +20,7 @@ const OCCASIONS = [
     accent: "#f97316",
     accentSoft: "rgba(249,115,22,",
     gradient: "linear-gradient(135deg, #f97316, #ec4899)",
-    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80",
+    image: "/vr birthday parties.jpeg",
   },
   {
     id: "corporate",
@@ -35,7 +34,7 @@ const OCCASIONS = [
     accent: "#6366f1",
     accentSoft: "rgba(99,102,241,",
     gradient: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+    image: "/vr corporate events.jpeg",
   },
   {
     id: "family",
@@ -49,7 +48,7 @@ const OCCASIONS = [
     accent: "#10b981",
     accentSoft: "rgba(16,185,129,",
     gradient: "linear-gradient(135deg, #10b981, #3b82f6)",
-    image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80",
+    image: "/vr family fun days.jpeg",
   },
   {
     id: "wedding",
@@ -63,7 +62,7 @@ const OCCASIONS = [
     accent: "#e879f9",
     accentSoft: "rgba(232,121,249,",
     gradient: "linear-gradient(135deg, #e879f9, #f43f5e)",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+    image: "/vr weddings and engagement.jpeg",
   },
   {
     id: "festival",
@@ -77,7 +76,7 @@ const OCCASIONS = [
     accent: "#f59e0b",
     accentSoft: "rgba(245,158,11,",
     gradient: "linear-gradient(135deg, #f59e0b, #ef4444)",
-    image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
+    image: "/vr festivals and concerts.jpeg",
   },
   {
     id: "education",
@@ -91,7 +90,7 @@ const OCCASIONS = [
     accent: "#06b6d4",
     accentSoft: "rgba(6,182,212,",
     gradient: "linear-gradient(135deg, #06b6d4, #6366f1)",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80",
+    image: "/vr educational programs.jpeg",
   },
 ];
 
@@ -186,12 +185,10 @@ function OccasionCard({
         className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-700 ease-out"
         style={{ y: imageY, scale: imageScale }}
       >
-        <Image
+        <img
           src={occasion.image}
           alt={occasion.title}
-          fill
-          unoptimized={true} // Bypassing Unsplash 403 blocks during rapid dev cycles just in case
-          className="object-cover"
+          className="w-full h-full object-cover"
           style={{ filter: isDark ? "brightness(0.3) saturate(1.4)" : "brightness(0.8) saturate(1.2)" }}
         />
         <div
@@ -269,6 +266,16 @@ function OccasionCard({
         >
           {occasion.subtitle}
         </p>
+
+        {/* Inline image for each occasion */}
+        <div className="relative w-full h-40 md:h-48 mb-5 overflow-hidden rounded-2xl">
+          <img
+            src={occasion.image}
+            alt={occasion.title}
+            className="w-full h-full object-cover"
+            style={{ filter: isDark ? "brightness(0.8) saturate(1.2)" : "brightness(0.95) saturate(1.1)" }}
+          />
+        </div>
 
         {/* Description */}
         <p
