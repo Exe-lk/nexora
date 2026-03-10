@@ -130,15 +130,22 @@ export function FloatingNav() {
         className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between gap-1"
         style={{
           zIndex: 200,
-          backdropFilter: "blur(24px)",
+          backdropFilter: scrolled ? "blur(28px) saturate(1.4)" : "blur(8px)",
+          WebkitBackdropFilter: scrolled ? "blur(28px) saturate(1.4)" : "blur(8px)",
           background: isDark
             ? scrolled
-              ? "linear-gradient(135deg, rgba(8,8,16,0.88) 0%, rgba(6,6,14,0.78) 100%)"
-              : "linear-gradient(135deg, rgba(8,8,16,0.5) 0%, rgba(6,6,14,0.35) 100%)"
+              ? "linear-gradient(135deg, rgba(6,6,14,0.55) 0%, rgba(4,4,10,0.42) 100%)"
+              : "transparent"
             : scrolled
-              ? "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(250,248,255,0.9) 100%)"
-              : "linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(250,248,255,0.6) 100%)",
-          border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
+              ? "linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(250,248,255,0.28) 100%)"
+              : "transparent",
+          border: isDark
+            ? scrolled
+              ? "1px solid rgba(255,255,255,0.10)"
+              : "1px solid rgba(255,255,255,0.06)"
+            : scrolled
+              ? "1px solid rgba(130,90,220,0.20)"
+              : "1px solid rgba(130,90,220,0.10)",
           borderRadius: "60px",
           padding: isMobile
             ? "8px 12px 8px 14px"
@@ -146,9 +153,13 @@ export function FloatingNav() {
               ? "8px 14px 8px 18px"
               : "10px 10px 10px 22px",
           boxShadow: isDark
-            ? "0 4px 40px rgba(180,100,220,0.06)"
-            : "0 4px 40px rgba(130,90,220,0.08), 0 0 0 1px rgba(130,90,220,0.05)",
-          transition: "background 0.4s",
+            ? scrolled
+              ? "0 4px 40px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.04) inset"
+              : "none"
+            : scrolled
+              ? "0 4px 32px rgba(130,90,220,0.12), 0 1px 0 rgba(255,255,255,0.6) inset"
+              : "none",
+          transition: "background 0.5s ease, border 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease",
           width: "min(960px, 95vw)",
           overflow: "visible",
         }}
@@ -163,10 +174,14 @@ export function FloatingNav() {
             // while tablet and desktop sizes remain unchanged.
             height: isMobile ? "110px" : isTabletOrSmall ? "78px" : "116px",
             width: "auto",
-            opacity: 0.97,
+            opacity: 1,
             marginRight: isMobile ? "6px" : isTabletOrSmall ? "10px" : "20px",
             marginTop: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
             marginBottom: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
+            filter: isDark
+              ? "drop-shadow(0 0 12px rgba(120,160,255,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.5))"
+              : "drop-shadow(0 0 10px rgba(130,90,220,0.25)) drop-shadow(0 2px 6px rgba(0,0,0,0.15))",
+            transition: "filter 0.4s ease",
           }}
           priority
         />
@@ -187,21 +202,24 @@ export function FloatingNav() {
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "15px",
                   color: isDark
-                    ? expOpen ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)"
-                    : expOpen ? "rgba(80,50,140,0.95)" : "rgba(80,50,140,0.6)",
+                    ? expOpen ? "#ffffff" : "rgba(255,255,255,0.88)"
+                    : expOpen ? "rgba(60,30,120,1)" : "rgba(60,30,120,0.85)",
                   background: expOpen
-                    ? isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)"
+                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)"
                     : "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
+                  textShadow: isDark
+                    ? "0 1px 8px rgba(0,0,0,0.7)"
+                    : "0 1px 6px rgba(255,255,255,0.8)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.95)" : "rgba(80,50,140,0.95)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)";
+                  e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
                 }}
                 onMouseLeave={(e) => {
                   if (!expOpen) {
-                    e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)";
+                    e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
                     e.currentTarget.style.background = "transparent";
                   }
                 }}
@@ -377,10 +395,13 @@ export function FloatingNav() {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "15px",
-                  color: isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)",
+                  color: isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)",
                   background: "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
+                  textShadow: isDark
+                    ? "0 1px 8px rgba(0,0,0,0.7)"
+                    : "0 1px 6px rgba(255,255,255,0.8)",
                 }}
                 onClick={() => {
                   if (item === "Pricing") {
@@ -394,11 +415,11 @@ export function FloatingNav() {
                   }
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.95)" : "rgba(80,50,140,0.95)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.08)";
+                  e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.55)" : "rgba(80,50,140,0.6)";
+                  e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
                   e.currentTarget.style.background = "transparent";
                 }}
               >
@@ -435,8 +456,9 @@ export function FloatingNav() {
                   style={{
                     width: "22px",
                     height: "2px",
-                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
+                    background: isDark ? "rgba(255,255,255,0.95)" : "rgba(60,30,120,0.9)",
                     borderRadius: "2px",
+                    boxShadow: isDark ? "0 0 6px rgba(255,255,255,0.4)" : "0 0 4px rgba(255,255,255,0.6)",
                   }}
               />
               <motion.div
@@ -444,8 +466,9 @@ export function FloatingNav() {
                   style={{
                     width: "22px",
                     height: "2px",
-                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
+                    background: isDark ? "rgba(255,255,255,0.95)" : "rgba(60,30,120,0.9)",
                     borderRadius: "2px",
+                    boxShadow: isDark ? "0 0 6px rgba(255,255,255,0.4)" : "0 0 4px rgba(255,255,255,0.6)",
                   }}
               />
               <motion.div
@@ -456,8 +479,9 @@ export function FloatingNav() {
                   style={{
                     width: "22px",
                     height: "2px",
-                    background: isDark ? "rgba(255,255,255,0.8)" : "rgba(80,50,140,0.8)",
+                    background: isDark ? "rgba(255,255,255,0.95)" : "rgba(60,30,120,0.9)",
                     borderRadius: "2px",
+                    boxShadow: isDark ? "0 0 6px rgba(255,255,255,0.4)" : "0 0 4px rgba(255,255,255,0.6)",
                   }}
               />
             </div>
@@ -480,11 +504,15 @@ export function FloatingNav() {
           className="fixed top-[5.5rem] left-4 right-4 flex flex-col items-center gap-1 py-5 px-4 rounded-2xl"
           style={{
             zIndex: 199,
-            backdropFilter: "blur(24px)",
+            backdropFilter: "blur(32px) saturate(1.5)",
+            WebkitBackdropFilter: "blur(32px) saturate(1.5)",
             background: isDark
-              ? "linear-gradient(135deg, rgba(8,8,16,0.92), rgba(6,6,14,0.88))"
-              : "linear-gradient(135deg, rgba(255,255,255,0.96), rgba(250,248,255,0.92))",
-            border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.12)",
+              ? "linear-gradient(135deg, rgba(6,6,14,0.72), rgba(4,4,10,0.60))"
+              : "linear-gradient(135deg, rgba(255,255,255,0.65), rgba(250,248,255,0.55))",
+            border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.18)",
+            boxShadow: isDark
+              ? "0 8px 40px rgba(0,0,0,0.4)"
+              : "0 8px 40px rgba(130,90,220,0.12)",
           }}
         >
           {/* Worlds with expandable sub-items */}
@@ -493,7 +521,7 @@ export function FloatingNav() {
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "15px",
-              color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+              color: isDark ? "rgba(255,255,255,0.90)" : "rgba(60,30,120,0.88)",
               background: "transparent",
               border: "none",
               letterSpacing: "0.06em",
@@ -565,7 +593,7 @@ export function FloatingNav() {
               style={{
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "15px",
-                color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+                color: isDark ? "rgba(255,255,255,0.90)" : "rgba(60,30,120,0.88)",
                 background: "transparent",
                 border: "none",
                 letterSpacing: "0.06em",

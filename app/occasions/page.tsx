@@ -131,8 +131,10 @@ function OccasionCard({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  // Always keep a base scale of 1.2 so the image fully covers the container
+  // even when translateY shifts it. y goes -10% → +10% (upward parallax).
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.2, 1.3]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -164,7 +166,7 @@ function OccasionCard({
       initial={{ opacity: 0, y: 60 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: (index % 3) * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative rounded-3xl overflow-hidden cursor-pointer"
+      className="group relative rounded-3xl cursor-pointer"
       style={{
         background: isDark
           ? "linear-gradient(160deg, rgba(15,12,28,0.8) 0%, rgba(10,8,20,0.6) 100%)"
@@ -176,49 +178,56 @@ function OccasionCard({
         boxShadow: isDark
           ? `0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px ${occasion.accentSoft}0.05)`
           : `0 8px 40px ${occasion.accentSoft}0.08), 0 0 0 1px ${occasion.accentSoft}0.08)`,
-        perspective: "1000px",
+        isolation: "isolate",
       }}
       whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
     >
-      {/* Image background with parallax */}
-      <motion.div
-        className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-700 ease-out"
-        style={{ y: imageY, scale: imageScale }}
-      >
-        <img
-          src={occasion.image}
-          alt={occasion.title}
-          className="w-full h-full object-cover"
-          style={{ filter: isDark ? "brightness(0.3) saturate(1.4)" : "brightness(0.8) saturate(1.2)" }}
-        />
+      {/* ── Dedicated clip container ────────────────────────────────────────
+           All absolute overlay layers live here so overflow-hidden is applied
+           on a NON-transformed element. This prevents the background image and
+           glow effects from bleeding outside the card border-radius when
+           Framer Motion applies scale/translateY transforms on the parent. */}
+      <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none" aria-hidden="true">
+        {/* Background image with scroll-driven parallax */}
+        <motion.div
+          className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-700 ease-out"
+          style={{ y: imageY, scale: imageScale }}
+        >
+          <img
+            src={occasion.image}
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ filter: isDark ? "brightness(0.3) saturate(1.4)" : "brightness(0.8) saturate(1.2)" }}
+          />
+          <div
+            className="absolute inset-0 transition-colors duration-500"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, transparent 0%, ${isDark ? "rgba(10,8,20,0.9)" : "rgba(255,255,255,0.95)"} 100%)`,
+            }}
+          />
+        </motion.div>
+
+        {/* Hover glow — top accent line */}
         <div
-          className="absolute inset-0 transition-colors duration-500"
+          className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ backgroundImage: occasion.gradient }}
+        />
+
+        {/* Mouse-tracking radial glow */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
-            backgroundImage: `linear-gradient(to bottom, transparent 0%, ${isDark ? "rgba(10,8,20,0.9)" : "rgba(255,255,255,0.95)"} 100%)`,
+            background: `radial-gradient(circle at ${50 + mousePosition.x * 100}% ${50 + mousePosition.y * 100}%, ${occasion.accentSoft}0.15), transparent 70%)`,
           }}
         />
-      </motion.div>
-
-      {/* Hover glow top line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
-        style={{ backgroundImage: occasion.gradient }}
-      />
-
-      {/* Interactive glow effect */}
-      <motion.div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at ${50 + mousePosition.x * 100}% ${50 + mousePosition.y * 100}%, ${occasion.accentSoft}0.15), transparent 70%)`,
-        }}
-      />
+      </div>
 
       <motion.div
         ref={cardRef}
         className="relative p-5 md:p-8 z-10"
         animate={{
-          rotateX: mousePosition.y * 5,
-          rotateY: mousePosition.x * 5,
+          x: mousePosition.x * 4,
+          y: mousePosition.y * 4,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
@@ -272,7 +281,7 @@ function OccasionCard({
           <img
             src={occasion.image}
             alt={occasion.title}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             style={{ filter: isDark ? "brightness(0.8) saturate(1.2)" : "brightness(0.95) saturate(1.1)" }}
           />
         </div>
