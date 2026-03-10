@@ -1,6 +1,7 @@
 "use client"
 
-import { FloatingNav, HUDContent } from "@/components/HUDOverlay";
+import { Navbar } from "@/components/Navbar";
+import { HUDContent } from "@/components/HUDOverlay";
 import { HeroPortal } from "@/components/HeroPortal";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useEffect, useRef } from "react";
@@ -39,7 +40,7 @@ export default function Home() {
       }}
     >
       <WebGLScene key={theme} state={stateRef} isDark={isDark} />
-      <FloatingNav />
+      <Navbar />
 
       {isDark && (
         <>

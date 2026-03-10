@@ -11,6 +11,8 @@ import { VRHeadset3D } from "./VRHeadset";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 
+const SECTION_MAX_WIDTH = "w-full max-w-6xl mx-auto";
+
 // --- Hook for mouse position ---
 function useMouseParallax() {
   const x = useMotionValue(0);
@@ -38,7 +40,7 @@ function useMouseParallax() {
 }
 
 // --- Mobile hook ---
-function useIsMobile() {
+export function useIsMobile() {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const check = () => setMobile(window.innerWidth < 768);
@@ -1100,7 +1102,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
       >
         <ParallaxLayer speed={-0.08}>
           <Section delay={0.05}>
-            <div className="text-center w-full max-w-6xl mx-auto">
+            <div className={`${SECTION_MAX_WIDTH} text-center`}>
               <h2
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
@@ -1188,12 +1190,12 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== HOME EXPERIENCE GALLERY ===== */}
       <section
-        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-10 lg:px-12"
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
         style={{ minHeight: "auto", pointerEvents: "auto" }}
       >
         <ParallaxLayer speed={-0.06}>
           <Section>
-            <div className="text-center w-full max-w-7xl mx-auto mb-10 md:mb-14">
+            <div className={`${SECTION_MAX_WIDTH} text-center mb-10 md:mb-14`}>
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div
                   style={{
@@ -1274,7 +1276,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
           <Section delay={0.15}>
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-7xl mx-auto"
+              className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
               style={{ pointerEvents: "auto" }}
             >
               {galleryImages.map((image, index) => (
@@ -1433,7 +1435,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-6xl"
+          className={`${SECTION_MAX_WIDTH} grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8`}
           style={{ pointerEvents: "auto", perspective: "1000px" }}
         >
           {/* Heaven Card */}
@@ -1507,7 +1509,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 w-full max-w-6xl"
+          className={`${SECTION_MAX_WIDTH} grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10`}
           style={{
             pointerEvents: "auto",
             perspective: "800px",
@@ -1581,7 +1583,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-6xl"
+          className={`${SECTION_MAX_WIDTH} flex flex-wrap justify-center gap-3 md:gap-4`}
           style={{ pointerEvents: "auto" }}
         >
           {[
@@ -1633,7 +1635,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7 w-full max-w-6xl"
+          className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
           style={{
             pointerEvents: "auto",
             perspective: "1000px",
@@ -1676,7 +1678,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
       >
         <ParallaxLayer speed={-0.1}>
           <Section>
-            <div className="text-center mb-10 md:mb-14">
+            <div className={`${SECTION_MAX_WIDTH} text-center mb-10 md:mb-14`}>
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div
                   style={{
@@ -1748,11 +1750,11 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
           </Section>
         </ParallaxLayer>
 
-        <Section delay={0.15}>
-          <div
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 w-full max-w-6xl"
-            style={{ pointerEvents: "auto" }}
-          >
+          <Section delay={0.15}>
+            <div
+              className={`${SECTION_MAX_WIDTH} grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5`}
+              style={{ pointerEvents: "auto" }}
+            >
             {([
               { name: "Meta Quest", tag: "MR / VR", accent: "rgba(120,180,255,", logo: "meta" },
               { name: "Apple Vision Pro", tag: "Spatial Computing", accent: "rgba(200,130,255,", logo: "apple" },
@@ -1819,7 +1821,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </ParallaxLayer>
 
         <div
-          className="flex flex-col items-center gap-6 w-full max-w-6xl"
+          className={`${SECTION_MAX_WIDTH} flex flex-col items-center gap-6`}
           style={{ pointerEvents: "auto" }}
         >
           <Section delay={0.2}>
@@ -1930,7 +1932,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
       >
         <Section>
           <div
-            className="flex flex-col items-center text-center w-full max-w-6xl"
+            className={`${SECTION_MAX_WIDTH} flex flex-col items-center text-center`}
             style={{ pointerEvents: "auto" }}
           >
             <span

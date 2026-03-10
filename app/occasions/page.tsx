@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -231,8 +232,8 @@ function OccasionCard({
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        {/* Tag + emoji */}
-        <div className="flex items-center justify-between mb-5">
+        {/* Tag */}
+        <div className="flex items-center mb-5">
           <span
             className="tracking-[0.25em] transition-colors duration-300 group-hover:text-white"
             style={{
@@ -243,13 +244,6 @@ function OccasionCard({
           >
             {occasion.tag}
           </span>
-          <motion.span
-            className="text-3xl"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            {occasion.emoji}
-          </motion.span>
         </div>
 
         {/* Title */}
@@ -285,19 +279,6 @@ function OccasionCard({
             style={{ filter: isDark ? "brightness(0.8) saturate(1.2)" : "brightness(0.95) saturate(1.1)" }}
           />
         </div>
-
-        {/* Description */}
-        <p
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.9rem",
-            lineHeight: 1.7,
-            color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.65)",
-            marginBottom: "24px",
-          }}
-        >
-          {occasion.description}
-        </p>
 
         {/* Divider */}
         <div
@@ -382,7 +363,7 @@ export default function OccasionsPage() {
         overflowX: "hidden",
       }}
     >
-      <FloatingNav />
+      <Navbar />
 
       {/* ── Interactive background particles ───────────────────────────────── */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }} suppressHydrationWarning>
@@ -610,71 +591,6 @@ export default function OccasionsPage() {
         </div>
       </section>
 
-      {/* ── CTA band ───────────────────────────────────────────── */}
-      <section
-        className="relative mx-4 mb-16 rounded-[2rem] overflow-hidden group"
-        style={{ maxWidth: "1200px", marginLeft: "auto", marginRight: "auto" }}
-      >
-        <div
-          className="relative flex flex-col md:flex-row items-center justify-between gap-8 px-5 sm:px-8 md:px-10 py-10 sm:py-12 md:py-14"
-          style={{
-            backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)",
-          }}
-        >
-          {/* subtle noise overlay */}
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
-
-          {/* Animated glow on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full" />
-
-          <div className="relative text-left z-10">
-            <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.8)", marginBottom: "10px" }}>
-              READY TO BEGIN?
-            </p>
-            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.4rem, 3vw, 2.4rem)", fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>
-              Let&apos;s build your perfect
-              <br />XR experience together
-            </h2>
-          </div>
-
-          <div className="relative flex flex-col sm:flex-row gap-4 shrink-0 z-10">
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }}
-              whileTap={{ scale: 0.97 }}
-              className="px-8 py-3.5 rounded-full cursor-pointer"
-              style={{
-                fontFamily: "'Exo 2', sans-serif",
-                fontSize: "13px",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                color: "#7c3aed",
-                background: "#fff",
-                border: "none",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-              }}
-            >
-              Contact Us Now
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.25)" }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => router.push("/")}
-              className="px-8 py-3.5 rounded-full cursor-pointer transition-colors"
-              style={{
-                fontFamily: "'Exo 2', sans-serif",
-                fontSize: "13px",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                color: "#fff",
-                background: "rgba(255,255,255,0.15)",
-                border: "1.5px solid rgba(255,255,255,0.4)",
-              }}
-            >
-              Explore Worlds
-            </motion.button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

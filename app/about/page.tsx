@@ -1,5 +1,6 @@
 "use client";
 
+import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -184,7 +185,7 @@ export default function AboutPage() {
       }}
     >
       <WebGLScene key={theme} state={stateRef} isDark={isDark} />
-      <FloatingNav />
+      <Navbar />
 
       {isDark && (
         <>
@@ -267,9 +268,9 @@ export default function AboutPage() {
                   boxShadow: "0 6px 30px rgba(168,85,247,0.35)",
                   border: "none",
                 }}
-                onClick={() => router.push("/book-now")}
+                onClick={() => router.push("/contact")}
               >
-                Book Your Adventure
+                Contact us
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -343,60 +344,9 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
-        {/* Who we are / mission */}
-        <section className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-          <div className="lg:col-span-2">
-            <div
-              style={{
-                fontFamily: "'Orbitron', sans-serif",
-                fontSize: "10px",
-                letterSpacing: "0.35em",
-                textTransform: "uppercase",
-                color: isDark ? "rgba(56,189,248,0.75)" : "rgba(37,99,235,0.75)",
-              }}
-            >
-              Who we are
-            </div>
-            <h2
-              className="mt-2"
-              style={{
-                fontFamily: "'Orbitron', sans-serif",
-                fontSize: "clamp(1.4rem, 2.8vw, 2rem)",
-                fontWeight: 800,
-                color: isDark ? "#fff" : "#1a0a2e",
-              }}
-            >
-              Storytellers, technologists, and experience designers
-            </h2>
-            <p
-              className="mt-4"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "0.98rem",
-                lineHeight: 1.8,
-                color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
-              }}
-            >
-              Immersia XR was born from a simple question: what if you could walk through a story instead of just watching it?
-              We saw a gap between traditional theatre, VR attractions, and interactive installations, and created Walking XR
-              Theatre to bridge all three.
-            </p>
-            <p
-              className="mt-3"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "0.98rem",
-                lineHeight: 1.8,
-                color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.7)",
-              }}
-            >
-              With a team of world-class creatives, technologists, and experience designers, we craft living story worlds—like
-              Alice in Wonderland, Tales of Aladdin, and Moon Landing—where every step, gesture, and glance is part of the
-              narrative.
-            </p>
-          </div>
-
-          <div className="space-y-5">
+        {/* Mission & vision */}
+        <section className="mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
             <div
               className="rounded-3xl p-5"
               style={{
@@ -508,77 +458,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="mt-14">
-          <div className="relative rounded-2xl overflow-hidden">
-            <div
-              className="relative flex flex-col sm:flex-row items-center justify-between gap-6 px-5 sm:px-8 py-8 sm:py-10"
-              style={{
-                backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)",
-              }}
-            >
-              <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
-              <div className="relative text-center sm:text-left z-10">
-                <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "10px", letterSpacing: "0.3em", color: "rgba(255,255,255,0.85)", marginBottom: "6px" }}>
-                  YOUR JOURNEY STARTS HERE
-                </p>
-                <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.2rem, 2.5vw, 1.9rem)", fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>
-                  Walk the story. Live the experience.
-                </h2>
-                <p
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "0.9rem",
-                    lineHeight: 1.7,
-                    color: "rgba(255,255,255,0.78)",
-                    marginTop: "8px",
-                    maxWidth: "26rem",
-                  }}
-                >
-                  Ready to leave the ordinary behind? Step into another world, become the main character, and share a story
-                  that moves with you.
-                </p>
-              </div>
-              <div className="relative flex gap-3 shrink-0 z-10">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-7 py-3 rounded-full cursor-pointer"
-                  style={{
-                    fontFamily: "'Exo 2', sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    color: "#7c3aed",
-                    background: "#fff",
-                    border: "none",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                  }}
-                  onClick={() => router.push("/book-now")}
-                >
-                  Book Now
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.25)" }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-7 py-3 rounded-full cursor-pointer transition-colors"
-                  style={{
-                    fontFamily: "'Exo 2', sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    color: "#fff",
-                    background: "rgba(255,255,255,0.15)",
-                    border: "1.5px solid rgba(255,255,255,0.4)",
-                  }}
-                  onClick={() => router.push("/book-now")}
-                >
-                  Partner With Us
-                </motion.button>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* CTA removed as requested */}
 
         <div className="mt-12 flex items-center justify-center gap-4 flex-wrap">
           <div style={{ height: "1px", width: "40px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.08))" : "linear-gradient(to right, transparent, rgba(60,40,100,0.14))" }} />

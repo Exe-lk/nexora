@@ -1,12 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
+import { WebGLScene } from "@/components/WebGLScene";
 
 export default function BookNowPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
+
+  useEffect(() => {
+    const onScroll = () => {
+      stateRef.current.scrollY = window.scrollY;
+    };
+    const onMouse = (e: MouseEvent) => {
+      stateRef.current.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      stateRef.current.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("mousemove", onMouse, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouse);
+    };
+  }, []);
 
   const bg = isDark
     ? "radial-gradient(circle at top, rgba(120,180,255,0.12), transparent 55%), radial-gradient(circle at bottom, rgba(236,72,153,0.14), transparent 60%), #050712"
@@ -34,63 +54,70 @@ export default function BookNowPage() {
   const accent = isDark ? "#a07de8" : "#6b3fbf";
 
   return (
-    <>
-      <FloatingNav />
+    <div
+      className="w-full relative min-h-screen"
+      style={{
+        background: bg,
+        overflowX: "hidden",
+      }}
+    >
+      <WebGLScene key={theme} state={stateRef} isDark={isDark} />
+      <Navbar />
       <main
-        className="min-h-screen w-full flex items-center justify-center px-4 py-24 md:py-32"
+        className="w-full flex items-center justify-center px-4 py-24 md:py-32"
         style={{
-          background: bg,
+          position: "relative",
           overflow: "hidden",
         }}
       >
-      {/* subtle grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(rgba(120,180,255,0.12) 1px, transparent 1px),
+        {/* subtle grid */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(rgba(120,180,255,0.12) 1px, transparent 1px),
                            linear-gradient(90deg, rgba(120,180,255,0.12) 1px, transparent 1px)`,
-          backgroundSize: "80px 80px",
-          opacity: isDark ? 0.35 : 0.6,
-          mixBlendMode: isDark ? "screen" : "normal",
-        }}
-      />
-
-      {/* glow orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute rounded-full blur-3xl"
-          style={{
-            width: 260,
-            height: 260,
-            top: "-40px",
-            left: "-40px",
-            background:
-              "radial-gradient(circle, rgba(96,165,250,0.35), transparent 60%)",
+            backgroundSize: "80px 80px",
+            opacity: isDark ? 0.35 : 0.6,
+            mixBlendMode: isDark ? "screen" : "normal",
           }}
-          animate={{ opacity: [0.5, 0.9, 0.5], y: [0, 10, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div
-          className="absolute rounded-full blur-3xl"
-          style={{
-            width: 260,
-            height: 260,
-            bottom: "-60px",
-            right: "-40px",
-            background:
-              "radial-gradient(circle, rgba(236,72,153,0.35), transparent 60%)",
-          }}
-          animate={{ opacity: [0.4, 0.8, 0.4], y: [0, -10, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
 
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative z-10 w-full max-w-5xl xl:max-w-6xl grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start"
-      >
+        {/* glow orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            className="absolute rounded-full blur-3xl"
+            style={{
+              width: 260,
+              height: 260,
+              top: "-40px",
+              left: "-40px",
+              background:
+                "radial-gradient(circle, rgba(96,165,250,0.35), transparent 60%)",
+            }}
+            animate={{ opacity: [0.5, 0.9, 0.5], y: [0, 10, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute rounded-full blur-3xl"
+            style={{
+              width: 260,
+              height: 260,
+              bottom: "-60px",
+              right: "-40px",
+              background:
+                "radial-gradient(circle, rgba(236,72,153,0.35), transparent 60%)",
+            }}
+            animate={{ opacity: [0.4, 0.8, 0.4], y: [0, -10, 0] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative z-10 w-full max-w-5xl xl:max-w-6xl grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start"
+        >
         {/* Left copy */}
         <div className="space-y-6 md:space-y-8">
           <motion.p
@@ -462,8 +489,8 @@ export default function BookNowPage() {
           </form>
         </motion.div>
       </motion.section>
-    </main>
-    </>
+      </main>
+    </div>
   );
 }
 

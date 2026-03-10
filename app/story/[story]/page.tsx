@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback, use, useMemo } from "react";
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FloatingNav } from "@/components/HUDOverlay";
+import { Navbar } from "@/components/Navbar";
 import { useTheme } from "@/contexts/ThemeContext";
 import heavenImg from "@/assets/images/heaven.png";
 import hellImg from "@/assets/images/hell.png";
@@ -1093,7 +1093,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
       {!isMobile && <OrbCursor hex={data.hex1} />}
 
       {/* Nav */}
-      <FloatingNav />
+      <Navbar />
 
       {/* Scanline overlay */}
       {isDark && (
