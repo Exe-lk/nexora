@@ -5,6 +5,7 @@ import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useTheme } from "@/contexts/ThemeContext";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -13,29 +14,33 @@ type Feature = {
   description: string;
   icon: string;
   accent: "cyan" | "violet" | "pink";
+  image: string;
 };
 
 const FEATURES: Feature[] = [
   {
-    icon: "🚀",
+    icon: "",
     title: "Be among the first",
     description:
-      "Immersia XR is pioneering Walking XR Theatre—an entirely new way to experience live, story-driven worlds.",
+      "Nexora XR is pioneering Walking XR Theatre—an entirely new way to experience live, story-driven worlds.",
     accent: "violet",
+    image: "/be among the first.jpeg",
   },
   {
-    icon: "🎭",
+    icon: "",
     title: "Step inside the story",
     description:
       "You don’t just watch. You walk, explore, and inhabit cinematic worlds that react to you and your group.",
     accent: "cyan",
+    image: "/step inside the story.jpeg",
   },
   {
-    icon: "👥",
+    icon: "",
     title: "Share the journey",
     description:
       "Designed for families, friends, dates, and teams—everyone moves together, laughs together, and remembers it together.",
     accent: "pink",
+    image: "/share the joerny.jpeg",
   },
 ];
 
@@ -73,16 +78,18 @@ function Card({
   badge,
   title,
   description,
+  image,
 }: {
   isDark: boolean;
   accent: Feature["accent"];
   badge: string;
   title: string;
   description: string;
+  image: string;
 }) {
   const s = accentStyles(isDark, accent);
   return (
-    <div
+    <motion.div
       className="rounded-3xl p-6 backdrop-blur-xl"
       style={{
         background: isDark
@@ -90,6 +97,14 @@ function Card({
           : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
         border: `1px solid ${s.border}`,
         boxShadow: isDark ? `0 18px 60px rgba(0,0,0,0.35), 0 0 0 1px ${s.glow}` : `0 16px 50px ${s.glow}`,
+      }}
+      initial={{ opacity: 0, y: 22, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.35 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
       }}
     >
       <div className="flex items-center justify-between gap-4">
@@ -115,6 +130,16 @@ function Card({
           }}
         />
       </div>
+      <div className="mt-4 overflow-hidden rounded-2xl border border-white/5">
+        <Image
+          src={image}
+          alt={title}
+          width={640}
+          height={360}
+          className="h-36 w-full object-cover"
+          priority={false}
+        />
+      </div>
       <div
         className="mt-4"
         style={{
@@ -138,7 +163,7 @@ function Card({
       >
         {description}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -220,7 +245,7 @@ export default function AboutPage() {
                 color: isDark ? "rgba(125,211,252,0.95)" : "rgba(109,40,217,0.9)",
               }}
             >
-              Immersia XR • About
+              NEXORA XR • About
             </div>
             <h1
               style={{
@@ -251,7 +276,7 @@ export default function AboutPage() {
                 maxWidth: "min(520px, 92vw)",
               }}
             >
-              At Immersia XR, we merge theatre, VR, and interactive entertainment into Walking XR Theatre—live, shared journeys
+              At Nexora XR, we merge theatre, VR, and interactive entertainment into Walking XR Theatre—live, shared journeys
               where audiences step inside legendary stories and move through them together.
             </p>
             <div className="flex gap-3 mt-8 flex-wrap justify-center">
@@ -307,13 +332,21 @@ export default function AboutPage() {
             }}
           >
             {stats.map((stat) => (
-              <div
+              <motion.div
                 key={stat.label}
                 className="flex flex-col items-center justify-center py-5 px-3 text-center"
                 style={{
                   background: isDark
                     ? "linear-gradient(160deg, rgba(15,12,28,0.78), rgba(10,8,20,0.56))"
                     : "linear-gradient(160deg, rgba(255,255,255,0.92), rgba(248,246,255,0.84))",
+                }}
+                initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.4 }}
+                whileHover={{ y: -4, scale: 1.01 }}
+                transition={{
+                  duration: 0.5,
+                  ease: "easeOut",
                 }}
               >
                 <span
@@ -339,15 +372,21 @@ export default function AboutPage() {
                 >
                   {stat.label}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.section>
 
         {/* Mission & vision */}
-        <section className="mt-16">
+        <motion.section
+          className="mt-16"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
-            <div
+            <motion.div
               className="rounded-3xl p-5"
               style={{
                 background: isDark
@@ -356,6 +395,11 @@ export default function AboutPage() {
                 border: isDark ? "1px solid rgba(56,189,248,0.35)" : "1px solid rgba(59,130,246,0.28)",
                 boxShadow: isDark ? "0 18px 45px rgba(15,23,42,0.7)" : "0 18px 45px rgba(59,130,246,0.25)",
               }}
+              initial={{ opacity: 0, y: 26, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              transition={{ duration: 0.65, ease: "easeOut" }}
             >
               <h3
                 style={{
@@ -380,8 +424,8 @@ export default function AboutPage() {
                 To redefine storytelling by merging cutting-edge XR technology with live, interactive performance—so audiences
                 don&apos;t just watch worlds, they walk inside them.
               </p>
-            </div>
-            <div
+            </motion.div>
+            <motion.div
               className="rounded-3xl p-5"
               style={{
                 background: isDark
@@ -390,6 +434,11 @@ export default function AboutPage() {
                 border: isDark ? "1px solid rgba(168,85,247,0.4)" : "1px solid rgba(129,140,248,0.35)",
                 boxShadow: isDark ? "0 18px 45px rgba(30,64,175,0.6)" : "0 18px 45px rgba(129,140,248,0.25)",
               }}
+              initial={{ opacity: 0, y: 26, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              transition={{ duration: 0.65, ease: "easeOut", delay: 0.05 }}
             >
               <h3
                 style={{
@@ -414,9 +463,9 @@ export default function AboutPage() {
                 A world where immersive, walkable stories sit alongside cinema and theatre as a new pillar of culture—and
                 where venues everywhere can host XR adventures that feel truly unforgettable.
               </p>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         {/* What we do */}
         <section className="mt-14">
@@ -453,6 +502,7 @@ export default function AboutPage() {
                 badge={`${f.icon}  ${f.title}`}
                 title={f.title}
                 description={f.description}
+            image={f.image}
               />
             ))}
           </div>

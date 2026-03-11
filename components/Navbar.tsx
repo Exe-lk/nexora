@@ -73,22 +73,22 @@ export function Navbar() {
         className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between gap-1"
         style={{
           zIndex: 200,
-          backdropFilter: scrolled ? "blur(28px) saturate(1.4)" : "blur(8px)",
-          WebkitBackdropFilter: scrolled ? "blur(28px) saturate(1.4)" : "blur(8px)",
+          backdropFilter: scrolled ? "blur(24px) saturate(1.3)" : "blur(6px)",
+          WebkitBackdropFilter: scrolled ? "blur(24px) saturate(1.3)" : "blur(6px)",
           background: isDark
             ? scrolled
-              ? "linear-gradient(135deg, rgba(6,6,14,0.55) 0%, rgba(4,4,10,0.42) 100%)"
+              ? "linear-gradient(135deg, rgba(6,6,14,0.40) 0%, rgba(4,4,10,0.28) 100%)"
               : "transparent"
             : scrolled
-              ? "linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(250,248,255,0.28) 100%)"
+              ? "linear-gradient(135deg, rgba(255,255,255,0.26) 0%, rgba(250,248,255,0.20) 100%)"
               : "transparent",
           border: isDark
             ? scrolled
-              ? "1px solid rgba(255,255,255,0.10)"
-              : "1px solid rgba(255,255,255,0.06)"
+              ? "1px solid rgba(255,255,255,0.08)"
+              : "1px solid rgba(255,255,255,0.04)"
             : scrolled
-              ? "1px solid rgba(130,90,220,0.20)"
-              : "1px solid rgba(130,90,220,0.10)",
+              ? "1px solid rgba(130,90,220,0.14)"
+              : "1px solid rgba(130,90,220,0.06)",
           borderRadius: "60px",
           padding: isMobile
             ? "8px 12px 8px 14px"
@@ -97,10 +97,10 @@ export function Navbar() {
               : "10px 10px 10px 22px",
           boxShadow: isDark
             ? scrolled
-              ? "0 4px 40px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.04) inset"
+              ? "0 4px 36px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.03) inset"
               : "none"
             : scrolled
-              ? "0 4px 32px rgba(130,90,220,0.12), 0 1px 0 rgba(255,255,255,0.6) inset"
+              ? "0 4px 28px rgba(130,90,220,0.10), 0 1px 0 rgba(255,255,255,0.5) inset"
               : "none",
           transition: "background 0.5s ease, border 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease",
           width: "min(960px, 95vw)",
@@ -151,16 +151,25 @@ export function Navbar() {
                   textShadow: isDark
                     ? "0 1px 8px rgba(0,0,0,0.7)"
                     : "0 1px 6px rgba(255,255,255,0.8)",
+                  boxShadow: "none",
+                  transform: "translateY(0)",
+                  transition: "color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
                   e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.boxShadow = isDark
+                    ? "0 8px 24px rgba(0,0,0,0.45)"
+                    : "0 8px 22px rgba(130,90,220,0.30)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
                 }}
                 onMouseLeave={(e) => {
                   if (!expOpen) {
                     e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
                     e.currentTarget.style.background = "transparent";
                   }
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 Worlds
@@ -333,6 +342,9 @@ export function Navbar() {
                   textShadow: isDark
                     ? "0 1px 8px rgba(0,0,0,0.7)"
                     : "0 1px 6px rgba(255,255,255,0.8)",
+                  boxShadow: "none",
+                  transform: "translateY(0)",
+                  transition: "color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease",
                 }}
                 onClick={() => {
                   if (item === "Pricing") {
@@ -348,10 +360,16 @@ export function Navbar() {
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
                   e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.boxShadow = isDark
+                    ? "0 8px 24px rgba(0,0,0,0.45)"
+                    : "0 8px 22px rgba(130,90,220,0.30)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
                   e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 {item}
@@ -435,8 +453,8 @@ export function Navbar() {
             backdropFilter: "blur(32px) saturate(1.5)",
             WebkitBackdropFilter: "blur(32px) saturate(1.5)",
             background: isDark
-              ? "linear-gradient(135deg, rgba(6,6,14,0.72), rgba(4,4,10,0.60))"
-              : "linear-gradient(135deg, rgba(255,255,255,0.65), rgba(250,248,255,0.55))",
+              ? "linear-gradient(135deg, rgba(6,6,14,0.60), rgba(4,4,10,0.50))"
+              : "linear-gradient(135deg, rgba(255,255,255,0.52), rgba(250,248,255,0.44))",
             border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.18)",
             boxShadow: isDark
               ? "0 8px 40px rgba(0,0,0,0.4)"

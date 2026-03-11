@@ -26,9 +26,10 @@ export function Footer() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  const shellBg = isDark
-    ? "linear-gradient(180deg, rgba(4,6,16,0.9) 0%, rgba(6,10,24,0.96) 40%, rgba(4,6,16,0.98) 100%)"
-    : "linear-gradient(180deg, rgba(246,241,255,0.96) 0%, rgba(242,236,255,0.98) 45%, rgba(255,255,255,0.98) 100%)";
+  // Slightly translucent shell so the global 3D background can subtly shine through
+  const shellOverlayBg = isDark
+    ? "linear-gradient(180deg, rgba(4,6,16,0.65) 0%, rgba(6,10,24,0.78) 40%, rgba(4,6,16,0.9) 100%)"
+    : "linear-gradient(180deg, rgba(246,241,255,0.55) 0%, rgba(242,236,255,0.7) 45%, rgba(255,255,255,0.9) 100%)";
 
   const cardBg = isDark
     ? "linear-gradient(150deg, rgba(15,12,28,0.9) 0%, rgba(10,8,20,0.85) 100%)"
@@ -45,10 +46,20 @@ export function Footer() {
     <footer
       className="relative w-full"
       style={{
-        background: shellBg,
+        // Keep border framing but let the interactive 3D canvas behind the page remain visible
+        background: "transparent",
         borderTop: isDark ? "1px solid rgba(15,23,42,0.9)" : "1px solid rgba(148,163,184,0.3)",
       }}
     >
+      {/* translucent shell overlay so 3D background shows through while preserving readability */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: shellOverlayBg,
+        }}
+      />
+
       {/* subtle glow blob behind card */}
       <div
         aria-hidden
