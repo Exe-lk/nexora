@@ -70,7 +70,7 @@ export default function Home() {
         <HeroPortal />
         
         {/* Rest of the content */}
-        <HUDContent skipHero />
+        <HUDContent skipHero skipVisionMission />
       </div>
     </div>
   );

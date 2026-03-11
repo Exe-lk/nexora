@@ -726,7 +726,7 @@ function GlassPanel({
 }
 
 // --- Main HUD Content ---
-export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
+export function HUDContent({ skipHero = false, skipVisionMission = false }: { skipHero?: boolean; skipVisionMission?: boolean }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const isMobile = useIsMobile();
@@ -1358,6 +1358,7 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
 
       {/* ===== 4.25 OUR STORIES ===== */}
       <section
+        id="discover-worlds"
         className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
         style={{ minHeight: "auto" }}
       >
@@ -1465,209 +1466,6 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
               link="/story/hell"
             />
           </Section>
-        </div>
-      </section>
-
-      {/* ===== 2. CORE EXPERIENCE ZONES ===== */}
-      <section
-        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
-        style={{ minHeight: "auto" }}
-      >
-        <ParallaxLayer speed={-0.15}>
-          <Section>
-            <div className="flex items-center gap-3 mb-8 md:mb-12 lg:mb-16">
-              <div
-                style={{
-                  width: "40px",
-                  height: "1px",
-                  background: isDark
-                    ? "linear-gradient(to right, transparent, rgba(120,180,255,0.3))"
-                    : "linear-gradient(to right, transparent, rgba(130,90,220,0.4))",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "10px",
-                  letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
-                }}
-              >
-                CORE EXPERIENCE ZONES
-              </span>
-              <div
-                style={{
-                  width: "40px",
-                  height: "1px",
-                  background: isDark
-                    ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
-                    : "linear-gradient(to left, transparent, rgba(200,100,255,0.4))",
-                }}
-              />
-            </div>
-          </Section>
-        </ParallaxLayer>
-
-        <div
-          className={`${SECTION_MAX_WIDTH} grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10`}
-          style={{
-            pointerEvents: "auto",
-            perspective: "800px",
-          }}
-        >
-          <Section delay={0.15}>
-            <ServiceModule
-              tag="XR-EXP"
-              title={"Immersive XR/VR\nExperiences for Events"}
-              desc="Transform physical events into multi-sensory journeys. Our spatial experiences merge real-world environments with digital dimensions, creating moments that transcend ordinary reality."
-              stats={[
-                { label: "IMMERSION", value: "99.2%" },
-                { label: "LATENCY", value: "<8ms" },
-              ]}
-              accent="rgba(120,180,255,"
-              icon={<EyeIcon />}
-              imageSrc="/xr experianse.jpeg"
-              imageAlt="Immersive XR/VR experiences for events"
-            />
-          </Section>
-          <Section delay={0.35}>
-            <ServiceModule
-              tag="VR-DEV"
-              title={"VR Game\nDevelopment"}
-              desc="We build virtual worlds that players inhabit, not just visit. From narrative adventures to competitive arenas, our games push the boundaries of interactive storytelling in true VR."
-              stats={[
-                { label: "FRAMERATE", value: "120fps" },
-                { label: "WORLDS", value: "∞" },
-              ]}
-              accent="rgba(200,100,220,"
-              icon={<GamepadIcon />}
-              imageSrc="/vr game.jpeg"
-              imageAlt="VR game development experience"
-            />
-          </Section>
-        </div>
-      </section>
-
-      {/* ===== 3. EXPERIENCE HIGHLIGHTS ===== */}
-      <section
-        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
-        style={{ minHeight: "auto" }}
-      >
-        <ParallaxLayer speed={-0.1}>
-          <Section>
-            <div className="text-center mb-10 md:mb-12">
-              <span
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "10px",
-                  letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
-                }}
-              >
-                EXPERIENCE HIGHLIGHTS
-              </span>
-              <h2
-                className="mt-3"
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "clamp(18px, 5.5vw, 22px)" : "clamp(22px, 2.5vw, 28px)",
-                  fontWeight: 700,
-                  color: isDark ? "#ffffff" : "#1a0a2e",
-                  lineHeight: 1.3,
-                }}
-              >
-                What Defines Our Worlds
-              </h2>
-            </div>
-          </Section>
-        </ParallaxLayer>
-
-        <div
-          className={`${SECTION_MAX_WIDTH} flex flex-wrap justify-center gap-3 md:gap-4`}
-          style={{ pointerEvents: "auto" }}
-        >
-          {[
-            { label: "Immersive Storytelling", icon: "✦" },
-            { label: "Interactive Environments", icon: "◈" },
-            { label: "Emotional Engagement", icon: "♡" },
-            { label: "Culture-Driven Experiences", icon: "◎" },
-            { label: "Innovation Through VR", icon: "⚡" },
-          ].map((item, i) => (
-            <Section key={item.label} delay={0.1 + i * 0.08}>
-              <DataNode label={item.label} icon={item.icon} />
-            </Section>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== 4. FEATURED WORLDS ===== */}
-      <section
-        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
-        style={{ minHeight: "auto" }}
-      >
-        <ParallaxLayer speed={-0.12}>
-          <Section>
-            <div className="text-center mb-10 md:mb-14">
-              <span
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "10px",
-                  letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
-                }}
-              >
-                FEATURED WORLDS
-              </span>
-              <h2
-                className="mt-3"
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "clamp(18px, 5.5vw, 22px)" : "clamp(22px, 2.5vw, 28px)",
-                  fontWeight: 700,
-                  color: isDark ? "#ffffff" : "#1a0a2e",
-                  lineHeight: 1.3,
-                }}
-              >
-                Explore Our Dimensions
-              </h2>
-            </div>
-          </Section>
-        </ParallaxLayer>
-
-        <div
-          className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
-          style={{
-            pointerEvents: "auto",
-            perspective: "1000px",
-          }}
-        >
-          {[
-            {
-              tag: "EVT-ACT",
-              title: "Event Activations",
-              desc: "Transform venues into multi-dimensional experiences. Spatial audio, reactive visuals, and immersive storytelling converge.",
-              accent: "rgba(120,180,255,",
-              img: "https://images.unsplash.com/photo-1571917687771-094c2a557ed4?w=600&q=80",
-            },
-            {
-              tag: "VRT-SHW",
-              title: "Virtual Showcases",
-              desc: "Digital exhibition spaces that transcend physical limitations. Present products and art in impossible environments.",
-              accent: "rgba(200,130,255,",
-              img: "https://images.unsplash.com/photo-1687389806477-22be64a5480f?w=600&q=80",
-            },
-            {
-              tag: "VR-GAME",
-              title: "VR Game Universes",
-              desc: "Fully realized game worlds built for presence. Adventure, competition, and narrative depth in virtual reality.",
-              accent: "rgba(230,80,160,",
-              img: "https://images.unsplash.com/photo-1728198349686-c51f8899d2a9?w=600&q=80",
-            },
-          ].map((world, i) => (
-            <Section key={world.tag} delay={0.15 + i * 0.15}>
-              <WorldCapsule {...world} isMobile={isMobile} />
-            </Section>
-          ))}
         </div>
       </section>
 
@@ -1782,148 +1580,152 @@ export function HUDContent({ skipHero = false }: { skipHero?: boolean }) {
         </Section>
       </section>
 
-      {/* ===== 5. VISION & MISSION ===== */}
-      <section
-        className="flex flex-col items-center justify-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
-        style={{ minHeight: "auto" }}
-      >
-        <ParallaxLayer speed={-0.1}>
-          <Section>
-            <div className="flex items-center gap-3 mb-10 md:mb-14">
-              <div
-                style={{
-                  width: "40px",
-                  height: "1px",
-                  background:
-                    "linear-gradient(to right, transparent, rgba(200,130,255,0.3))",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "10px",
-                  letterSpacing: "0.4em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
-                }}
-              >
-                MANIFESTO
-              </span>
-              <div
-                style={{
-                  width: "40px",
-                  height: "1px",
-                  background:
-                    "linear-gradient(to left, transparent, rgba(230,80,160,0.3))",
-                }}
-              />
-            </div>
-          </Section>
-        </ParallaxLayer>
+      {!skipVisionMission && (
+        <>
+          {/* ===== 5. VISION & MISSION ===== */}
+          <section
+            className="flex flex-col items-center justify-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+            style={{ minHeight: "auto" }}
+          >
+            <ParallaxLayer speed={-0.1}>
+              <Section>
+                <div className="flex items-center gap-3 mb-10 md:mb-14">
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "1px",
+                      background:
+                        "linear-gradient(to right, transparent, rgba(200,130,255,0.3))",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: "'Orbitron', sans-serif",
+                      fontSize: "10px",
+                      letterSpacing: "0.4em",
+                      color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                    }}
+                  >
+                    MANIFESTO
+                  </span>
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "1px",
+                      background:
+                        "linear-gradient(to left, transparent, rgba(230,80,160,0.3))",
+                    }}
+                  />
+                </div>
+              </Section>
+            </ParallaxLayer>
 
-        <div
-          className={`${SECTION_MAX_WIDTH} flex flex-col items-center gap-6`}
-          style={{ pointerEvents: "auto" }}
-        >
-          <Section delay={0.2}>
-            <GlassPanel
-              accent="rgba(200,130,255,"
-              className="p-6 sm:p-8 md:p-12 text-center w-full"
-              style={{ position: "relative" }}
-            >
-              <CornerAccents />
-              <div
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "9px",
-                  letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
-                  textTransform: "uppercase",
-                  marginBottom: "16px",
-                }}
-              >
-                Our Vision
-              </div>
-              <h2
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "clamp(15px, 4.5vw, 18px)" : "clamp(18px, 2vw, 24px)",
-                  fontWeight: 700,
-                  lineHeight: 1.6,
-                  color: isDark ? "#ffffff" : "#1a0a2e",
-                  maxWidth: "600px",
-                  margin: "0 auto",
-                }}
-              >
-                To bring{" "}
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #C77DFF, #E84393)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  imagination, culture, and emotion
-                </span>{" "}
-                into immersive reality.
-              </h2>
-            </GlassPanel>
-          </Section>
-
-          <Section delay={0.4}>
             <div
-              style={{
-                width: "1px",
-                height: "50px",
-                background:
-                  "linear-gradient(to bottom, rgba(200,130,255,0.15), rgba(230,80,160,0.15))",
-              }}
-            />
-          </Section>
-
-          <Section delay={0.5}>
-            <GlassPanel
-              accent="rgba(120,180,255,"
-              className="p-6 sm:p-8 md:p-12 text-center w-full"
-              style={{ position: "relative" }}
+              className={`${SECTION_MAX_WIDTH} flex flex-col items-center gap-6`}
+              style={{ pointerEvents: "auto" }}
             >
-              <CornerAccents flip />
-              <div
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "9px",
-                  letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
-                  textTransform: "uppercase",
-                  marginBottom: "16px",
-                }}
-              >
-                Our Mission
-              </div>
-              <p
-                style={{
-                  fontFamily: "'Exo 2', sans-serif",
-                  fontSize: isMobile ? "clamp(13px, 3.5vw, 15px)" : "clamp(15px, 1.5vw, 18px)",
-                  fontWeight: 400,
-                  lineHeight: 1.8,
-                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
-                  maxWidth: "600px",
-                  margin: "0 auto",
-                }}
-              >
-                To develop innovative{" "}
-                <span
-                  style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}
+              <Section delay={0.2}>
+                <GlassPanel
+                  accent="rgba(200,130,255,"
+                  className="p-6 sm:p-8 md:p-12 text-center w-full"
+                  style={{ position: "relative" }}
                 >
-                  digital worlds and experiences
-                </span>{" "}
-                that inspire creativity, connection, and
-                exploration.
-              </p>
-            </GlassPanel>
-          </Section>
-        </div>
-      </section>
+                  <CornerAccents />
+                  <div
+                    style={{
+                      fontFamily: "'Orbitron', sans-serif",
+                      fontSize: "9px",
+                      letterSpacing: "0.35em",
+                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                      textTransform: "uppercase",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    Our Vision
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "'Orbitron', sans-serif",
+                      fontSize: isMobile ? "clamp(15px, 4.5vw, 18px)" : "clamp(18px, 2vw, 24px)",
+                      fontWeight: 700,
+                      lineHeight: 1.6,
+                      color: isDark ? "#ffffff" : "#1a0a2e",
+                      maxWidth: "600px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    To bring{" "}
+                    <span
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #C77DFF, #E84393)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      imagination, culture, and emotion
+                    </span>{" "}
+                    into immersive reality.
+                  </h2>
+                </GlassPanel>
+              </Section>
+
+              <Section delay={0.4}>
+                <div
+                  style={{
+                    width: "1px",
+                    height: "50px",
+                    background:
+                      "linear-gradient(to bottom, rgba(200,130,255,0.15), rgba(230,80,160,0.15))",
+                  }}
+                />
+              </Section>
+
+              <Section delay={0.5}>
+                <GlassPanel
+                  accent="rgba(120,180,255,"
+                  className="p-6 sm:p-8 md:p-12 text-center w-full"
+                  style={{ position: "relative" }}
+                >
+                  <CornerAccents flip />
+                  <div
+                    style={{
+                      fontFamily: "'Orbitron', sans-serif",
+                      fontSize: "9px",
+                      letterSpacing: "0.35em",
+                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                      textTransform: "uppercase",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    Our Mission
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: "'Exo 2', sans-serif",
+                      fontSize: isMobile ? "clamp(13px, 3.5vw, 15px)" : "clamp(15px, 1.5vw, 18px)",
+                      fontWeight: 400,
+                      lineHeight: 1.8,
+                      color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+                      maxWidth: "600px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    To develop innovative{" "}
+                    <span
+                      style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}
+                    >
+                      digital worlds and experiences
+                    </span>{" "}
+                    that inspire creativity, connection, and
+                    exploration.
+                  </p>
+                </GlassPanel>
+              </Section>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* ===== 6. FINAL CTA ===== */}
       <section

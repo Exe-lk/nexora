@@ -109,6 +109,13 @@ export function HeroPortal() {
 
   const gridColor = isDark ? "rgba(120,180,255,0.15)" : "rgba(100,60,200,0.07)";
 
+  const handleExploreClick = () => {
+    const target = document.getElementById("discover-worlds");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section
       ref={ref}
@@ -299,6 +306,7 @@ export function HeroPortal() {
           <motion.button
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.97 }}
+            onClick={handleExploreClick}
             className="w-full sm:w-auto px-7 md:px-9 py-3.5 md:py-4 rounded-full text-white cursor-pointer"
             style={{
               fontFamily: "'Inter', sans-serif",
@@ -310,23 +318,6 @@ export function HeroPortal() {
             }}
           >
             Explore Experiences
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full sm:w-auto px-7 md:px-9 py-3.5 md:py-4 rounded-full cursor-pointer"
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)",
-              fontWeight: 600,
-              letterSpacing: "0.03em",
-              color: button2Color,
-              backgroundColor: button2Bg,
-              border: button2Border,
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            View VR Games
           </motion.button>
         </motion.div>
 

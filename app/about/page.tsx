@@ -377,96 +377,6 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
-        {/* Mission & vision */}
-        <motion.section
-          className="mt-16"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
-            <motion.div
-              className="rounded-3xl p-5"
-              style={{
-                background: isDark
-                  ? "linear-gradient(150deg, rgba(15,23,42,0.96), rgba(30,64,175,0.85))"
-                  : "linear-gradient(150deg, rgba(239,246,255,0.98), rgba(221,239,253,0.96))",
-                border: isDark ? "1px solid rgba(56,189,248,0.35)" : "1px solid rgba(59,130,246,0.28)",
-                boxShadow: isDark ? "0 18px 45px rgba(15,23,42,0.7)" : "0 18px 45px rgba(59,130,246,0.25)",
-              }}
-              initial={{ opacity: 0, y: 26, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.4 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              transition={{ duration: 0.65, ease: "easeOut" }}
-            >
-              <h3
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "0.9rem",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: isDark ? "rgba(191,219,254,0.95)" : "rgba(30,64,175,0.98)",
-                }}
-              >
-                Our mission
-              </h3>
-              <p
-                className="mt-3"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.8,
-                  color: isDark ? "rgba(226,232,240,0.85)" : "rgba(30,64,175,0.9)",
-                }}
-              >
-                To redefine storytelling by merging cutting-edge XR technology with live, interactive performance—so audiences
-                don&apos;t just watch worlds, they walk inside them.
-              </p>
-            </motion.div>
-            <motion.div
-              className="rounded-3xl p-5"
-              style={{
-                background: isDark
-                  ? "linear-gradient(150deg, rgba(24,20,45,0.96), rgba(109,40,217,0.9))"
-                  : "linear-gradient(150deg, rgba(245,243,255,0.98), rgba(221,214,254,0.96))",
-                border: isDark ? "1px solid rgba(168,85,247,0.4)" : "1px solid rgba(129,140,248,0.35)",
-                boxShadow: isDark ? "0 18px 45px rgba(30,64,175,0.6)" : "0 18px 45px rgba(129,140,248,0.25)",
-              }}
-              initial={{ opacity: 0, y: 26, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.4 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              transition={{ duration: 0.65, ease: "easeOut", delay: 0.05 }}
-            >
-              <h3
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "0.9rem",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: isDark ? "rgba(233,213,255,0.95)" : "rgba(91,33,182,0.98)",
-                }}
-              >
-                Our vision
-              </h3>
-              <p
-                className="mt-3"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.8,
-                  color: isDark ? "rgba(237,233,254,0.85)" : "rgba(76,29,149,0.9)",
-                }}
-              >
-                A world where immersive, walkable stories sit alongside cinema and theatre as a new pillar of culture—and
-                where venues everywhere can host XR adventures that feel truly unforgettable.
-              </p>
-            </motion.div>
-          </div>
-        </motion.section>
-
         {/* What we do */}
         <section className="mt-14">
           <div className="text-center mb-6">
@@ -508,7 +418,147 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA removed as requested */}
+        {/* Our Vision & Our Mission */}
+        <section className="mt-14 md:mt-20">
+          <div className="flex items-center justify-center gap-3 mb-8 md:mb-10">
+            <div
+              style={{
+                width: "40px",
+                height: "1px",
+                background: isDark
+                  ? "linear-gradient(to right, transparent, rgba(200,130,255,0.3))"
+                  : "linear-gradient(to right, transparent, rgba(124,58,237,0.35))",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "'Orbitron', sans-serif",
+                fontSize: "10px",
+                letterSpacing: "0.4em",
+                textTransform: "uppercase",
+                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+              }}
+            >
+              Manifesto
+            </span>
+            <div
+              style={{
+                width: "40px",
+                height: "1px",
+                background: isDark
+                  ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
+                  : "linear-gradient(to left, transparent, rgba(219,39,119,0.35))",
+              }}
+            />
+          </div>
+          <div className="mx-auto max-w-3xl flex flex-col items-center gap-6">
+            <motion.div
+              className="w-full rounded-3xl p-6 sm:p-8 md:p-10 text-center"
+              style={{
+                background: isDark
+                  ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
+                  : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
+                border: isDark ? "1px solid rgba(200,130,255,0.22)" : "1px solid rgba(124,58,237,0.2)",
+                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(124,58,237,0.08)",
+              }}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <div
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "0.35em",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                  textTransform: "uppercase",
+                  marginBottom: "16px",
+                }}
+              >
+                Our Vision
+              </div>
+              <h2
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: "clamp(1rem, 2.5vw, 1.4rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.6,
+                  color: isDark ? "#ffffff" : "#1a0a2e",
+                  maxWidth: "600px",
+                  margin: "0 auto",
+                }}
+              >
+                To bring{" "}
+                <span
+                  style={{
+                    background: "linear-gradient(135deg, #C77DFF, #E84393)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  imagination, culture, and emotion
+                </span>{" "}
+                into immersive reality.
+              </h2>
+            </motion.div>
+
+            <div
+              style={{
+                width: "1px",
+                height: "50px",
+                background: isDark
+                  ? "linear-gradient(to bottom, rgba(200,130,255,0.15), rgba(230,80,160,0.15))"
+                  : "linear-gradient(to bottom, rgba(124,58,237,0.15), rgba(219,39,119,0.15))",
+              }}
+            />
+
+            <motion.div
+              className="w-full rounded-3xl p-6 sm:p-8 md:p-10 text-center"
+              style={{
+                background: isDark
+                  ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
+                  : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
+                border: isDark ? "1px solid rgba(120,180,255,0.22)" : "1px solid rgba(14,165,233,0.2)",
+                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(14,165,233,0.08)",
+              }}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+            >
+              <div
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "0.35em",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                  textTransform: "uppercase",
+                  marginBottom: "16px",
+                }}
+              >
+                Our Mission
+              </div>
+              <p
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: "clamp(0.9rem, 1.5vw, 1.1rem)",
+                  fontWeight: 400,
+                  lineHeight: 1.8,
+                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+                  maxWidth: "600px",
+                  margin: "0 auto",
+                }}
+              >
+                To develop innovative{" "}
+                <span style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}>
+                  digital worlds and experiences
+                </span>{" "}
+                that inspire creativity, connection, and exploration.
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
         <div className="mt-12 flex items-center justify-center gap-4 flex-wrap">
           <div style={{ height: "1px", width: "40px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.08))" : "linear-gradient(to right, transparent, rgba(60,40,100,0.14))" }} />

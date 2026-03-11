@@ -194,7 +194,7 @@ export default function PrivacyPage() {
                 marginBottom: "10px",
               }}
             >
-              Privacy & data use
+              Privacy Policy
             </h1>
             <p
               className="mx-auto"
