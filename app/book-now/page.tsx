@@ -29,16 +29,16 @@ export default function BookNowPage() {
   }, []);
 
   const bg = isDark
-    ? "radial-gradient(circle at top, rgba(120,180,255,0.12), transparent 55%), radial-gradient(circle at bottom, rgba(236,72,153,0.14), transparent 60%), #050712"
-    : "radial-gradient(circle at top, rgba(120,180,255,0.14), transparent 55%), radial-gradient(circle at bottom, rgba(236,72,153,0.12), transparent 60%), #f7f3ff";
+    ? "radial-gradient(circle at top, rgba(212,165,116,0.12), transparent 55%), radial-gradient(circle at bottom, rgba(184,134,11,0.14), transparent 60%), #050712"
+    : "radial-gradient(circle at top, rgba(212,165,116,0.14), transparent 55%), radial-gradient(circle at bottom, rgba(184,134,11,0.12), transparent 60%), #f7f3ff";
 
   const cardBg = isDark
     ? "linear-gradient(145deg, rgba(15,18,35,0.96), rgba(7,10,22,0.96))"
     : "linear-gradient(145deg, rgba(255,255,255,0.98), rgba(246,240,255,0.98))";
 
   const borderColor = isDark
-    ? "1px solid rgba(120,180,255,0.22)"
-    : "1px solid rgba(130,90,220,0.2)";
+    ? "1px solid rgba(212,165,116,0.22)"
+    : "1px solid rgba(201,147,62,0.2)";
 
   const inputBg = isDark ? "rgba(10,12,24,0.95)" : "rgba(255,255,255,0.9)";
   const inputBorder = isDark
@@ -51,7 +51,7 @@ export default function BookNowPage() {
 
   const textColor = isDark ? "rgba(255,255,255,0.7)" : "#433264";
 
-  const accent = isDark ? "#a07de8" : "#6b3fbf";
+  const accent = isDark ? "#C9933E" : "#B8860B";
 
   return (
     <div
@@ -74,8 +74,8 @@ export default function BookNowPage() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `linear-gradient(rgba(120,180,255,0.12) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(120,180,255,0.12) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(212,165,116,0.12) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(212,165,116,0.12) 1px, transparent 1px)`,
             backgroundSize: "80px 80px",
             opacity: isDark ? 0.35 : 0.6,
             mixBlendMode: isDark ? "screen" : "normal",
@@ -92,7 +92,7 @@ export default function BookNowPage() {
               top: "-40px",
               left: "-40px",
               background:
-                "radial-gradient(circle, rgba(96,165,250,0.35), transparent 60%)",
+                "radial-gradient(circle, rgba(212,165,116,0.35), transparent 60%)",
             }}
             animate={{ opacity: [0.5, 0.9, 0.5], y: [0, 10, 0] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
@@ -105,7 +105,7 @@ export default function BookNowPage() {
               bottom: "-60px",
               right: "-40px",
               background:
-                "radial-gradient(circle, rgba(236,72,153,0.35), transparent 60%)",
+                "radial-gradient(circle, rgba(184,134,11,0.35), transparent 60%)",
             }}
             animate={{ opacity: [0.4, 0.8, 0.4], y: [0, -10, 0] }}
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
@@ -150,8 +150,8 @@ export default function BookNowPage() {
             style={{
               fontFamily: "'Orbitron', sans-serif",
               backgroundImage: isDark
-                ? "linear-gradient(135deg,#6b8ef0 0%,#a07de8 30%,#e06aac 65%,#5ec4e0 100%)"
-                : "linear-gradient(135deg,#4a6fd8 0%,#7b52c4 30%,#c44a8f 65%,#e06aac 100%)",
+                ? "linear-gradient(135deg,#D4A574 0%,#C9933E 30%,#B8860B 65%,#E6B973 100%)"
+                : "linear-gradient(135deg,#B8860B 0%,#C9933E 30%,#A67C00 65%,#B8860B 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -187,8 +187,8 @@ export default function BookNowPage() {
                   ? "linear-gradient(145deg, rgba(15,23,42,0.95), rgba(15,23,42,0.75))"
                   : "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(244,240,255,0.9))",
                 border: isDark
-                  ? "1px solid rgba(96,165,250,0.35)"
-                  : "1px solid rgba(129,140,248,0.4)",
+                  ? "1px solid rgba(212,165,116,0.35)"
+                  : "1px solid rgba(201,147,62,0.4)",
               }}
             >
               <p
@@ -229,7 +229,7 @@ export default function BookNowPage() {
                   fontFamily: "'Orbitron', sans-serif",
                   color: isDark
                     ? "rgba(254,202,202,0.85)"
-                    : "rgba(219,39,119,0.95)",
+                    : "rgba(184,134,11,0.95)",
                 }}
               >
                 Scale
@@ -290,7 +290,7 @@ export default function BookNowPage() {
               <span>Typical response time &lt; 24h</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.9)]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(212,165,116,0.9)]" />
               <span>Hardware, setup & crew included</span>
             </div>
           </motion.div>
@@ -306,14 +306,14 @@ export default function BookNowPage() {
             background: cardBg,
             border: borderColor,
             boxShadow: isDark
-              ? "0 30px 80px rgba(15,23,42,0.9), 0 0 40px rgba(120,180,255,0.25)"
-              : "0 26px 70px rgba(129,140,248,0.26), 0 0 40px rgba(244,114,182,0.18)",
+              ? "0 30px 80px rgba(15,23,42,0.9), 0 0 40px rgba(212,165,116,0.25)"
+              : "0 26px 70px rgba(201,147,62,0.26), 0 0 40px rgba(244,114,182,0.18)",
           }}
         >
           {/* corner accents */}
           <div className="pointer-events-none">
-            <div className="absolute -top-px left-7 w-8 h-[1px] bg-gradient-to-r from-transparent via-indigo-400/80 to-transparent" />
-            <div className="absolute -bottom-px right-7 w-8 h-[1px] bg-gradient-to-r from-transparent via-pink-400/80 to-transparent" />
+            <div className="absolute -top-px left-7 w-8 h-[1px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
+            <div className="absolute -bottom-px right-7 w-8 h-[1px] bg-gradient-to-r from-transparent via-yellow-400/80 to-transparent" />
           </div>
 
           <div className="flex items-center justify-between gap-3 mb-6">
@@ -462,12 +462,12 @@ export default function BookNowPage() {
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   backgroundImage: isDark
-                    ? "linear-gradient(135deg, rgba(140,100,220,0.9), rgba(230,80,160,0.85))"
-                    : "linear-gradient(135deg, rgba(122,92,230,0.98), rgba(236,72,153,0.95))",
+                    ? "linear-gradient(135deg, rgba(140,100,220,0.9), rgba(212,165,116,0.85))"
+                    : "linear-gradient(135deg, rgba(122,92,230,0.98), rgba(184,134,11,0.95))",
                   color: "#ffffff",
                   boxShadow: isDark
-                    ? "0 18px 45px rgba(168,85,247,0.6)"
-                    : "0 18px 45px rgba(168,85,247,0.5)",
+                    ? "0 18px 45px rgba(212,165,116,0.6)"
+                    : "0 18px 45px rgba(212,165,116,0.5)",
                   letterSpacing: "0.16em",
                 }}
               >

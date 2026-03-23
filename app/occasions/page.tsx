@@ -18,9 +18,9 @@ const OCCASIONS = [
     description:
       "Step into your own virtual world for the most memorable birthday ever. From floating sky castles to underwater kingdoms — we build the perfect digital realm around you.",
     features: ["Custom VR world themed to your personality", "Up to 30 simultaneous headsets", "Live DJ & spatial audio", "Photo-realistic avatar creation"],
-    accent: "#f97316",
+    accent: "#B8860B",
     accentSoft: "rgba(249,115,22,",
-    gradient: "linear-gradient(135deg, #f97316, #ec4899)",
+    gradient: "linear-gradient(135deg, #B8860B, #E6B973)",
     image: "/vr birthday parties.jpeg",
   },
   {
@@ -32,9 +32,9 @@ const OCCASIONS = [
     description:
       "Product launches, team-building retreats, and conferences that leave a lasting impression. Immersive XR experiences that position your company at the cutting edge.",
     features: ["Branded virtual environments", "Interactive product demos in XR", "Global team collaboration spaces", "Analytics & engagement reports"],
-    accent: "#6366f1",
-    accentSoft: "rgba(99,102,241,",
-    gradient: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+    accent: "#D4A574",
+    accentSoft: "rgba(201,147,62,",
+    gradient: "linear-gradient(135deg, #D4A574, #B8860B)",
     image: "/vr corporate events.jpeg",
   },
   {
@@ -60,9 +60,9 @@ const OCCASIONS = [
     description:
       "Enchant your guests with breathtaking virtual backdrops, immersive reception lounges and a one-of-a-kind XR experience woven into your most cherished day.",
     features: ["Custom ceremony virtual venue", "Guest XR photo booths", "360° wedding highlights capture", "Virtual guest attendance for remote family"],
-    accent: "#e879f9",
-    accentSoft: "rgba(232,121,249,",
-    gradient: "linear-gradient(135deg, #e879f9, #f43f5e)",
+    accent: "#D4A574",
+    accentSoft: "rgba(212,165,116,",
+    gradient: "linear-gradient(135deg, #D4A574, #C9933E)",
     image: "/vr weddings and engagement.jpeg",
   },
   {
@@ -88,9 +88,9 @@ const OCCASIONS = [
     description:
       "From school excursions to museum activations, XR education unlocks understanding that textbooks never could. Walk on Mars, dive into ancient history, or explore the human body.",
     features: ["Curriculum-aligned XR journeys", "Museum & heritage partnerships", "STEM interactive simulations", "Classroom headset rental packages"],
-    accent: "#06b6d4",
+    accent: "#C9933E",
     accentSoft: "rgba(6,182,212,",
-    gradient: "linear-gradient(135deg, #06b6d4, #6366f1)",
+    gradient: "linear-gradient(135deg, #C9933E, #D4A574)",
     image: "/vr educational programs.jpeg",
   },
 ];
@@ -416,7 +416,7 @@ export default function OccasionsPage() {
                 width: size,
                 height: size,
                 border: isDark
-                  ? `1px solid rgba(168,85,247,${0.06 + i * 0.04})`
+                  ? `1px solid rgba(212,165,116,${0.06 + i * 0.04})`
                   : `1px solid rgba(130,60,220,${0.06 + i * 0.04})`,
               }}
               animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
@@ -431,19 +431,19 @@ export default function OccasionsPage() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-4 flex items-center gap-3"
         >
-          <div style={{ width: 30, height: 1, backgroundImage: isDark ? "linear-gradient(to right, transparent, rgba(168,85,247,0.5))" : "linear-gradient(to right, transparent, rgba(130,60,220,0.4))" }} />
+          <div style={{ width: 30, height: 1, backgroundImage: isDark ? "linear-gradient(to right, transparent, rgba(212,165,116,0.5))" : "linear-gradient(to right, transparent, rgba(130,60,220,0.4))" }} />
           <span
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "10px",
               letterSpacing: "0.35em",
-              color: isDark ? "rgba(168,85,247,0.7)" : "rgba(100,50,180,0.65)",
+              color: isDark ? "rgba(212,165,116,0.7)" : "rgba(168,120,10,0.65)",
               textTransform: "uppercase",
             }}
           >
             NexoraXR Experiences
           </span>
-          <div style={{ width: 30, height: 1, backgroundImage: isDark ? "linear-gradient(to left, transparent, rgba(236,72,153,0.5))" : "linear-gradient(to left, transparent, rgba(200,80,200,0.4))" }} />
+          <div style={{ width: 30, height: 1, backgroundImage: isDark ? "linear-gradient(to left, transparent, rgba(184,134,11,0.5))" : "linear-gradient(to left, transparent, rgba(200,80,200,0.4))" }} />
         </motion.div>
 
         <motion.h1
@@ -457,8 +457,8 @@ export default function OccasionsPage() {
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
             backgroundImage: isDark
-              ? "linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #38bdf8 100%)"
-              : "linear-gradient(135deg, #7c3aed 0%, #6366f1 40%, #0ea5e9 100%)",
+              ? "linear-gradient(135deg, #D4A574 0%, #C9933E 40%, #B8860B 100%)"
+              : "linear-gradient(135deg, #C9933E 0%, #D4A574 40%, #D4A574 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             marginBottom: "20px",
@@ -499,8 +499,8 @@ export default function OccasionsPage() {
               fontSize: "13px",
               fontWeight: 600,
               letterSpacing: "0.06em",
-              backgroundImage: "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)",
-              boxShadow: "0 6px 30px rgba(168,85,247,0.4)",
+              backgroundImage: "linear-gradient(135deg, #C9933E, #D4A574, #E6B973)",
+              boxShadow: "0 6px 30px rgba(212,165,116,0.4)",
               border: "none",
             }}
           >
@@ -517,8 +517,8 @@ export default function OccasionsPage() {
               fontWeight: 600,
               letterSpacing: "0.06em",
               color: isDark ? "#c4b5fd" : "#6d28d9",
-              background: isDark ? "rgba(124,58,237,0.12)" : "rgba(255,255,255,0.8)",
-              border: isDark ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(109,40,217,0.2)",
+              background: isDark ? "rgba(184,134,11,0.12)" : "rgba(255,255,255,0.8)",
+              border: isDark ? "1px solid rgba(184,134,11,0.3)" : "1px solid rgba(168,120,10,0.2)",
             }}
           >
             View Worlds
@@ -559,7 +559,7 @@ export default function OccasionsPage() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "1.8rem",
                   fontWeight: 800,
-                  backgroundImage: "linear-gradient(135deg, #a78bfa, #818cf8)",
+                  backgroundImage: "linear-gradient(135deg, #D4A574, #C9933E)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}

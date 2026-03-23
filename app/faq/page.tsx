@@ -80,11 +80,11 @@ export default function FAQPage() {
   };
 
   const heroAccent = isDark
-    ? "linear-gradient(135deg,#6b8ef0 0%,#a07de8 30%,#e06aac 65%,#5ec4e0 100%)"
-    : "linear-gradient(135deg,#4a6fd8 0%,#7b52c4 30%,#c44a8f 65%,#e06aac 100%)";
+    ? "linear-gradient(135deg,#D4A574 0%,#C9933E 30%,#B8860B 65%,#E6B973 100%)"
+    : "linear-gradient(135deg,#B8860B 0%,#C9933E 30%,#A67C00 65%,#B8860B 100%)";
 
   const searchBg = isDark ? "rgba(15,23,42,0.75)" : "rgba(255,255,255,0.86)";
-  const searchBorder = isDark ? "1px solid rgba(148,163,184,0.35)" : "1px solid rgba(130,90,220,0.22)";
+  const searchBorder = isDark ? "1px solid rgba(148,163,184,0.35)" : "1px solid rgba(201,147,62,0.22)";
   const searchText = isDark ? "rgba(255,255,255,0.85)" : "rgba(60,30,120,0.9)";
   const searchPlaceholder = isDark ? "rgba(255,255,255,0.35)" : "rgba(60,40,100,0.45)";
 
@@ -135,9 +135,9 @@ export default function FAQPage() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-semibold tracking-[0.24em] uppercase mb-6"
             style={{
               fontFamily: "'Orbitron', sans-serif",
-              borderColor: isDark ? "rgba(168,85,247,0.28)" : "rgba(124,58,237,0.22)",
-              background: isDark ? "rgba(168,85,247,0.10)" : "rgba(124,58,237,0.10)",
-              color: isDark ? "rgba(216,180,254,0.92)" : "rgba(109,40,217,0.9)",
+              borderColor: isDark ? "rgba(212,165,116,0.28)" : "rgba(184,134,11,0.22)",
+              background: isDark ? "rgba(212,165,116,0.10)" : "rgba(184,134,11,0.10)",
+              color: isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.9)",
             }}
           >
             Quick answers, zero noise
@@ -178,7 +178,7 @@ export default function FAQPage() {
               style={{
                 background: searchBg,
                 border: searchBorder,
-                boxShadow: isDark ? "0 20px 70px rgba(0,0,0,0.35)" : "0 18px 60px rgba(124,58,237,0.08)",
+                boxShadow: isDark ? "0 20px 70px rgba(0,0,0,0.35)" : "0 18px 60px rgba(184,134,11,0.08)",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
               }}
@@ -287,7 +287,7 @@ export default function FAQPage() {
               className="rounded-3xl p-8 text-center"
               style={{
                 background: isDark ? "rgba(15,23,42,0.5)" : "rgba(255,255,255,0.85)",
-                border: isDark ? "1px solid rgba(148,163,184,0.25)" : "1px solid rgba(130,90,220,0.18)",
+                border: isDark ? "1px solid rgba(148,163,184,0.25)" : "1px solid rgba(201,147,62,0.18)",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
               }}
@@ -343,8 +343,8 @@ function CategoryPill({
             : "rgba(60,40,100,0.85)",
         background: active
           ? isDark
-            ? "linear-gradient(135deg, rgba(120,180,255,0.92), rgba(168,85,247,0.9))"
-            : "linear-gradient(135deg, rgba(124,58,237,0.95), rgba(236,72,153,0.92))"
+            ? "linear-gradient(135deg, rgba(212,165,116,0.92), rgba(212,165,116,0.9))"
+            : "linear-gradient(135deg, rgba(184,134,11,0.95), rgba(184,134,11,0.92))"
           : isDark
             ? "rgba(255,255,255,0.06)"
             : "rgba(255,255,255,0.78)",
@@ -352,11 +352,11 @@ function CategoryPill({
           ? "1px solid rgba(255,255,255,0.0)"
           : isDark
             ? "1px solid rgba(255,255,255,0.10)"
-            : "1px solid rgba(130,90,220,0.16)",
+            : "1px solid rgba(201,147,62,0.16)",
         boxShadow: active
           ? isDark
-            ? "0 18px 50px rgba(120,180,255,0.18)"
-            : "0 18px 50px rgba(124,58,237,0.14)"
+            ? "0 18px 50px rgba(212,165,116,0.18)"
+            : "0 18px 50px rgba(184,134,11,0.14)"
           : "none",
       }}
     >

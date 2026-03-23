@@ -10,7 +10,7 @@ export type FaqCategory = {
   title: string;
   subtitle: string;
   accentGradient: string;
-  accentSoft: string; // rgba(...,  e.g. "rgba(168,85,247,"
+  accentSoft: string; // rgba(...,  e.g. "rgba(212,165,116,"
   items: FaqItem[];
 };
 
@@ -19,8 +19,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "about",
     title: "About NexoraXR",
     subtitle: "What we are, how it works, what’s included",
-    accentGradient: "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)",
-    accentSoft: "rgba(168,85,247,",
+    accentGradient: "linear-gradient(135deg, #C9933E 0%, #D4A574 50%, #E6B973 100%)",
+    accentSoft: "rgba(212,165,116,",
     items: [
       {
         id: "about-what-is",
@@ -58,8 +58,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "who",
     title: "Who can attend?",
     subtitle: "Ages, accessibility, and suitability",
-    accentGradient: "linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%)",
-    accentSoft: "rgba(56,189,248,",
+    accentGradient: "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
+    accentSoft: "rgba(212,165,116,",
     items: [
       {
         id: "who-ages",
@@ -97,7 +97,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "experiences",
     title: "Experiences",
     subtitle: "Worlds, duration, and what guests do",
-    accentGradient: "linear-gradient(135deg, #22c55e 0%, #38bdf8 60%, #a855f7 100%)",
+    accentGradient: "linear-gradient(135deg, #E6B973 0%, #D4A574 60%, #D4A574 100%)",
     accentSoft: "rgba(52,211,153,",
     items: [
       {
@@ -136,8 +136,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "booking_pricing",
     title: "Booking & Pricing",
     subtitle: "How to book, what it costs, and what happens next",
-    accentGradient: "linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #7c3aed 100%)",
-    accentSoft: "rgba(14,165,233,",
+    accentGradient: "linear-gradient(135deg, #C9933E 0%, #D4A574 50%, #C9933E 100%)",
+    accentSoft: "rgba(184,134,11,",
     items: [
       {
         id: "book-how",
@@ -175,8 +175,8 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "safety",
     title: "Safety & Comfort",
     subtitle: "Motion sickness, hygiene, and supervision",
-    accentGradient: "linear-gradient(135deg, #ec4899 0%, #a855f7 55%, #38bdf8 100%)",
-    accentSoft: "rgba(236,72,153,",
+    accentGradient: "linear-gradient(135deg, #E6B973 0%, #D4A574 55%, #D4A574 100%)",
+    accentSoft: "rgba(184,134,11,",
     items: [
       {
         id: "safe-motion-sickness",
@@ -214,7 +214,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
     id: "events",
     title: "Events & Groups",
     subtitle: "Corporate, schools, festivals, and large crowds",
-    accentGradient: "linear-gradient(135deg, #f59e0b 0%, #ef4444 45%, #ec4899 100%)",
+    accentGradient: "linear-gradient(135deg, #f59e0b 0%, #ef4444 45%, #E6B973 100%)",
     accentSoft: "rgba(245,158,11,",
     items: [
       {

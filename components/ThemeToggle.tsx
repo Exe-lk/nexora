@@ -13,12 +13,12 @@ export function ThemeToggle() {
       className="relative w-14 h-7 rounded-full cursor-pointer transition-all duration-300"
       style={{
         background: isDark
-          ? "linear-gradient(135deg, rgba(120,180,255,0.2), rgba(168,85,247,0.15))"
-          : "linear-gradient(135deg, rgba(130,90,220,0.15), rgba(200,120,255,0.1))",
-        border: `1px solid ${isDark ? "rgba(120,180,255,0.3)" : "rgba(130,90,220,0.25)"}`,
+          ? "linear-gradient(135deg, rgba(212,165,116,0.2), rgba(201,147,62,0.15))"
+          : "linear-gradient(135deg, rgba(201,147,62,0.15), rgba(212,165,116,0.1))",
+        border: `1px solid ${isDark ? "rgba(212,165,116,0.3)" : "rgba(201,147,62,0.25)"}`,
         boxShadow: isDark
-          ? "0 0 20px rgba(120,180,255,0.1)"
-          : "0 0 15px rgba(130,90,220,0.08)",
+          ? "0 0 20px rgba(212,165,116,0.1)"
+          : "0 0 15px rgba(201,147,62,0.08)",
       }}
       aria-label="Toggle theme"
     >
@@ -26,10 +26,10 @@ export function ThemeToggle() {
         className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full flex items-center justify-center"
         style={{
           background: isDark
-            ? "linear-gradient(135deg, rgba(120,180,255,0.9), rgba(168,85,247,0.8))"
+            ? "linear-gradient(135deg, rgba(212,165,116,0.9), rgba(201,147,62,0.8))"
             : "linear-gradient(135deg, rgba(255,220,100,0.9), rgba(255,180,80,0.8))",
           boxShadow: isDark
-            ? "0 0 15px rgba(120,180,255,0.4)"
+            ? "0 0 15px rgba(212,165,116,0.4)"
             : "0 0 12px rgba(255,200,100,0.3)",
         }}
         animate={{
@@ -47,7 +47,7 @@ export function ThemeToggle() {
             height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="rgba(120,180,255,0.9)"
+            stroke="rgba(212,165,116,0.9)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"

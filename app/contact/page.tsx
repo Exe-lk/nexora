@@ -36,7 +36,7 @@ function FieldLabel({ label, required, isDark }: { label: string; required?: boo
             fontFamily: "'Orbitron', sans-serif",
             fontSize: "10px",
             letterSpacing: "0.12em",
-            color: isDark ? "rgba(236,72,153,0.9)" : "rgba(190,24,93,0.9)",
+            color: isDark ? "rgba(184,134,11,0.9)" : "rgba(190,24,93,0.9)",
           }}
         >
           *
@@ -137,7 +137,7 @@ export default function ContactPage() {
                   width: size,
                   height: size,
                   border: isDark
-                    ? `1px solid rgba(168,85,247,${0.06 + i * 0.04})`
+                    ? `1px solid rgba(212,165,116,${0.06 + i * 0.04})`
                     : `1px solid rgba(130,60,220,${0.06 + i * 0.04})`,
                 }}
                 animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
@@ -155,8 +155,8 @@ export default function ContactPage() {
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
                 backgroundImage: isDark
-                  ? "linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #38bdf8 100%)"
-                  : "linear-gradient(135deg, #7c3aed 0%, #6366f1 40%, #0ea5e9 100%)",
+                  ? "linear-gradient(135deg, #D4A574 0%, #C9933E 40%, #B8860B 100%)"
+                  : "linear-gradient(135deg, #C9933E 0%, #D4A574 40%, #B8860B 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 marginBottom: "12px",
@@ -195,8 +195,8 @@ export default function ContactPage() {
                 background: isDark
                   ? "linear-gradient(160deg, rgba(10,8,20,0.72) 0%, rgba(15,12,28,0.58) 100%)"
                   : "linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(248,246,255,0.86) 100%)",
-                border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.16)",
-                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(130,90,220,0.14)",
+                border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(201,147,62,0.16)",
+                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(201,147,62,0.14)",
               }}
             >
               <div
@@ -205,7 +205,7 @@ export default function ContactPage() {
                   fontSize: "10px",
                   letterSpacing: "0.35em",
                   textTransform: "uppercase",
-                  color: isDark ? "rgba(168,85,247,0.7)" : "rgba(109,40,217,0.65)",
+                  color: isDark ? "rgba(212,165,116,0.7)" : "rgba(168,120,10,0.65)",
                 }}
               >
                 Send a message
@@ -235,8 +235,8 @@ export default function ContactPage() {
                       style={{
                         fontFamily: "'Inter', sans-serif",
                         fontSize: "0.95rem",
-                        background: isDark ? "rgba(255,255,255,0.04)" : "rgba(130,90,220,0.06)",
-                        border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.12)",
+                        background: isDark ? "rgba(255,255,255,0.04)" : "rgba(201,147,62,0.06)",
+                        border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)",
                         color: isDark ? "rgba(255,255,255,0.92)" : "#1a0a2e",
                       }}
                     />
@@ -255,8 +255,8 @@ export default function ContactPage() {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontSize: "0.95rem",
-                    background: isDark ? "rgba(255,255,255,0.04)" : "rgba(130,90,220,0.06)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.12)",
+                    background: isDark ? "rgba(255,255,255,0.04)" : "rgba(201,147,62,0.06)",
+                    border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)",
                     color: isDark ? "rgba(255,255,255,0.92)" : "#1a0a2e",
                   }}
                 />
@@ -273,7 +273,7 @@ export default function ContactPage() {
                     fontSize: "13px",
                     fontWeight: 700,
                     letterSpacing: "0.06em",
-                    backgroundImage: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
+                    backgroundImage: "linear-gradient(135deg, #D4A574, #D4A574, #E6B973)",
                     border: "none",
                   }}
                   disabled
@@ -292,8 +292,8 @@ export default function ContactPage() {
                     fontWeight: 700,
                     letterSpacing: "0.06em",
                     color: isDark ? "#c4b5fd" : "#6d28d9",
-                    background: isDark ? "rgba(124,58,237,0.12)" : "rgba(255,255,255,0.85)",
-                    border: isDark ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(109,40,217,0.2)",
+                    background: isDark ? "rgba(184,134,11,0.12)" : "rgba(255,255,255,0.85)",
+                    border: isDark ? "1px solid rgba(184,134,11,0.3)" : "1px solid rgba(168,120,10,0.2)",
                   }}
                   href="mailto:hello@nexoraxr.com?subject=Partnership%20enquiry%20(NexoraXR)"
                 >

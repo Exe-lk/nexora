@@ -15,9 +15,9 @@ const tickets = [
     price: 1000,
     description: "The complete NexoraXR immersive experience.",
     features: ["Full immersive experience", "Access to all VR zones", "Free locker access"],
-    color: "from-cyan-500/20 to-blue-600/20",
-    border: "group-hover:border-cyan-400/50",
-    accent: "text-cyan-400",
+    color: "from-amber-500/20 to-yellow-600/20",
+    border: "group-hover:border-amber-400/50",
+    accent: "text-amber-400",
   },
   {
     id: "child",
@@ -26,9 +26,9 @@ const tickets = [
     price: 300,
     description: "Curated experiences tailored for younger users.",
     features: ["Kid-friendly VR zones", "Supervised activities", "Complimentary drink"],
-    color: "from-pink-500/20 to-purple-600/20",
-    border: "group-hover:border-pink-400/50",
-    accent: "text-pink-400",
+    color: "from-yellow-500/20 to-amber-600/20",
+    border: "group-hover:border-yellow-400/50",
+    accent: "text-yellow-400",
   },
   {
     id: "family",
@@ -110,9 +110,9 @@ export default function PricingPage() {
           <div
             className="inline-block px-4 py-1.5 rounded-full border text-sm font-medium tracking-wide mb-6 uppercase"
             style={{
-              borderColor: isDark ? "rgba(56,189,248,0.3)" : "rgba(14,165,233,0.22)",
-              background: isDark ? "rgba(56,189,248,0.10)" : "rgba(14,165,233,0.10)",
-              color: isDark ? "rgba(125,211,252,0.95)" : "rgba(2,132,199,0.9)",
+              borderColor: isDark ? "rgba(212,165,116,0.3)" : "rgba(184,134,11,0.22)",
+              background: isDark ? "rgba(212,165,116,0.10)" : "rgba(184,134,11,0.10)",
+              color: isDark ? "rgba(230,185,115,0.95)" : "rgba(184,134,11,0.9)",
             }}
           >
             Admission & Ticketing
@@ -157,8 +157,8 @@ export default function PricingPage() {
                       : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
                     border: isDark
                       ? "1px solid rgba(51,65,85,1)"
-                      : "1px solid rgba(14,165,233,0.2)",
-                    boxShadow: isDark ? undefined : "0 16px 50px rgba(14,165,233,0.08)",
+                      : "1px solid rgba(184,134,11,0.2)",
+                    boxShadow: isDark ? undefined : "0 16px 50px rgba(184,134,11,0.08)",
                   }}
                 >
                   <div className="mb-8">

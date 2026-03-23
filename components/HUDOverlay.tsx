@@ -146,8 +146,8 @@ export function FloatingNav() {
               ? "1px solid rgba(255,255,255,0.10)"
               : "1px solid rgba(255,255,255,0.06)"
             : scrolled
-              ? "1px solid rgba(130,90,220,0.20)"
-              : "1px solid rgba(130,90,220,0.10)",
+              ? "1px solid rgba(201,147,62,0.20)"
+              : "1px solid rgba(201,147,62,0.10)",
           borderRadius: "60px",
           padding: isMobile
             ? "8px 12px 8px 14px"
@@ -159,7 +159,7 @@ export function FloatingNav() {
               ? "0 4px 40px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.04) inset"
               : "none"
             : scrolled
-              ? "0 4px 32px rgba(130,90,220,0.12), 0 1px 0 rgba(255,255,255,0.6) inset"
+              ? "0 4px 32px rgba(201,147,62,0.12), 0 1px 0 rgba(255,255,255,0.6) inset"
               : "none",
           transition: "background 0.5s ease, border 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease",
           width: "min(960px, 95vw)",
@@ -182,7 +182,7 @@ export function FloatingNav() {
             marginBottom: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
             filter: isDark
               ? "drop-shadow(0 0 12px rgba(120,160,255,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.5))"
-              : "drop-shadow(0 0 10px rgba(130,90,220,0.25)) drop-shadow(0 2px 6px rgba(0,0,0,0.15))",
+              : "drop-shadow(0 0 10px rgba(201,147,62,0.25)) drop-shadow(0 2px 6px rgba(0,0,0,0.15))",
             transition: "filter 0.4s ease",
           }}
           priority
@@ -207,7 +207,7 @@ export function FloatingNav() {
                     ? expOpen ? "#ffffff" : "rgba(255,255,255,0.88)"
                     : expOpen ? "rgba(60,30,120,1)" : "rgba(60,30,120,0.85)",
                   background: expOpen
-                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)"
+                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)"
                     : "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
@@ -217,7 +217,7 @@ export function FloatingNav() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)";
                 }}
                 onMouseLeave={(e) => {
                   if (!expOpen) {
@@ -257,18 +257,18 @@ export function FloatingNav() {
                       background: isDark
                         ? "linear-gradient(160deg, rgba(10,10,20,0.95), rgba(6,6,14,0.92))"
                         : "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,248,255,0.95))",
-                      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
+                      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.15)",
                       backdropFilter: "blur(30px)",
                       boxShadow: isDark
-                        ? "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.06)"
-                        : "0 20px 60px rgba(130,90,220,0.15), 0 0 40px rgba(180,100,220,0.08)",
+                        ? "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(212,165,116,0.06)"
+                        : "0 20px 60px rgba(201,147,62,0.15), 0 0 40px rgba(212,165,116,0.08)",
                     }}
                     onMouseEnter={handleExpEnter}
                     onMouseLeave={handleExpLeave}
                   >
                     {/* Header */}
                     <div className="px-4 pt-3 pb-2">
-                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)" }}>
+                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(100,70,20,0.75)" }}>
                         EXPLORE WORLDS
                       </span>
                     </div>
@@ -315,7 +315,7 @@ export function FloatingNav() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Swarga: The Celestial Realm
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)" }}>
                             Golden temples &amp; divine wonder
                           </div>
                         </div>
@@ -325,7 +325,7 @@ export function FloatingNav() {
                       </button>
 
                       {/* Divider */}
-                      <div className="mx-4" style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)" }} />
+                      <div className="mx-4" style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(201,147,62,0.1), transparent)" }} />
 
                       {/* Hell */}
                       <button
@@ -367,7 +367,7 @@ export function FloatingNav() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Naraka: The Infernal Depths
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)" }}>
                             Volcanic wastelands &amp; rivers of fire
                           </div>
                         </div>
@@ -379,8 +379,8 @@ export function FloatingNav() {
 
                     {/* Footer */}
                     <div className="px-4 pt-2 pb-2 mt-1">
-                      <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)", marginBottom: "8px" }} />
-                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.65)", letterSpacing: "0.1em" }}>
+                      <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(201,147,62,0.1), transparent)", marginBottom: "8px" }} />
+                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.75)", letterSpacing: "0.1em" }}>
                         More worlds coming soon...
                       </span>
                     </div>
@@ -418,7 +418,7 @@ export function FloatingNav() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
@@ -511,10 +511,10 @@ export function FloatingNav() {
             background: isDark
               ? "linear-gradient(135deg, rgba(6,6,14,0.72), rgba(4,4,10,0.60))"
               : "linear-gradient(135deg, rgba(255,255,255,0.65), rgba(250,248,255,0.55))",
-            border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.18)",
+            border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(201,147,62,0.18)",
             boxShadow: isDark
               ? "0 8px 40px rgba(0,0,0,0.4)"
-              : "0 8px 40px rgba(130,90,220,0.12)",
+              : "0 8px 40px rgba(201,147,62,0.12)",
           }}
         >
           {/* Worlds with expandable sub-items */}
@@ -833,7 +833,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 height: "1px",
                   background: isDark
                     ? "linear-gradient(to right, transparent, rgba(180,120,220,0.4))"
-                    : "linear-gradient(to right, transparent, rgba(130,90,220,0.5))",
+                    : "linear-gradient(to right, transparent, rgba(201,147,62,0.5))",
               }}
             />
             <span
@@ -841,7 +841,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: isMobile ? "8px" : "10px",
                 letterSpacing: "0.35em",
-                color: isDark ? "rgba(255,255,255,0.5)" : "rgba(80,50,140,0.6)",
+                color: isDark ? "rgba(255,255,255,0.5)" : "rgba(100,70,20,0.7)",
                 textTransform: "uppercase",
               }}
             >
@@ -852,7 +852,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 width: "30px",
                 height: "1px",
                 background: isDark
-                  ? "linear-gradient(to left, transparent, rgba(230,80,160,0.4))"
+                  ? "linear-gradient(to left, transparent, rgba(212,165,116,0.4))"
                   : "linear-gradient(to left, transparent, rgba(200,100,255,0.5))",
               }}
             />
@@ -876,8 +876,8 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               lineHeight: 1.1,
               color: isDark ? "#ffffff" : "#1a0a2e",
               textShadow: isDark
-                ? "0 0 60px rgba(180,100,220,0.2), 0 0 120px rgba(120,180,255,0.08)"
-                : "0 0 40px rgba(130,90,220,0.15)",
+                ? "0 0 60px rgba(212,165,116,0.2), 0 0 120px rgba(212,165,116,0.08)"
+                : "0 0 40px rgba(201,147,62,0.15)",
               letterSpacing: "0.03em",
             }}
           >
@@ -886,13 +886,13 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
             <span
               style={{
                 background: isDark
-                  ? "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 40%, #E84393 100%)"
-                  : "linear-gradient(135deg, #4a6fd8 0%, #7b52c4 40%, #c44a8f 100%)",
+                  ? "linear-gradient(135deg, #D4A574 0%, #C9933E 40%, #B8860B 100%)"
+                  : "linear-gradient(135deg, #C9933E 0%, #B8860B 40%, #A67C00 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 filter: isDark
-                  ? "drop-shadow(0 0 20px rgba(180,100,220,0.3))"
-                  : "drop-shadow(0 0 15px rgba(130,90,220,0.2))",
+                  ? "drop-shadow(0 0 20px rgba(212,165,116,0.3))"
+                  : "drop-shadow(0 0 15px rgba(201,147,62,0.2))",
               }}
             >
               New Worlds
@@ -908,7 +908,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               fontFamily: "'Exo 2', sans-serif",
               fontSize: isMobile ? "13px" : "15px",
               lineHeight: 1.8,
-              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(80,50,140,0.6)",
+              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(100,70,20,0.7)",
               maxWidth: "420px",
               marginTop: isMobile ? "14px" : "20px",
               letterSpacing: "0.02em",
@@ -960,7 +960,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "8px",
                     letterSpacing: "0.2em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
                   }}
                 >
                   SYSTEM STATUS
@@ -970,7 +970,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(100,70,20,0.75)",
                   lineHeight: 2,
                 }}
               >
@@ -993,7 +993,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 <div>
                   WORLD SYNC{" "}
                   <span
-                    style={{ color: isDark ? "rgba(180,120,255,0.6)" : "rgba(100,40,180,0.9)" }}
+                    style={{ color: isDark ? "rgba(201,147,62,0.6)" : "rgba(168,120,10,0.9)" }}
                   >
                     98.7%
                   </span>
@@ -1016,13 +1016,13 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               y: hudRightY,
             }}
           >
-            <HUDChip accent="rgba(230,80,160,">
+            <HUDChip accent="rgba(212,165,116,">
               <span
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "8px",
                   letterSpacing: "0.2em",
-                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                  color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
                 }}
               >
                 SCENE DEPTH
@@ -1032,14 +1032,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: "10px",
-                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)",
+                  color: isDark ? "rgba(255,255,255,0.3)" : "rgba(100,70,20,0.75)",
                   lineHeight: 2,
                 }}
               >
                 <div>
                   OBJECTS{" "}
                   <span
-                    style={{ color: isDark ? "rgba(200,130,255,0.6)" : "rgba(120,60,200,0.9)" }}
+                    style={{ color: isDark ? "rgba(212,165,116,0.6)" : "rgba(120,60,200,0.9)" }}
                   >
                     2,847
                   </span>
@@ -1047,7 +1047,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 <div>
                   DRAW CALLS{" "}
                   <span
-                    style={{ color: isDark ? "rgba(200,130,255,0.6)" : "rgba(120,60,200,0.9)" }}
+                    style={{ color: isDark ? "rgba(212,165,116,0.6)" : "rgba(120,60,200,0.9)" }}
                   >
                     124
                   </span>
@@ -1077,7 +1077,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: "9px",
                 letterSpacing: "0.3em",
-                color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.55)",
+                color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.65)",
               }}
             >
               SCROLL TO EXPLORE
@@ -1089,7 +1089,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               width: "1px",
               height: "24px",
               background:
-                "linear-gradient(to bottom, rgba(200,130,255,0.3), transparent)",
+                "linear-gradient(to bottom, rgba(212,165,116,0.3), transparent)",
             }}
           />
         </motion.div>
@@ -1120,7 +1120,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: isMobile ? "14px" : "16px",
                   fontWeight: 600,
-                  color: isDark ? "rgba(255,255,255,0.85)" : "rgba(80,50,140,0.9)",
+                  color: isDark ? "rgba(255,255,255,0.85)" : "rgba(100,70,20,0.95)",
                   letterSpacing: "0.02em",
                   marginBottom: "24px",
                 }}
@@ -1144,7 +1144,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "14px" : "15px",
                   lineHeight: 1.75,
-                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.8)",
                   marginBottom: "16px",
                 }}
               >
@@ -1155,7 +1155,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "14px" : "15px",
                   lineHeight: 1.75,
-                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.8)",
                   marginBottom: "16px",
                 }}
               >
@@ -1166,7 +1166,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "14px" : "15px",
                   lineHeight: 1.75,
-                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.75)",
+                  color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.8)",
                   marginBottom: "16px",
                 }}
               >
@@ -1178,7 +1178,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   fontSize: isMobile ? "15px" : "16px",
                   fontWeight: 600,
                   lineHeight: 1.6,
-                  color: isDark ? "rgba(255,255,255,0.9)" : "rgba(80,50,140,0.95)",
+                  color: isDark ? "rgba(255,255,255,0.9)" : "rgba(100,70,20,1)",
                 }}
               >
                 Are you ready to step beyond reality?
@@ -1202,8 +1202,8 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     width: "40px",
                     height: "1px",
                     background: isDark
-                      ? "linear-gradient(to right, transparent, rgba(120,180,255,0.3))"
-                      : "linear-gradient(to right, transparent, rgba(130,90,220,0.4))",
+                      ? "linear-gradient(to right, transparent, rgba(212,165,116,0.3))"
+                      : "linear-gradient(to right, transparent, rgba(201,147,62,0.4))",
                   }}
                 />
                 <span
@@ -1214,7 +1214,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     textTransform: "uppercase",
                     color: isDark
                       ? "rgba(255,255,255,0.35)"
-                      : "rgba(80,50,140,0.65)",
+                      : "rgba(100,70,20,0.75)",
                   }}
                 >
                   Inside the Experience
@@ -1224,7 +1224,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     width: "40px",
                     height: "1px",
                     background: isDark
-                      ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
+                      ? "linear-gradient(to left, transparent, rgba(212,165,116,0.3))"
                       : "linear-gradient(to left, transparent, rgba(200,100,255,0.4))",
                   }}
                 />
@@ -1243,7 +1243,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 <span
                   style={{
                     backgroundImage:
-                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
+                      "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -1262,7 +1262,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                   lineHeight: 1.7,
                   color: isDark
                     ? "rgba(255,255,255,0.4)"
-                    : "rgba(80,50,140,0.6)",
+                    : "rgba(100,70,20,0.7)",
                   maxWidth: "560px",
                   margin: "12px auto 0",
                 }}
@@ -1282,7 +1282,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               {galleryImages.map((image, index) => (
                 <GlassPanel
                   key={image.src}
-                  accent="rgba(120,180,255,"
+                  accent="rgba(212,165,116,"
                   className="group overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
                   style={{ padding: 0 }}
                 >
@@ -1310,14 +1310,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     {/* Hover border */}
                     <div
                       className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
-                      style={{ border: "1px solid rgba(120,180,255,0.12)" }}
+                      style={{ border: "1px solid rgba(212,165,116,0.12)" }}
                     />
                     {/* Index badge */}
                     <div
                       className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
                       style={{
                         background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
-                        border: "1px solid rgba(120,180,255,0.15)",
+                        border: "1px solid rgba(212,165,116,0.15)",
                         backdropFilter: "blur(8px)",
                       }}
                     >
@@ -1326,7 +1326,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                           fontFamily: "'Orbitron', sans-serif",
                           fontSize: "8px",
                           letterSpacing: "0.2em",
-                          color: "rgba(120,180,255,0.7)",
+                          color: "rgba(212,165,116,0.7)",
                         }}
                       >
                         {String(index + 1).padStart(2, "0")}
@@ -1341,7 +1341,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                           fontFamily: "'Exo 2', sans-serif",
                           fontSize: "11px",
                           lineHeight: 1.5,
-                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(80,50,140,0.8)",
+                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.85)",
                           margin: 0,
                         }}
                       >
@@ -1379,7 +1379,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
                   }}
                 >
                   NARRATIVE WORLDS
@@ -1407,7 +1407,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 <span
                   style={{
                     backgroundImage:
-                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
+                      "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -1422,7 +1422,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "12px" : "14px",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.7)",
                   maxWidth: "520px",
                   margin: "12px auto 0",
                   lineHeight: 1.7,
@@ -1483,7 +1483,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     width: "40px",
                     height: "1px",
                     background:
-                      "linear-gradient(to right, transparent, rgba(120,180,255,0.3))",
+                      "linear-gradient(to right, transparent, rgba(212,165,116,0.3))",
                   }}
                 />
                 <span
@@ -1491,7 +1491,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "10px",
                     letterSpacing: "0.4em",
-                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                    color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
                   }}
                 >
                   ECOSYSTEM
@@ -1501,7 +1501,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     width: "40px",
                     height: "1px",
                     background:
-                      "linear-gradient(to left, transparent, rgba(230,80,160,0.3))",
+                      "linear-gradient(to left, transparent, rgba(212,165,116,0.3))",
                   }}
                 />
               </div>
@@ -1519,7 +1519,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 <span
                   style={{
                     backgroundImage:
-                      "linear-gradient(135deg, #7BB8FF 0%, #C77DFF 50%, #E84393 100%)",
+                      "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -1534,7 +1534,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
                   fontSize: isMobile ? "12px" : "14px",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.7)",
                   maxWidth: "520px",
                   margin: "12px auto 0",
                   lineHeight: 1.7,
@@ -1554,18 +1554,18 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               style={{ pointerEvents: "auto" }}
             >
             {([
-              { name: "Meta Quest", tag: "MR / VR", accent: "rgba(120,180,255,", logo: "meta" },
-              { name: "Apple Vision Pro", tag: "Spatial Computing", accent: "rgba(200,130,255,", logo: "apple" },
-              { name: "PlayStation VR2", tag: "Console VR", accent: "rgba(230,80,160,", logo: "playstation" },
-              { name: "Valve Index", tag: "PC VR", accent: "rgba(120,180,255,", logo: "valve" },
-              { name: "HTC Vive", tag: "Enterprise XR", accent: "rgba(200,130,255,", logo: "htc" },
-              { name: "Pico", tag: "Standalone VR", accent: "rgba(230,80,160,", logo: "pico" },
-              { name: "Unity", tag: "Engine", accent: "rgba(120,180,255,", logo: "unity" },
-              { name: "Unreal Engine", tag: "Engine", accent: "rgba(200,130,255,", logo: "unreal" },
-              { name: "Magic Leap", tag: "AR / MR", accent: "rgba(230,80,160,", logo: "magicleap" },
-              { name: "Varjo", tag: "Enterprise XR", accent: "rgba(120,180,255,", logo: "varjo" },
-              { name: "OpenXR", tag: "Standard", accent: "rgba(200,130,255,", logo: "openxr" },
-              { name: "WebXR", tag: "Web Platform", accent: "rgba(230,80,160,", logo: "webxr" },
+              { name: "Meta Quest", tag: "MR / VR", accent: "rgba(212,165,116,", logo: "meta" },
+              { name: "Apple Vision Pro", tag: "Spatial Computing", accent: "rgba(212,165,116,", logo: "apple" },
+              { name: "PlayStation VR2", tag: "Console VR", accent: "rgba(212,165,116,", logo: "playstation" },
+              { name: "Valve Index", tag: "PC VR", accent: "rgba(212,165,116,", logo: "valve" },
+              { name: "HTC Vive", tag: "Enterprise XR", accent: "rgba(212,165,116,", logo: "htc" },
+              { name: "Pico", tag: "Standalone VR", accent: "rgba(212,165,116,", logo: "pico" },
+              { name: "Unity", tag: "Engine", accent: "rgba(212,165,116,", logo: "unity" },
+              { name: "Unreal Engine", tag: "Engine", accent: "rgba(212,165,116,", logo: "unreal" },
+              { name: "Magic Leap", tag: "AR / MR", accent: "rgba(212,165,116,", logo: "magicleap" },
+              { name: "Varjo", tag: "Enterprise XR", accent: "rgba(212,165,116,", logo: "varjo" },
+              { name: "OpenXR", tag: "Standard", accent: "rgba(212,165,116,", logo: "openxr" },
+              { name: "WebXR", tag: "Web Platform", accent: "rgba(212,165,116,", logo: "webxr" },
             ] as const).map((brand, i) => (
               <Section key={brand.name} delay={0.05 + i * 0.04}>
                 <BrandCard
@@ -1595,7 +1595,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       width: "40px",
                       height: "1px",
                       background:
-                        "linear-gradient(to right, transparent, rgba(200,130,255,0.3))",
+                        "linear-gradient(to right, transparent, rgba(212,165,116,0.3))",
                     }}
                   />
                   <span
@@ -1603,7 +1603,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       fontFamily: "'Orbitron', sans-serif",
                       fontSize: "10px",
                       letterSpacing: "0.4em",
-                      color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                      color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
                     }}
                   >
                     MANIFESTO
@@ -1613,7 +1613,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       width: "40px",
                       height: "1px",
                       background:
-                        "linear-gradient(to left, transparent, rgba(230,80,160,0.3))",
+                        "linear-gradient(to left, transparent, rgba(212,165,116,0.3))",
                     }}
                   />
                 </div>
@@ -1626,7 +1626,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
             >
               <Section delay={0.2}>
                 <GlassPanel
-                  accent="rgba(200,130,255,"
+                  accent="rgba(212,165,116,"
                   className="p-6 sm:p-8 md:p-12 text-center w-full"
                   style={{ position: "relative" }}
                 >
@@ -1636,7 +1636,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       fontFamily: "'Orbitron', sans-serif",
                       fontSize: "9px",
                       letterSpacing: "0.35em",
-                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
                       textTransform: "uppercase",
                       marginBottom: "16px",
                     }}
@@ -1658,7 +1658,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     <span
                       style={{
                         background:
-                          "linear-gradient(135deg, #C77DFF, #E84393)",
+                          "linear-gradient(135deg, #D4A574, #C9933E)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
@@ -1676,14 +1676,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                     width: "1px",
                     height: "50px",
                     background:
-                      "linear-gradient(to bottom, rgba(200,130,255,0.15), rgba(230,80,160,0.15))",
+                      "linear-gradient(to bottom, rgba(212,165,116,0.15), rgba(212,165,116,0.15))",
                   }}
                 />
               </Section>
 
               <Section delay={0.5}>
                 <GlassPanel
-                  accent="rgba(120,180,255,"
+                  accent="rgba(212,165,116,"
                   className="p-6 sm:p-8 md:p-12 text-center w-full"
                   style={{ position: "relative" }}
                 >
@@ -1693,7 +1693,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       fontFamily: "'Orbitron', sans-serif",
                       fontSize: "9px",
                       letterSpacing: "0.35em",
-                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                      color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
                       textTransform: "uppercase",
                       marginBottom: "16px",
                     }}
@@ -1706,14 +1706,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                       fontSize: isMobile ? "clamp(13px, 3.5vw, 15px)" : "clamp(15px, 1.5vw, 18px)",
                       fontWeight: 400,
                       lineHeight: 1.8,
-                      color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+                      color: isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)",
                       maxWidth: "600px",
                       margin: "0 auto",
                     }}
                   >
                     To develop innovative{" "}
                     <span
-                      style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}
+                      style={{ color: isDark ? "rgba(212,165,116,0.9)" : "rgba(168,120,10,0.95)" }}
                     >
                       digital worlds and experiences
                     </span>{" "}
@@ -1742,7 +1742,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
               }}
             >
               INITIALIZE
@@ -1763,8 +1763,8 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
               <span
                 style={{
                   backgroundImage: isDark
-                    ? "linear-gradient(135deg, #7BB8FF, #C77DFF, #E84393)"
-                    : "linear-gradient(135deg, #4a6fd8, #7b52c4, #c44a8f)",
+                    ? "linear-gradient(135deg, #D4A574, #C9933E, #B8860B)"
+                    : "linear-gradient(135deg, #C9933E, #B8860B, #A67C00)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -1780,7 +1780,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 fontFamily: "'Exo 2', sans-serif",
                 fontSize: isMobile ? "13px" : "14px",
                 lineHeight: 1.8,
-                color: isDark ? "rgba(255,255,255,0.45)" : "rgba(80,50,140,0.6)",
+                color: isDark ? "rgba(255,255,255,0.45)" : "rgba(100,70,20,0.7)",
                 maxWidth: "400px",
               }}
             >
@@ -1819,14 +1819,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
             style={{
               width: "1px",
               height: "10px",
-              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(130,90,220,0.15)",
+              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(201,147,62,0.15)",
             }}
           />
           <span
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.6)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.7)",
             }}
           >
             2026
@@ -1835,14 +1835,14 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
             style={{
               width: "1px",
               height: "10px",
-              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(130,90,220,0.15)",
+              background: isDark ? "rgba(255,255,255,0.1)" : "rgba(201,147,62,0.15)",
             }}
           />
           <span
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.6)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.7)",
             }}
           >
             Immersive Reality Platform
@@ -1879,57 +1879,57 @@ function CTAButton({
         padding: large ? "14px 32px" : "12px 24px",
         color: primary
           ? "#ffffff"
-          : isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+          : isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)",
         background: primary
           ? isDark
-            ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(230,80,160,0.22))"
-            : "linear-gradient(135deg, rgba(130,90,220,0.8), rgba(200,100,255,0.7))"
+            ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(212,165,116,0.22))"
+            : "linear-gradient(135deg, rgba(201,147,62,0.8), rgba(200,100,255,0.7))"
           : isDark
             ? "rgba(255,255,255,0.04)"
-            : "rgba(130,90,220,0.08)",
+            : "rgba(201,147,62,0.08)",
         border: primary
           ? isDark
-            ? "1px solid rgba(200,130,255,0.22)"
-            : "1px solid rgba(130,90,220,0.3)"
+            ? "1px solid rgba(212,165,116,0.22)"
+            : "1px solid rgba(201,147,62,0.3)"
           : isDark
             ? "1px solid rgba(255,255,255,0.08)"
-            : "1px solid rgba(130,90,220,0.2)",
+            : "1px solid rgba(201,147,62,0.2)",
         borderRadius: "50px",
         boxShadow: primary
           ? isDark
-            ? "0 0 24px rgba(180,100,220,0.1)"
-            : "0 0 24px rgba(130,90,220,0.15)"
+            ? "0 0 24px rgba(212,165,116,0.1)"
+            : "0 0 24px rgba(201,147,62,0.15)"
           : "none",
         whiteSpace: "nowrap",
       }}
       onMouseEnter={(e) => {
         if (primary) {
           e.currentTarget.style.boxShadow = isDark
-            ? "0 0 40px rgba(180,100,220,0.2)"
-            : "0 0 40px rgba(130,90,220,0.25)";
+            ? "0 0 40px rgba(212,165,116,0.2)"
+            : "0 0 40px rgba(201,147,62,0.25)";
           e.currentTarget.style.borderColor = isDark
-            ? "rgba(200,130,255,0.35)"
-            : "rgba(130,90,220,0.4)";
+            ? "rgba(212,165,116,0.35)"
+            : "rgba(201,147,62,0.4)";
         } else {
-          e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(80,50,140,0.9)";
+          e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(100,70,20,0.95)";
           e.currentTarget.style.borderColor = isDark
             ? "rgba(255,255,255,0.2)"
-            : "rgba(130,90,220,0.3)";
+            : "rgba(201,147,62,0.3)";
         }
       }}
       onMouseLeave={(e) => {
         if (primary) {
           e.currentTarget.style.boxShadow = isDark
-            ? "0 0 24px rgba(180,100,220,0.1)"
-            : "0 0 24px rgba(130,90,220,0.15)";
+            ? "0 0 24px rgba(212,165,116,0.1)"
+            : "0 0 24px rgba(201,147,62,0.15)";
           e.currentTarget.style.borderColor = isDark
-            ? "rgba(200,130,255,0.22)"
-            : "rgba(130,90,220,0.3)";
+            ? "rgba(212,165,116,0.22)"
+            : "rgba(201,147,62,0.3)";
         } else {
-          e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)";
+          e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)";
           e.currentTarget.style.borderColor = isDark
             ? "rgba(255,255,255,0.08)"
-            : "rgba(130,90,220,0.2)";
+            : "rgba(201,147,62,0.2)";
         }
       }}
     >
@@ -2062,7 +2062,7 @@ function ServiceModule({
           fontFamily: "'Exo 2', sans-serif",
           fontSize: "13px",
           lineHeight: 1.8,
-          color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
+          color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.7)",
           marginBottom: "20px",
         }}
       >
@@ -2076,7 +2076,7 @@ function ServiceModule({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "8px",
                 letterSpacing: "0.2em",
-                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(80,50,140,0.55)",
+                color: isDark ? "rgba(255,255,255,0.25)" : "rgba(100,70,20,0.65)",
                 marginBottom: "4px",
               }}
             >
@@ -2121,23 +2121,23 @@ function DataNode({
         background: isDark
           ? "linear-gradient(135deg, rgba(12,10,24,0.5), rgba(8,6,18,0.3))"
           : "linear-gradient(135deg, rgba(255,255,255,0.7), rgba(250,248,255,0.6))",
-        border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(130,90,220,0.15)",
+        border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(201,147,62,0.15)",
         borderRadius: "40px",
         backdropFilter: "blur(12px)",
         pointerEvents: "auto",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = isDark
-          ? "rgba(200,130,255,0.18)"
-          : "rgba(130,90,220,0.3)";
+          ? "rgba(212,165,116,0.18)"
+          : "rgba(201,147,62,0.3)";
         e.currentTarget.style.boxShadow = isDark
-          ? "0 0 20px rgba(180,100,220,0.08)"
-          : "0 0 20px rgba(130,90,220,0.12)";
+          ? "0 0 20px rgba(212,165,116,0.08)"
+          : "0 0 20px rgba(201,147,62,0.12)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = isDark
           ? "rgba(255,255,255,0.06)"
-          : "rgba(130,90,220,0.15)";
+          : "rgba(201,147,62,0.15)";
         e.currentTarget.style.boxShadow = "none";
       }}
     >
@@ -2148,7 +2148,7 @@ function DataNode({
         style={{
           fontFamily: "'Exo 2', sans-serif",
           fontSize: "12px",
-          color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+          color: isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)",
           letterSpacing: "0.04em",
         }}
       >
@@ -2651,7 +2651,7 @@ function StoryCard({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "clamp(11px, 1.5vw, 13px)",
             lineHeight: 1.8,
-            color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.6)",
+            color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.7)",
             marginBottom: "20px",
           }}
         >
@@ -2689,7 +2689,7 @@ function StoryCard({
             style={{
               fontFamily: "'Exo 2', sans-serif",
               fontSize: "10px",
-              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.65)",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.75)",
               letterSpacing: "0.1em",
             }}
           >
@@ -2797,7 +2797,7 @@ function WorldCapsule({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "12px",
             lineHeight: 1.7,
-            color: isDark ? "rgba(255,255,255,0.38)" : "rgba(80,50,140,0.6)",
+            color: isDark ? "rgba(255,255,255,0.38)" : "rgba(100,70,20,0.7)",
           }}
         >
           {desc}
@@ -2848,15 +2848,15 @@ function CornerAccents({ flip }: { flip?: boolean }) {
             ? {
                 top: 0,
                 right: 0,
-                borderTop: "1px solid rgba(120,180,255,0.15)",
-                borderRight: "1px solid rgba(120,180,255,0.15)",
+                borderTop: "1px solid rgba(212,165,116,0.15)",
+                borderRight: "1px solid rgba(212,165,116,0.15)",
                 borderRadius: "0 20px 0 0",
               }
             : {
                 top: 0,
                 left: 0,
-                borderTop: "1px solid rgba(200,130,255,0.15)",
-                borderLeft: "1px solid rgba(200,130,255,0.15)",
+                borderTop: "1px solid rgba(212,165,116,0.15)",
+                borderLeft: "1px solid rgba(212,165,116,0.15)",
                 borderRadius: "20px 0 0 0",
               }),
         }}
@@ -2870,16 +2870,16 @@ function CornerAccents({ flip }: { flip?: boolean }) {
             ? {
                 bottom: 0,
                 left: 0,
-                borderBottom: "1px solid rgba(230,80,160,0.12)",
-                borderLeft: "1px solid rgba(230,80,160,0.12)",
+                borderBottom: "1px solid rgba(212,165,116,0.12)",
+                borderLeft: "1px solid rgba(212,165,116,0.12)",
                 borderRadius: "0 0 0 20px",
               }
             : {
                 bottom: 0,
                 right: 0,
                 borderBottom:
-                  "1px solid rgba(120,180,255,0.12)",
-                borderRight: "1px solid rgba(120,180,255,0.12)",
+                  "1px solid rgba(212,165,116,0.12)",
+                borderRight: "1px solid rgba(212,165,116,0.12)",
                 borderRadius: "0 0 20px 0",
               }),
         }}
@@ -2896,7 +2896,7 @@ function EyeIcon() {
       height="18"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="rgba(120,180,255,0.65)"
+      stroke="rgba(212,165,116,0.65)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

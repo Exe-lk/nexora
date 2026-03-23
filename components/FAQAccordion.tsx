@@ -136,8 +136,8 @@ export function FAQAccordion({
                   }
                   transition={{ duration: 0.25, ease: "easeOut" }}
                   style={{
-                    background: isDark ? "rgba(255,255,255,0.06)" : "rgba(130,90,220,0.10)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.16)",
+                    background: isDark ? "rgba(255,255,255,0.06)" : "rgba(201,147,62,0.10)",
+                    border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(201,147,62,0.16)",
                   }}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -165,7 +165,7 @@ export function FAQAccordion({
                   transition={reduceMotion ? undefined : { duration: 0.25, ease: "easeOut" }}
                   className="px-5 md:px-7 pb-5 md:pb-6"
                   style={{
-                    borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(130,90,220,0.10)",
+                    borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(201,147,62,0.10)",
                   }}
                 >
                   <ul className="mt-4 space-y-2.5">

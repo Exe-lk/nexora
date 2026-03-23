@@ -100,7 +100,7 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
       }
 
       // Draw body edges - front face
-      const bodyColor = "rgba(120,180,255,";
+      const bodyColor = "rgba(212,165,116,";
       const bodyAlpha = 0.5 + 0.15 * Math.sin(t * 1.5);
       drawLine(pc.ftl, pc.ftr, `${bodyColor}0.7)`, bodyAlpha, 1.5);
       drawLine(pc.ftr, pc.fbr, `${bodyColor}0.7)`, bodyAlpha, 1.5);
@@ -139,9 +139,9 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
         const cp = project(lensX, lensY, lensZ);
         const grad = ctx!.createRadialGradient(cp[0], cp[1], 0, cp[0], cp[1], lensR * scale * cp[2]);
         const pulse = 0.3 + 0.2 * Math.sin(t * 2 + side);
-        grad.addColorStop(0, `rgba(200,130,255,${pulse * 0.4})`);
-        grad.addColorStop(0.5, `rgba(120,180,255,${pulse * 0.2})`);
-        grad.addColorStop(1, "rgba(120,180,255,0)");
+        grad.addColorStop(0, `rgba(212,165,116,${pulse * 0.4})`);
+        grad.addColorStop(0.5, `rgba(212,165,116,${pulse * 0.2})`);
+        grad.addColorStop(1, "rgba(212,165,116,0)");
         ctx!.beginPath();
         for (let i = 0; i < points.length; i++) {
           if (i === 0) ctx!.moveTo(points[i][0], points[i][1]);
@@ -173,7 +173,7 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
           if (i === 0) ctx!.moveTo(innerPoints[i][0], innerPoints[i][1]);
           else ctx!.lineTo(innerPoints[i][0], innerPoints[i][1]);
         }
-        ctx!.strokeStyle = `rgba(230,80,160,${0.25 + 0.15 * Math.sin(t * 3)})`;
+        ctx!.strokeStyle = `rgba(212,165,116,${0.25 + 0.15 * Math.sin(t * 3)})`;
         ctx!.lineWidth = 0.8 * cp[2];
         ctx!.stroke();
       }
@@ -193,7 +193,7 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
       ctx!.stroke();
 
       // --- Head strap (curved lines going back) ---
-      const strapColor = "rgba(120,180,255,0.2)";
+      const strapColor = "rgba(212,165,116,0.2)";
       for (const side of [-1, 1]) {
         const strapPoints: [number, number, number][] = [];
         for (let i = 0; i <= 8; i++) {
@@ -228,7 +228,7 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
       ctx!.beginPath();
       ctx!.moveTo(scanL[0], scanL[1]);
       ctx!.lineTo(scanR2[0], scanR2[1]);
-      ctx!.strokeStyle = `rgba(120,180,255,${0.15 * (1 - Math.abs(scanPhase - 0.5) * 2)})`;
+      ctx!.strokeStyle = `rgba(212,165,116,${0.15 * (1 - Math.abs(scanPhase - 0.5) * 2)})`;
       ctx!.lineWidth = 1;
       ctx!.stroke();
 
@@ -245,7 +245,7 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
         const dotAlpha = 0.3 + 0.2 * Math.sin(t * 2 + i * 1.2);
         ctx!.beginPath();
         ctx!.arc(dp[0], dp[1], 2 * dp[2], 0, Math.PI * 2);
-        ctx!.fillStyle = i % 2 === 0 ? `rgba(120,180,255,${dotAlpha})` : `rgba(230,80,160,${dotAlpha})`;
+        ctx!.fillStyle = i % 2 === 0 ? `rgba(212,165,116,${dotAlpha})` : `rgba(184,134,11,${dotAlpha})`;
         ctx!.fill();
 
         // Tiny connection line to headset
@@ -265,8 +265,8 @@ export function VRHeadset3D({ mouseX = 0, mouseY = 0 }: { mouseX: number; mouseY
       // --- Ambient glow behind headset ---
       const centerP = project(0, 0, 0);
       const ambientGrad = ctx!.createRadialGradient(centerP[0], centerP[1], 0, centerP[0], centerP[1], scale * 0.9);
-      ambientGrad.addColorStop(0, `rgba(140,100,220,${0.06 + 0.03 * Math.sin(t)})`);
-      ambientGrad.addColorStop(0.5, `rgba(120,180,255,${0.03 + 0.02 * Math.sin(t * 1.3)})`);
+      ambientGrad.addColorStop(0, `rgba(201,147,62,${0.06 + 0.03 * Math.sin(t)})`);
+      ambientGrad.addColorStop(0.5, `rgba(212,165,116,${0.03 + 0.02 * Math.sin(t * 1.3)})`);
       ambientGrad.addColorStop(1, "rgba(0,0,0,0)");
       ctx!.fillStyle = ambientGrad;
       ctx!.fillRect(0, 0, w, h);

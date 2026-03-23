@@ -47,28 +47,28 @@ const FEATURES: Feature[] = [
 function accentStyles(isDark: boolean, accent: Feature["accent"]) {
   if (accent === "cyan") {
     return {
-      border: isDark ? "rgba(56,189,248,0.22)" : "rgba(14,165,233,0.22)",
-      glow: isDark ? "rgba(56,189,248,0.18)" : "rgba(14,165,233,0.14)",
-      gradient: "linear-gradient(135deg, #38bdf8, #818cf8)",
-      pillBg: isDark ? "rgba(56,189,248,0.12)" : "rgba(14,165,233,0.10)",
-      pillText: isDark ? "rgba(125,211,252,0.9)" : "rgba(2,132,199,0.9)",
+      border: isDark ? "rgba(212,165,116,0.22)" : "rgba(184,134,11,0.22)",
+      glow: isDark ? "rgba(212,165,116,0.18)" : "rgba(184,134,11,0.14)",
+      gradient: "linear-gradient(135deg, #D4A574, #C9933E)",
+      pillBg: isDark ? "rgba(212,165,116,0.12)" : "rgba(184,134,11,0.10)",
+      pillText: isDark ? "rgba(230,185,115,0.9)" : "rgba(184,134,11,0.9)",
     };
   }
   if (accent === "pink") {
     return {
-      border: isDark ? "rgba(236,72,153,0.24)" : "rgba(219,39,119,0.22)",
-      glow: isDark ? "rgba(236,72,153,0.16)" : "rgba(219,39,119,0.12)",
-      gradient: "linear-gradient(135deg, #ec4899, #a855f7)",
-      pillBg: isDark ? "rgba(236,72,153,0.12)" : "rgba(219,39,119,0.10)",
-      pillText: isDark ? "rgba(251,113,133,0.9)" : "rgba(190,24,93,0.9)",
+      border: isDark ? "rgba(184,134,11,0.24)" : "rgba(184,134,11,0.22)",
+      glow: isDark ? "rgba(184,134,11,0.16)" : "rgba(184,134,11,0.12)",
+      gradient: "linear-gradient(135deg, #E6B973, #D4A574)",
+      pillBg: isDark ? "rgba(184,134,11,0.12)" : "rgba(184,134,11,0.10)",
+      pillText: isDark ? "rgba(230,185,115,0.9)" : "rgba(184,134,11,0.9)",
     };
   }
   return {
-    border: isDark ? "rgba(168,85,247,0.24)" : "rgba(124,58,237,0.22)",
-    glow: isDark ? "rgba(168,85,247,0.18)" : "rgba(124,58,237,0.12)",
-    gradient: "linear-gradient(135deg, #c084fc, #818cf8, #38bdf8)",
-    pillBg: isDark ? "rgba(168,85,247,0.12)" : "rgba(124,58,237,0.10)",
-    pillText: isDark ? "rgba(216,180,254,0.9)" : "rgba(109,40,217,0.9)",
+    border: isDark ? "rgba(212,165,116,0.24)" : "rgba(184,134,11,0.22)",
+    glow: isDark ? "rgba(212,165,116,0.18)" : "rgba(184,134,11,0.12)",
+    gradient: "linear-gradient(135deg, #C9933E, #D4A574, #B8860B)",
+    pillBg: isDark ? "rgba(212,165,116,0.12)" : "rgba(184,134,11,0.10)",
+    pillText: isDark ? "rgba(230,185,115,0.9)" : "rgba(168,120,10,0.9)",
   };
 }
 
@@ -240,9 +240,9 @@ export default function AboutPage() {
             <div
               className="inline-block px-4 py-1.5 rounded-full border text-sm font-medium tracking-wide mb-5 uppercase"
               style={{
-                borderColor: isDark ? "rgba(56,189,248,0.28)" : "rgba(124,58,237,0.22)",
-                background: isDark ? "rgba(56,189,248,0.10)" : "rgba(124,58,237,0.08)",
-                color: isDark ? "rgba(125,211,252,0.95)" : "rgba(109,40,217,0.9)",
+                borderColor: isDark ? "rgba(212,165,116,0.28)" : "rgba(184,134,11,0.22)",
+                background: isDark ? "rgba(212,165,116,0.10)" : "rgba(184,134,11,0.08)",
+                color: isDark ? "rgba(230,185,115,0.95)" : "rgba(168,120,10,0.9)",
               }}
             >
               NEXORA XR • About
@@ -255,8 +255,8 @@ export default function AboutPage() {
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
                 backgroundImage: isDark
-                  ? "linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #38bdf8 100%)"
-                  : "linear-gradient(135deg, #7c3aed 0%, #6366f1 40%, #0ea5e9 100%)",
+                  ? "linear-gradient(135deg, #D4A574 0%, #C9933E 40%, #B8860B 100%)"
+                  : "linear-gradient(135deg, #C9933E 0%, #D4A574 40%, #B8860B 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 marginBottom: "14px",
@@ -289,8 +289,8 @@ export default function AboutPage() {
                   fontSize: "13px",
                   fontWeight: 600,
                   letterSpacing: "0.06em",
-                  backgroundImage: "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)",
-                  boxShadow: "0 6px 30px rgba(168,85,247,0.35)",
+                  backgroundImage: "linear-gradient(135deg, #C9933E, #D4A574, #E6B973)",
+                  boxShadow: "0 6px 30px rgba(212,165,116,0.35)",
                   border: "none",
                 }}
                 onClick={() => router.push("/contact")}
@@ -307,8 +307,8 @@ export default function AboutPage() {
                   fontWeight: 600,
                   letterSpacing: "0.06em",
                   color: isDark ? "#c4b5fd" : "#6d28d9",
-                  background: isDark ? "rgba(124,58,237,0.12)" : "rgba(255,255,255,0.85)",
-                  border: isDark ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(109,40,217,0.2)",
+                  background: isDark ? "rgba(184,134,11,0.12)" : "rgba(255,255,255,0.85)",
+                  border: isDark ? "1px solid rgba(184,134,11,0.3)" : "1px solid rgba(168,120,10,0.2)",
                 }}
                 onClick={() => router.push("/#experiences")}
               >
@@ -354,7 +354,7 @@ export default function AboutPage() {
                     fontFamily: "'Orbitron', sans-serif",
                     fontSize: "1rem",
                     fontWeight: 800,
-                    backgroundImage: isDark ? "linear-gradient(135deg, #a78bfa, #818cf8)" : "linear-gradient(135deg, #7c3aed, #0ea5e9)",
+                    backgroundImage: isDark ? "linear-gradient(135deg, #D4A574, #C9933E)" : "linear-gradient(135deg, #C9933E, #B8860B)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -386,7 +386,7 @@ export default function AboutPage() {
                 fontSize: "10px",
                 letterSpacing: "0.35em",
                 textTransform: "uppercase",
-                color: isDark ? "rgba(168,85,247,0.7)" : "rgba(109,40,217,0.65)",
+                color: isDark ? "rgba(212,165,116,0.7)" : "rgba(168,120,10,0.65)",
               }}
             >
               Why XR walking theatre
@@ -426,8 +426,8 @@ export default function AboutPage() {
                 width: "40px",
                 height: "1px",
                 background: isDark
-                  ? "linear-gradient(to right, transparent, rgba(200,130,255,0.3))"
-                  : "linear-gradient(to right, transparent, rgba(124,58,237,0.35))",
+                  ? "linear-gradient(to right, transparent, rgba(212,165,116,0.3))"
+                  : "linear-gradient(to right, transparent, rgba(184,134,11,0.35))",
               }}
             />
             <span
@@ -436,7 +436,7 @@ export default function AboutPage() {
                 fontSize: "10px",
                 letterSpacing: "0.4em",
                 textTransform: "uppercase",
-                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)",
+                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)",
               }}
             >
               Manifesto
@@ -446,8 +446,8 @@ export default function AboutPage() {
                 width: "40px",
                 height: "1px",
                 background: isDark
-                  ? "linear-gradient(to left, transparent, rgba(230,80,160,0.3))"
-                  : "linear-gradient(to left, transparent, rgba(219,39,119,0.35))",
+                  ? "linear-gradient(to left, transparent, rgba(212,165,116,0.3))"
+                  : "linear-gradient(to left, transparent, rgba(184,134,11,0.35))",
               }}
             />
           </div>
@@ -458,8 +458,8 @@ export default function AboutPage() {
                 background: isDark
                   ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
                   : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                border: isDark ? "1px solid rgba(200,130,255,0.22)" : "1px solid rgba(124,58,237,0.2)",
-                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(124,58,237,0.08)",
+                border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(184,134,11,0.2)",
+                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(184,134,11,0.08)",
               }}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -471,7 +471,7 @@ export default function AboutPage() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -492,7 +492,7 @@ export default function AboutPage() {
                 To bring{" "}
                 <span
                   style={{
-                    background: "linear-gradient(135deg, #C77DFF, #E84393)",
+                    background: "linear-gradient(135deg, #D4A574, #C9933E)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -508,8 +508,8 @@ export default function AboutPage() {
                 width: "1px",
                 height: "50px",
                 background: isDark
-                  ? "linear-gradient(to bottom, rgba(200,130,255,0.15), rgba(230,80,160,0.15))"
-                  : "linear-gradient(to bottom, rgba(124,58,237,0.15), rgba(219,39,119,0.15))",
+                  ? "linear-gradient(to bottom, rgba(212,165,116,0.15), rgba(212,165,116,0.15))"
+                  : "linear-gradient(to bottom, rgba(184,134,11,0.15), rgba(184,134,11,0.15))",
               }}
             />
 
@@ -519,8 +519,8 @@ export default function AboutPage() {
                 background: isDark
                   ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
                   : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                border: isDark ? "1px solid rgba(120,180,255,0.22)" : "1px solid rgba(14,165,233,0.2)",
-                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(14,165,233,0.08)",
+                border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(184,134,11,0.2)",
+                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(184,134,11,0.08)",
               }}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -532,7 +532,7 @@ export default function AboutPage() {
                   fontFamily: "'Orbitron', sans-serif",
                   fontSize: "9px",
                   letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(80,50,140,0.65)",
+                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
                   textTransform: "uppercase",
                   marginBottom: "16px",
                 }}
@@ -545,13 +545,13 @@ export default function AboutPage() {
                   fontSize: "clamp(0.9rem, 1.5vw, 1.1rem)",
                   fontWeight: 400,
                   lineHeight: 1.8,
-                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(80,50,140,0.7)",
+                  color: isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)",
                   maxWidth: "600px",
                   margin: "0 auto",
                 }}
               >
                 To develop innovative{" "}
-                <span style={{ color: isDark ? "rgba(200,160,255,0.9)" : "rgba(120,60,220,0.95)" }}>
+                <span style={{ color: isDark ? "rgba(212,165,116,0.9)" : "rgba(168,120,10,0.95)" }}>
                   digital worlds and experiences
                 </span>{" "}
                 that inspire creativity, connection, and exploration.

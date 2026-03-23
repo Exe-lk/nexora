@@ -647,7 +647,7 @@ function ChapterCard({
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "9px",
                 letterSpacing: "0.3em",
-                color: isDark ? `${color1}0.45)` : "rgba(80,50,140,0.65)",
+                color: isDark ? `${color1}0.45)` : "rgba(100,70,20,0.75)",
               }}
             >
               CHAPTER {chapter.num}
@@ -1198,7 +1198,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
               style={{
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
-                color: isDark ? `${data.color1}0.8)` : "rgba(80,50,140,0.75)",
+                color: isDark ? `${data.color1}0.8)` : "rgba(100,70,20,0.8)",
                 textShadow: isDark ? `0 0 20px ${data.color1}0.4)` : "none",
               }}
             >
@@ -1254,7 +1254,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: isMobile ? "13px" : "16px",
-              color: isDark ? `${data.color1}0.9)` : "rgba(80,50,140,0.8)",
+              color: isDark ? `${data.color1}0.9)` : "rgba(100,70,20,0.85)",
               marginTop: "14px",
               letterSpacing: "0.2em",
               textShadow: isDark ? `0 0 20px ${data.color1}0.4)` : "none",
@@ -1374,7 +1374,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
             <motion.span
               animate={{ opacity: [0.3, 0.7, 0.3] }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: isDark ? `${data.color1}0.4)` : "rgba(80,50,140,0.5)" }}
+              style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", letterSpacing: "0.3em", color: isDark ? `${data.color1}0.4)` : "rgba(100,70,20,0.6)" }}
             >
               SCROLL TO EXPLORE
             </motion.span>
@@ -1399,7 +1399,7 @@ export default function StoryPage({ params }: { params: Promise<{ story: string 
                 fontFamily: "'Orbitron', sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.4em",
-                color: isDark ? `${data.color1}0.4)` : "rgba(80,50,140,0.65)",
+                color: isDark ? `${data.color1}0.4)` : "rgba(100,70,20,0.75)",
               }}
             >
               THE EXPERIENCE

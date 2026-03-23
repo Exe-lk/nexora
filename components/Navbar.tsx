@@ -87,8 +87,8 @@ export function Navbar() {
               ? "1px solid rgba(255,255,255,0.08)"
               : "1px solid rgba(255,255,255,0.04)"
             : scrolled
-              ? "1px solid rgba(130,90,220,0.14)"
-              : "1px solid rgba(130,90,220,0.06)",
+              ? "1px solid rgba(201,147,62,0.14)"
+              : "1px solid rgba(201,147,62,0.06)",
           borderRadius: "60px",
           padding: isMobile
             ? "8px 12px 8px 14px"
@@ -100,7 +100,7 @@ export function Navbar() {
               ? "0 4px 36px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.03) inset"
               : "none"
             : scrolled
-              ? "0 4px 28px rgba(130,90,220,0.10), 0 1px 0 rgba(255,255,255,0.5) inset"
+              ? "0 4px 28px rgba(201,147,62,0.10), 0 1px 0 rgba(255,255,255,0.5) inset"
               : "none",
           transition: "background 0.5s ease, border 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease",
           width: "min(960px, 95vw)",
@@ -120,8 +120,8 @@ export function Navbar() {
             marginTop: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
             marginBottom: isMobile ? "-14px" : isTabletOrSmall ? "-10px" : "-15px",
             filter: isDark
-              ? "drop-shadow(0 0 12px rgba(120,160,255,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.5))"
-              : "drop-shadow(0 0 10px rgba(130,90,220,0.25)) drop-shadow(0 2px 6px rgba(0,0,0,0.15))",
+              ? "drop-shadow(0 0 12px rgba(212,165,116,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.5))"
+              : "drop-shadow(0 0 10px rgba(201,147,62,0.25)) drop-shadow(0 2px 6px rgba(0,0,0,0.15))",
             transition: "filter 0.4s ease",
           }}
           priority
@@ -144,7 +144,7 @@ export function Navbar() {
                     ? expOpen ? "#ffffff" : "rgba(255,255,255,0.88)"
                     : expOpen ? "rgba(60,30,120,1)" : "rgba(60,30,120,0.85)",
                   background: expOpen
-                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)"
+                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)"
                     : "transparent",
                   border: "none",
                   letterSpacing: "0.06em",
@@ -157,10 +157,10 @@ export function Navbar() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)";
                   e.currentTarget.style.boxShadow = isDark
                     ? "0 8px 24px rgba(0,0,0,0.45)"
-                    : "0 8px 22px rgba(130,90,220,0.30)";
+                    : "0 8px 22px rgba(201,147,62,0.30)";
                   e.currentTarget.style.transform = "translateY(-1px)";
                 }}
                 onMouseLeave={(e) => {
@@ -202,17 +202,17 @@ export function Navbar() {
                       background: isDark
                         ? "linear-gradient(160deg, rgba(10,10,20,0.95), rgba(6,6,14,0.92))"
                         : "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,248,255,0.95))",
-                      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(130,90,220,0.15)",
+                      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.15)",
                       backdropFilter: "blur(30px)",
                       boxShadow: isDark
-                        ? "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.06)"
-                        : "0 20px 60px rgba(130,90,220,0.15), 0 0 40px rgba(180,100,220,0.08)",
+                        ? "0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(201,147,62,0.06)"
+                        : "0 20px 60px rgba(201,147,62,0.15), 0 0 40px rgba(212,165,116,0.08)",
                     }}
                     onMouseEnter={handleExpEnter}
                     onMouseLeave={handleExpLeave}
                   >
                     <div className="px-4 pt-3 pb-2">
-                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(80,50,140,0.65)" }}>
+                      <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "8px", letterSpacing: "0.3em", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(100,70,20,0.75)" }}>
                         EXPLORE WORLDS
                       </span>
                     </div>
@@ -257,7 +257,7 @@ export function Navbar() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Swarga: The Celestial Realm
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)" }}>
                             Golden temples &amp; divine wonder
                           </div>
                         </div>
@@ -266,7 +266,7 @@ export function Navbar() {
                         </svg>
                       </button>
 
-                      <div className="mx-4" style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)" }} />
+                      <div className="mx-4" style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(201,147,62,0.1), transparent)" }} />
 
                       <button
                         className="flex items-center gap-4 w-full p-3 rounded-2xl transition-all duration-300 cursor-pointer group"
@@ -307,7 +307,7 @@ export function Navbar() {
                           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "12px", fontWeight: 700, color: isDark ? "#fff" : "#1a0a2e", marginBottom: "2px" }}>
                             Naraka: The Infernal Depths
                           </div>
-                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(80,50,140,0.65)" }}>
+                          <div style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "10px", color: isDark ? "rgba(255,255,255,0.35)" : "rgba(100,70,20,0.75)" }}>
                             Volcanic wastelands &amp; rivers of fire
                           </div>
                         </div>
@@ -318,8 +318,8 @@ export function Navbar() {
                     </div>
 
                     <div className="px-4 pt-2 pb-2 mt-1">
-                      <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(130,90,220,0.1), transparent)", marginBottom: "8px" }} />
-                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(80,50,140,0.65)", letterSpacing: "0.1em" }}>
+                      <div style={{ height: "1px", background: isDark ? "linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent)" : "linear-gradient(to right, transparent, rgba(201,147,62,0.1), transparent)", marginBottom: "8px" }} />
+                      <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: "9px", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(100,70,20,0.75)", letterSpacing: "0.1em" }}>
                         More worlds coming soon...
                       </span>
                     </div>
@@ -359,10 +359,10 @@ export function Navbar() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
-                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(130,90,220,0.1)";
+                  e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)";
                   e.currentTarget.style.boxShadow = isDark
                     ? "0 8px 24px rgba(0,0,0,0.45)"
-                    : "0 8px 22px rgba(130,90,220,0.30)";
+                    : "0 8px 22px rgba(201,147,62,0.30)";
                   e.currentTarget.style.transform = "translateY(-1px)";
                 }}
                 onMouseLeave={(e) => {
@@ -455,10 +455,10 @@ export function Navbar() {
             background: isDark
               ? "linear-gradient(135deg, rgba(6,6,14,0.60), rgba(4,4,10,0.50))"
               : "linear-gradient(135deg, rgba(255,255,255,0.52), rgba(250,248,255,0.44))",
-            border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(130,90,220,0.18)",
+            border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(201,147,62,0.18)",
             boxShadow: isDark
               ? "0 8px 40px rgba(0,0,0,0.4)"
-              : "0 8px 40px rgba(130,90,220,0.12)",
+              : "0 8px 40px rgba(201,147,62,0.12)",
           }}
         >
           <button

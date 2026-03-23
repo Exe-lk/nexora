@@ -17,22 +17,22 @@ type Section = {
 function accentStyles(isDark: boolean, accent: Section["accent"]) {
   if (accent === "cyan") {
     return {
-      border: isDark ? "rgba(56,189,248,0.22)" : "rgba(14,165,233,0.22)",
-      glow: isDark ? "rgba(56,189,248,0.16)" : "rgba(14,165,233,0.12)",
-      title: isDark ? "rgba(125,211,252,0.95)" : "rgba(2,132,199,0.95)",
+      border: isDark ? "rgba(212,165,116,0.22)" : "rgba(184,134,11,0.22)",
+      glow: isDark ? "rgba(212,165,116,0.16)" : "rgba(184,134,11,0.12)",
+      title: isDark ? "rgba(230,185,115,0.95)" : "rgba(184,134,11,0.95)",
     };
   }
   if (accent === "pink") {
     return {
-      border: isDark ? "rgba(236,72,153,0.22)" : "rgba(219,39,119,0.20)",
-      glow: isDark ? "rgba(236,72,153,0.14)" : "rgba(219,39,119,0.10)",
+      border: isDark ? "rgba(184,134,11,0.22)" : "rgba(184,134,11,0.20)",
+      glow: isDark ? "rgba(184,134,11,0.14)" : "rgba(184,134,11,0.10)",
       title: isDark ? "rgba(251,113,133,0.9)" : "rgba(190,24,93,0.9)",
     };
   }
   return {
-    border: isDark ? "rgba(168,85,247,0.22)" : "rgba(124,58,237,0.20)",
-    glow: isDark ? "rgba(168,85,247,0.16)" : "rgba(124,58,237,0.10)",
-    title: isDark ? "rgba(216,180,254,0.92)" : "rgba(109,40,217,0.92)",
+    border: isDark ? "rgba(212,165,116,0.22)" : "rgba(184,134,11,0.20)",
+    glow: isDark ? "rgba(212,165,116,0.16)" : "rgba(184,134,11,0.10)",
+    title: isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.92)",
   };
 }
 
@@ -171,8 +171,8 @@ export default function PrivacyPage() {
         style={{
           zIndex: 0,
           background: isDark
-            ? "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(99,102,241,0.10) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 50% 70%, rgba(236,72,153,0.08) 0%, transparent 60%)"
-            : "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(124,58,237,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 50% 70%, rgba(14,165,233,0.06) 0%, transparent 60%)",
+            ? "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(201,147,62,0.10) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 50% 70%, rgba(184,134,11,0.08) 0%, transparent 60%)"
+            : "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(184,134,11,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 50% 70%, rgba(184,134,11,0.06) 0%, transparent 60%)",
         }}
       />
 
@@ -187,8 +187,8 @@ export default function PrivacyPage() {
                 lineHeight: 1.12,
                 letterSpacing: "-0.02em",
                 backgroundImage: isDark
-                  ? "linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #38bdf8 100%)"
-                  : "linear-gradient(135deg, #7c3aed 0%, #6366f1 40%, #0ea5e9 100%)",
+                  ? "linear-gradient(135deg, #D4A574 0%, #C9933E 40%, #B8860B 100%)"
+                  : "linear-gradient(135deg, #C9933E 0%, #D4A574 40%, #D4A574 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 marginBottom: "10px",
@@ -207,7 +207,7 @@ export default function PrivacyPage() {
               }}
             >
               This is a short summary of how NexoraXR handles information on this website. If you have questions, reach us via{" "}
-              <Link href="/contact" style={{ color: isDark ? "rgba(125,211,252,0.95)" : "rgba(37,99,235,0.92)" }}>
+              <Link href="/contact" style={{ color: isDark ? "rgba(230,185,115,0.95)" : "rgba(37,99,235,0.92)" }}>
                 /contact
               </Link>
               .

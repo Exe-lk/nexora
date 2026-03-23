@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 // ─── constants ────────────────────────────────────────────────────────────────
 const GLITCH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%<>[]{}ΨΩΔΛΣΞφ⊕⊗◈⊘⟡∇∆".split("");
 
-// Brand-gradient colours per letter — matches the logo's cyan→purple→pink
-const NEXORA_CLR = ["#22d3ee", "#6b8ef0", "#818cf8", "#a855f7", "#e879f9", "#ec4899"];
-const XR_CLR     = ["#f472b6", "#fb7185"];
-const PART_CLR   = ["#6b8ef0","#a07de8","#e06aac","#5ec4e0","#7c3aed","#ec4899"];
+// Brand-gradient colours per letter — matches the logo's gold theme
+const NEXORA_CLR = ["#E6B973", "#D4A574", "#C9933E", "#B8860B", "#D4A574", "#E6B973"];
+const XR_CLR     = ["#C9933E", "#B8860B"];
+const PART_CLR   = ["#D4A574","#C9933E","#B8860B","#E6B973","#A67C00","#D4A574"];
 
 const STATUSES = [
   "BOOT SEQUENCE INITIATED",
@@ -150,13 +150,13 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
             width: 680, height: 680,
             top: "50%", left: "50%", transform: "translate(-50%,-58%)",
             background:
-              "radial-gradient(circle,rgba(99,102,241,0.15) 0%,rgba(168,85,247,0.07) 40%,transparent 70%)",
+              "radial-gradient(circle,rgba(201,147,62,0.15) 0%,rgba(212,165,116,0.07) 40%,transparent 70%)",
           }} />
 
           {/* ═══ TOP HUD BAR ═══ */}
           <motion.div
             className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3 pointer-events-none"
-            style={{ borderBottom: "1px solid rgba(99,102,241,0.14)" }}
+            style={{ borderBottom: "1px solid rgba(201,147,62,0.14)" }}
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.55 }}
@@ -172,7 +172,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
             <div className="flex items-center gap-2">
               <motion.div
                 className="rounded-full"
-                style={{ width: 6, height: 6, background: "#22d3ee", boxShadow: "0 0 8px #22d3ee" }}
+                style={{ width: 6, height: 6, background: "#D4A574", boxShadow: "0 0 8px #D4A574" }}
                 animate={{ opacity: [1, 0.25, 1] }}
                 transition={{ duration: 1.1, repeat: Infinity }}
               />
@@ -196,8 +196,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           {/* ── scan line ── */}
           <motion.div className="absolute inset-x-0 pointer-events-none" style={{
             height: 1,
-            background: "linear-gradient(90deg,transparent,rgba(99,102,241,0.35),rgba(168,85,247,0.9),rgba(99,102,241,0.35),transparent)",
-            boxShadow: "0 0 16px rgba(168,85,247,0.5)",
+            background: "linear-gradient(90deg,transparent,rgba(201,147,62,0.35),rgba(212,165,116,0.9),rgba(201,147,62,0.35),transparent)",
+            boxShadow: "0 0 16px rgba(212,165,116,0.5)",
           }} animate={{ top: ["0%", "100%"] }}
              transition={{ duration: 3.5, repeat: Infinity, ease: "linear", repeatDelay: 0.3 }} />
 
@@ -212,14 +212,14 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               {/* Ring 3 — outer, slow CW */}
               <motion.div className="absolute rounded-full" style={{
                 width: 480, height: 480,
-                border: "1px solid rgba(99,102,241,0.2)",
-                boxShadow: "0 0 35px rgba(99,102,241,0.06)",
+                border: "1px solid rgba(201,147,62,0.2)",
+                boxShadow: "0 0 35px rgba(201,147,62,0.06)",
                 top: 0, left: 0,
               }} initial={{ opacity: 0, scale: 0.55 }} animate={{ opacity: 1, scale: 1, rotate: 360 }}
                  transition={{ opacity: { delay: 0.6, duration: 0.9 }, scale: { delay: 0.6, duration: 0.9, type: "spring", stiffness: 80 }, rotate: { duration: 40, repeat: Infinity, ease: "linear" } }}>
                 {ring3Dots.map(deg => (
                   <div key={deg} className="absolute rounded-full" style={{
-                    width: 5, height: 5, background: "rgba(99,102,241,0.5)", boxShadow: "0 0 8px rgba(99,102,241,0.7)",
+                    width: 5, height: 5, background: "rgba(201,147,62,0.5)", boxShadow: "0 0 8px rgba(201,147,62,0.7)",
                     top: "50%", left: "50%", transform: `rotate(${deg}deg) translateX(240px) translate(-50%,-50%)`,
                   }} />
                 ))}
@@ -228,16 +228,16 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               {/* Ring 2 — middle, CCW, dashed */}
               <motion.div className="absolute rounded-full" style={{
                 width: 340, height: 340,
-                border: "1.5px dashed rgba(168,85,247,0.32)",
-                boxShadow: "0 0 50px rgba(168,85,247,0.1),inset 0 0 50px rgba(168,85,247,0.05)",
+                border: "1.5px dashed rgba(212,165,116,0.32)",
+                boxShadow: "0 0 50px rgba(212,165,116,0.1),inset 0 0 50px rgba(212,165,116,0.05)",
                 top: 70, left: 70,
               }} initial={{ opacity: 0, scale: 0.4 }} animate={{ opacity: 1, scale: 1, rotate: -360 }}
                  transition={{ opacity: { delay: 0.38, duration: 0.9 }, scale: { delay: 0.38, duration: 0.9, type: "spring", stiffness: 95 }, rotate: { duration: 25, repeat: Infinity, ease: "linear" } }}>
                 {ring2Dots.map(({ d, big }) => (
                   <motion.div key={d} className="absolute rounded-full" style={{
                     width: big ? 9 : 5, height: big ? 9 : 5,
-                    background: big ? "linear-gradient(135deg,#a855f7,#6366f1)" : "rgba(168,85,247,0.65)",
-                    boxShadow: `0 0 ${big ? 14 : 7}px rgba(168,85,247,0.9)`,
+                    background: big ? "linear-gradient(135deg,#D4A574,#C9933E)" : "rgba(212,165,116,0.65)",
+                    boxShadow: `0 0 ${big ? 14 : 7}px rgba(212,165,116,0.9)`,
                     top: "50%", left: "50%", transform: `rotate(${d}deg) translateX(170px) translate(-50%,-50%)`,
                   }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, delay: d / 360, repeat: Infinity }} />
                 ))}
@@ -253,8 +253,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                  transition={{ opacity: { delay: 0.18, duration: 0.6 }, scale: { delay: 0.18, duration: 0.6, type: "spring", stiffness: 145 }, rotate: { duration: 12, repeat: Infinity, ease: "linear" } }}>
                 {/* Comet dot on ring 1 */}
                 <div className="absolute rounded-full" style={{
-                  width: 9, height: 9, background: "linear-gradient(135deg,#ec4899,#a855f7)",
-                  boxShadow: "0 0 18px rgba(236,72,153,1)", top: "50%", left: "50%",
+                  width: 9, height: 9, background: "linear-gradient(135deg,#B8860B,#D4A574)",
+                  boxShadow: "0 0 18px rgba(212,165,116,1)", top: "50%", left: "50%",
                   transform: "translateX(105px) translate(-50%,-50%)",
                 }} />
               </motion.div>
@@ -262,7 +262,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               {/* Core breathing glow */}
               <motion.div className="absolute rounded-full pointer-events-none" style={{
                 width: 150, height: 150, top: 165, left: 165,
-                background: "radial-gradient(circle,rgba(139,92,246,0.28) 0%,rgba(99,102,241,0.12) 50%,transparent 70%)",
+                background: "radial-gradient(circle,rgba(212,165,116,0.28) 0%,rgba(201,147,62,0.12) 50%,transparent 70%)",
               }} animate={{ scale: [1, 1.3, 1], opacity: [0.55, 1, 0.55] }}
                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }} />
             </div>
@@ -431,25 +431,25 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 
               <span style={{
                 fontFamily: "'Orbitron', sans-serif", fontSize: "0.72rem", fontWeight: 700,
-                backgroundImage: "linear-gradient(135deg,#6b8ef0,#a07de8,#ec4899)",
+                backgroundImage: "linear-gradient(135deg,#D4A574,#C9933E,#B8860B)",
                 WebkitBackgroundClip: "text", backgroundClip: "text",
                 WebkitTextFillColor: "transparent", color: "transparent",
               }}>{progress}%</span>
             </div>
 
             {/* track */}
-            <div style={{ width: "100%", height: 2, background: "rgba(99,102,241,0.12)", borderRadius: 1, position: "relative", overflow: "visible" }}>
+            <div style={{ width: "100%", height: 2, background: "rgba(201,147,62,0.12)", borderRadius: 1, position: "relative", overflow: "visible" }}>
               <div style={{
                 position: "absolute", left: 0, top: 0, height: "100%", width: `${progress}%`,
-                backgroundImage: "linear-gradient(90deg,#6366f1,#a855f7,#ec4899)",
-                boxShadow: "0 0 10px rgba(168,85,247,0.8)", borderRadius: 1,
+                backgroundImage: "linear-gradient(90deg,#C9933E,#D4A574,#B8860B)",
+                boxShadow: "0 0 10px rgba(212,165,116,0.8)", borderRadius: 1,
                 transition: "width 0.05s linear",
               }} />
               <div style={{
                 position: "absolute", top: "50%", left: `${progress}%`,
                 transform: "translate(-50%,-50%)", width: 7, height: 7,
                 background: "#fff", borderRadius: "50%",
-                boxShadow: "0 0 14px rgba(255,255,255,0.9),0 0 22px rgba(168,85,247,1)",
+                boxShadow: "0 0 14px rgba(255,255,255,0.9),0 0 22px rgba(212,165,116,1)",
                 transition: "left 0.05s linear",
               }} />
             </div>
@@ -459,8 +459,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               {[0,1,2,3,4].map(i => (
                 <div key={i} style={{
                   width: 5, height: 5, borderRadius: "50%",
-                  background: progress >= (i+1)*20 ? "#a855f7" : "rgba(99,102,241,0.18)",
-                  boxShadow: progress >= (i+1)*20 ? "0 0 8px rgba(168,85,247,0.9)" : "none",
+                  background: progress >= (i+1)*20 ? "#D4A574" : "rgba(201,147,62,0.18)",
+                  boxShadow: progress >= (i+1)*20 ? "0 0 8px rgba(212,165,116,0.9)" : "none",
                   transition: "all 0.4s ease",
                 }} />
               ))}
@@ -477,10 +477,10 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                 left:   pos.endsWith("l")   ?  20 : undefined,
                 right:  pos.endsWith("r")   ?  20 : undefined,
                 width: 30, height: 30,
-                borderTop:    pos.startsWith("t") ? "1.5px solid rgba(99,102,241,0.55)" : undefined,
-                borderBottom: pos.startsWith("b") ? "1.5px solid rgba(99,102,241,0.55)" : undefined,
-                borderLeft:   pos.endsWith("l")   ? "1.5px solid rgba(99,102,241,0.55)" : undefined,
-                borderRight:  pos.endsWith("r")   ? "1.5px solid rgba(99,102,241,0.55)" : undefined,
+                borderTop:    pos.startsWith("t") ? "1.5px solid rgba(201,147,62,0.55)" : undefined,
+                borderBottom: pos.startsWith("b") ? "1.5px solid rgba(201,147,62,0.55)" : undefined,
+                borderLeft:   pos.endsWith("l")   ? "1.5px solid rgba(201,147,62,0.55)" : undefined,
+                borderRight:  pos.endsWith("r")   ? "1.5px solid rgba(201,147,62,0.55)" : undefined,
               }}
               initial={{ opacity: 0, scale: 0.4 }}
               animate={{ opacity: 1, scale: 1 }}

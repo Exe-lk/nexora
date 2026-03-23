@@ -47,67 +47,67 @@ export function HeroPortal() {
       x: Math.random() * 100,
       y: Math.random() * 100,
       color: isDark
-        ? ["#6b8ef0", "#a07de8", "#e06aac", "#5ec4e0"][Math.floor(Math.random() * 4)]
-        : ["#4a6fd8", "#7b52c4", "#c44a8f", "#3d9bc8"][Math.floor(Math.random() * 4)],
+        ? ["#D4A574", "#C9933E", "#B8860B", "#E6B973"][Math.floor(Math.random() * 4)]
+        : ["#B8860B", "#C9933E", "#D4A574", "#A67C00"][Math.floor(Math.random() * 4)],
       dur: Math.random() * 3 + 2.5,
       del: Math.random() * 3,
     }));
   }, [isDark, mounted]);
 
   // Theme-aware colors
-  const ringBorderColor   = isDark ? "rgba(120,180,255,0.25)"  : "rgba(100,60,200,0.2)";
+  const ringBorderColor   = isDark ? "rgba(212,165,116,0.25)"  : "rgba(184,134,11,0.2)";
   const ringShadow        = isDark
-    ? "0 0 80px rgba(120,180,255,0.12), inset 0 0 80px rgba(120,180,255,0.06)"
-    : "0 0 80px rgba(100,60,200,0.1),  inset 0 0 80px rgba(100,60,200,0.05)";
+    ? "0 0 80px rgba(212,165,116,0.12), inset 0 0 80px rgba(212,165,116,0.06)"
+    : "0 0 80px rgba(184,134,11,0.1),  inset 0 0 80px rgba(184,134,11,0.05)";
 
-  const dotGradient = "linear-gradient(135deg, #7b9ef5, #b88ef5)";
-  const dotColor    = isDark ? "rgba(168,120,240,0.7)" : "rgba(130,80,220,0.5)";
-  const dotShadow   = isDark ? "0 0 18px rgba(140,100,240,0.8)" : "0 0 12px rgba(130,80,220,0.5)";
+  const dotGradient = "linear-gradient(135deg, #D4A574, #C9933E)";
+  const dotColor    = isDark ? "rgba(212,165,116,0.7)" : "rgba(201,147,62,0.5)";
+  const dotShadow   = isDark ? "0 0 18px rgba(212,165,116,0.8)" : "0 0 12px rgba(201,147,62,0.5)";
 
-  const ring2Border = isDark ? "1.5px dashed rgba(96,165,250,0.2)"  : "1.5px dashed rgba(96,100,250,0.18)";
-  const ring2Shadow = isDark ? "0 0 100px rgba(96,165,250,0.1)"     : "0 0 100px rgba(96,100,250,0.08)";
-  const ring3Border = isDark ? "1px solid rgba(220,100,180,0.15)"   : "1px solid rgba(200,80,180,0.15)";
+  const ring2Border = isDark ? "1.5px dashed rgba(212,165,116,0.2)"  : "1.5px dashed rgba(201,147,62,0.18)";
+  const ring2Shadow = isDark ? "0 0 100px rgba(212,165,116,0.1)"     : "0 0 100px rgba(201,147,62,0.08)";
+  const ring3Border = isDark ? "1px solid rgba(184,134,11,0.15)"   : "1px solid rgba(168,120,10,0.15)";
 
   const coreGlow  = isDark
-    ? "radial-gradient(circle, rgba(120,180,255,0.18) 0%, rgba(99,102,241,0.1) 40%, transparent 70%)"
-    : "radial-gradient(circle, rgba(100,60,220,0.12)  0%, rgba(99,102,241,0.07) 40%, transparent 70%)";
+    ? "radial-gradient(circle, rgba(212,165,116,0.18) 0%, rgba(201,147,62,0.1) 40%, transparent 70%)"
+    : "radial-gradient(circle, rgba(184,134,11,0.12)  0%, rgba(201,147,62,0.07) 40%, transparent 70%)";
   const coreShadow = isDark
-    ? "0 0 150px rgba(120,180,255,0.15), 0 0 300px rgba(99,102,241,0.08)"
-    : "0 0 150px rgba(100,60,220,0.12),  0 0 300px rgba(99,102,241,0.06)";
+    ? "0 0 150px rgba(212,165,116,0.15), 0 0 300px rgba(201,147,62,0.08)"
+    : "0 0 150px rgba(184,134,11,0.12),  0 0 300px rgba(201,147,62,0.06)";
 
   const innerGlow = isDark
-    ? "radial-gradient(circle, rgba(236,72,153,0.25) 0%, rgba(168,85,247,0.12) 50%, transparent 70%)"
-    : "radial-gradient(circle, rgba(220,60,160,0.2)  0%, rgba(168,85,247,0.1)  50%, transparent 70%)";
+    ? "radial-gradient(circle, rgba(184,134,11,0.25) 0%, rgba(201,147,62,0.12) 50%, transparent 70%)"
+    : "radial-gradient(circle, rgba(168,120,10,0.2)  0%, rgba(201,147,62,0.1)  50%, transparent 70%)";
 
   const lightTrail1 = isDark
-    ? "linear-gradient(90deg, transparent, rgba(96,165,250,0.4),  rgba(168,85,247,0.2),  transparent)"
-    : "linear-gradient(90deg, transparent, rgba(96,100,250,0.3),  rgba(168,85,247,0.18), transparent)";
+    ? "linear-gradient(90deg, transparent, rgba(212,165,116,0.4),  rgba(201,147,62,0.2),  transparent)"
+    : "linear-gradient(90deg, transparent, rgba(201,147,62,0.3),  rgba(212,165,116,0.18), transparent)";
   const lightTrail2 = isDark
-    ? "linear-gradient(90deg, transparent, rgba(236,72,153,0.35), transparent)"
-    : "linear-gradient(90deg, transparent, rgba(210,60,160,0.28), transparent)";
+    ? "linear-gradient(90deg, transparent, rgba(184,134,11,0.35), transparent)"
+    : "linear-gradient(90deg, transparent, rgba(168,120,10,0.28), transparent)";
   const lightTrail3 = isDark
-    ? "linear-gradient(90deg, transparent, rgba(99,102,241,0.3),  transparent)"
-    : "linear-gradient(90deg, transparent, rgba(90,90,240,0.22),  transparent)";
+    ? "linear-gradient(90deg, transparent, rgba(201,147,62,0.3),  transparent)"
+    : "linear-gradient(90deg, transparent, rgba(184,134,11,0.22),  transparent)";
 
-  const taglineColor   = isDark ? "#a07de8"              : "#6b3fbf";
+  const taglineColor   = isDark ? "#C9933E"              : "#B8860B";
   const headingGradient = isDark
-    ? "linear-gradient(135deg, #6b8ef0 0%, #a07de8 30%, #e06aac 60%, #5ec4e0 100%)"
-    : "linear-gradient(135deg, #4a6fd8 0%, #7b52c4 30%, #c44a8f 60%, #e06aac 100%)";
+    ? "linear-gradient(135deg, #D4A574 0%, #C9933E 30%, #B8860B 60%, #E6B973 100%)"
+    : "linear-gradient(135deg, #B8860B 0%, #C9933E 30%, #A67C00 60%, #D4A574 100%)";
   const textColor = isDark ? "rgba(255,255,255,0.7)" : "#4a3a70";
 
   const button1Shadow = isDark
-    ? "0 6px 30px rgba(168,85,247,0.45), 0 0 80px rgba(168,85,247,0.15)"
-    : "0 6px 30px rgba(168,85,247,0.35), 0 0 80px rgba(168,85,247,0.1)";
+    ? "0 6px 30px rgba(201,147,62,0.45), 0 0 80px rgba(201,147,62,0.15)"
+    : "0 6px 30px rgba(201,147,62,0.35), 0 0 80px rgba(201,147,62,0.1)";
 
-  const button2Bg     = isDark ? "rgba(130,90,220,0.15)" : "rgba(255,255,255,0.6)";
-  const button2Border = isDark ? "1.5px solid rgba(130,90,220,0.35)" : "1.5px solid rgba(100,60,200,0.3)";
-  const button2Color  = isDark ? "#c4a5f0" : "#5a45a0";
+  const button2Bg     = isDark ? "rgba(201,147,62,0.15)" : "rgba(255,255,255,0.6)";
+  const button2Border = isDark ? "1.5px solid rgba(201,147,62,0.35)" : "1.5px solid rgba(184,134,11,0.3)";
+  const button2Color  = isDark ? "#E6B973" : "#A67C00";
 
-  const scrollBorder = isDark ? "1.5px solid rgba(130,90,220,0.4)" : "1.5px solid rgba(100,60,200,0.3)";
-  const scrollDot    = isDark ? "rgba(130,90,220,0.7)"             : "rgba(100,60,200,0.5)";
-  const scrollText   = isDark ? "rgba(150,120,220,0.5)"            : "rgba(90,50,160,0.45)";
+  const scrollBorder = isDark ? "1.5px solid rgba(201,147,62,0.4)" : "1.5px solid rgba(184,134,11,0.3)";
+  const scrollDot    = isDark ? "rgba(201,147,62,0.7)"             : "rgba(184,134,11,0.5)";
+  const scrollText   = isDark ? "rgba(212,165,116,0.5)"            : "rgba(168,120,10,0.45)";
 
-  const gridColor = isDark ? "rgba(120,180,255,0.15)" : "rgba(100,60,200,0.07)";
+  const gridColor = isDark ? "rgba(212,165,116,0.15)" : "rgba(184,134,11,0.07)";
 
   const handleExploreClick = () => {
     const target = document.getElementById("discover-worlds");
@@ -313,7 +313,7 @@ export function HeroPortal() {
               fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)",
               fontWeight: 600,
               letterSpacing: "0.03em",
-              backgroundImage: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
+              backgroundImage: "linear-gradient(135deg, #C9933E, #D4A574, #B8860B)",
               boxShadow: button1Shadow,
             }}
           >
