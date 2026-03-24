@@ -61,7 +61,7 @@ export function Footer() {
           <div className="space-y-4 max-w-md">
             <div className="inline-flex items-center gap-2">
               <Image
-                src={isDark ? "/dark%20logo.png" : "/light%20logo.png"}
+                src={isDark ? "/light%20logo.png" : "/light%20logo.png"}
                 alt="NexoraXR logo"
                 width={24}
                 height={24}

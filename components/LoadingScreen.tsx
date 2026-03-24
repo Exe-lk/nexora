@@ -134,8 +134,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           {/* ── grid ── */}
           <div className="absolute inset-0 pointer-events-none" style={{
             backgroundImage:
-              "linear-gradient(rgba(99,120,255,0.06) 1px,transparent 1px)," +
-              "linear-gradient(90deg,rgba(99,120,255,0.06) 1px,transparent 1px)",
+              "linear-gradient(rgba(201,147,62,0.06) 1px,transparent 1px)," +
+              "linear-gradient(90deg,rgba(201,147,62,0.06) 1px,transparent 1px)",
             backgroundSize: "70px 70px",
           }} />
 
@@ -163,10 +163,10 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           >
             <span style={{
               fontFamily: "'Orbitron', sans-serif", fontSize: "0.58rem",
-              letterSpacing: "0.28em", color: "rgba(130,100,230,0.7)",
+              letterSpacing: "0.28em", color: "rgba(201,147,62,0.8)",
             }}>
               ◢&nbsp;NEXORA XR&nbsp;
-              <span style={{ color: "rgba(100,80,160,0.4)", marginLeft: 6 }}>v2.1.0</span>
+              <span style={{ color: "rgba(166,124,0,0.5)", marginLeft: 6 }}>v2.1.0</span>
             </span>
 
             <div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               />
               <span style={{
                 fontFamily: "'Orbitron', sans-serif", fontSize: "0.58rem",
-                letterSpacing: "0.28em", color: "rgba(130,100,230,0.7)",
+                letterSpacing: "0.28em", color: "rgba(201,147,62,0.8)",
               }}>HEADSET LINKED&nbsp;◣</span>
             </div>
           </motion.div>
@@ -246,8 +246,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               {/* Ring 1 — inner, fast CW */}
               <motion.div className="absolute rounded-full" style={{
                 width: 210, height: 210,
-                border: "2px solid rgba(236,72,153,0.28)",
-                boxShadow: "0 0 70px rgba(236,72,153,0.16),inset 0 0 70px rgba(236,72,153,0.07)",
+                border: "2px solid rgba(212,165,116,0.28)",
+                boxShadow: "0 0 70px rgba(212,165,116,0.16),inset 0 0 70px rgba(212,165,116,0.07)",
                 top: 135, left: 135,
               }} initial={{ opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1, rotate: 360 }}
                  transition={{ opacity: { delay: 0.18, duration: 0.6 }, scale: { delay: 0.18, duration: 0.6, type: "spring", stiffness: 145 }, rotate: { duration: 12, repeat: Infinity, ease: "linear" } }}>
@@ -291,7 +291,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                         fontSize: "clamp(22px,3vw,34px)",
                         fontWeight: 700,
                         letterSpacing: "0.12em",
-                        color: isLocked ? NEXORA_CLR[i] : "rgba(90,110,180,0.28)",
+                        color: isLocked ? NEXORA_CLR[i] : "rgba(166,124,0,0.3)",
                         textShadow: isLocked
                           ? `0 0 18px ${NEXORA_CLR[i]}, 0 0 36px ${NEXORA_CLR[i]}88`
                           : "none",
@@ -315,7 +315,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                 {/* Decorative line before XR */}
                 <motion.div style={{
                   width: 32, height: 1,
-                  background: "linear-gradient(90deg,transparent,rgba(244,114,182,0.5))",
+                  background: "linear-gradient(90deg,transparent,rgba(212,165,116,0.5))",
                 }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
                    transition={{ delay: 1.5, duration: 0.5 }} />
 
@@ -332,7 +332,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                         fontSize: "clamp(14px,2vw,20px)",
                         fontWeight: 700,
                         letterSpacing: "0.35em",
-                        color: isLocked ? XR_CLR[i] : "rgba(90,110,180,0.22)",
+                        color: isLocked ? XR_CLR[i] : "rgba(166,124,0,0.25)",
                         textShadow: isLocked
                           ? `0 0 14px ${XR_CLR[i]}, 0 0 28px ${XR_CLR[i]}88`
                           : "none",
@@ -348,7 +348,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                 {/* Decorative line after XR */}
                 <motion.div style={{
                   width: 32, height: 1,
-                  background: "linear-gradient(90deg,rgba(251,113,133,0.5),transparent)",
+                  background: "linear-gradient(90deg,rgba(230,185,115,0.5),transparent)",
                 }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
                    transition={{ delay: 1.5, duration: 0.5 }} />
               </motion.div>
@@ -357,7 +357,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               <motion.p
                 style={{
                   fontFamily: "'Orbitron', sans-serif", fontSize: "0.52rem",
-                  letterSpacing: "0.45em", color: "rgba(140,110,220,0.45)",
+                  letterSpacing: "0.45em", color: "rgba(201,147,62,0.5)",
                   marginTop: 6, textTransform: "uppercase",
                 }}
                 initial={{ opacity: 0 }}
@@ -380,10 +380,10 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                 style={{
                   fontFamily: "monospace", fontSize: "0.58rem",
                   color: line.includes("READY")
-                    ? "rgba(34,211,238,0.8)"
-                    : "rgba(110,90,180,0.55)",
+                    ? "rgba(212,165,116,0.9)"
+                    : "rgba(166,124,0,0.65)",
                   letterSpacing: "0.05em", marginBottom: 2,
-                  textShadow: line.includes("READY") ? "0 0 10px rgba(34,211,238,0.5)" : "none",
+                  textShadow: line.includes("READY") ? "0 0 10px rgba(212,165,116,0.6)" : "none",
                 }}
               >{line}</motion.p>
             ))}
@@ -404,8 +404,8 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               ["FOV",        "220°"],
             ].map(([label, val]) => (
               <div key={label} className="flex justify-between gap-6 mb-1.5">
-                <span style={{ fontFamily: "monospace", fontSize: "0.55rem", color: "rgba(100,80,170,0.4)", letterSpacing: "0.06em" }}>{label}</span>
-                <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "0.55rem", color: "rgba(130,100,220,0.6)", letterSpacing: "0.1em" }}>{val}</span>
+                <span style={{ fontFamily: "monospace", fontSize: "0.55rem", color: "rgba(166,124,0,0.5)", letterSpacing: "0.06em" }}>{label}</span>
+                <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "0.55rem", color: "rgba(201,147,62,0.7)", letterSpacing: "0.1em" }}>{val}</span>
               </div>
             ))}
           </motion.div>
@@ -424,7 +424,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
                   transition={{ duration: 0.3 }}
                   style={{
                     fontFamily: "'Orbitron', sans-serif", fontSize: "0.58rem",
-                    letterSpacing: "0.2em", color: "rgba(140,110,230,0.75)",
+                    letterSpacing: "0.2em", color: "rgba(201,147,62,0.85)",
                   }}
                 >{STATUSES[statusIdx]}</motion.span>
               </AnimatePresence>

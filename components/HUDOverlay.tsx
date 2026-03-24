@@ -853,7 +853,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
                 height: "1px",
                 background: isDark
                   ? "linear-gradient(to left, transparent, rgba(212,165,116,0.4))"
-                  : "linear-gradient(to left, transparent, rgba(200,100,255,0.5))",
+                  : "linear-gradient(to left, transparent, rgba(201,147,62,0.5))",
               }}
             />
           </motion.div>
@@ -1188,173 +1188,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
         </ParallaxLayer>
       </section>
 
-      {/* ===== HOME EXPERIENCE GALLERY ===== */}
-      <section
-        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
-        style={{ minHeight: "auto", pointerEvents: "auto" }}
-      >
-        <ParallaxLayer speed={-0.06}>
-          <Section>
-            <div className={`${SECTION_MAX_WIDTH} text-center mb-10 md:mb-14`}>
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div
-                  style={{
-                    width: "40px",
-                    height: "1px",
-                    background: isDark
-                      ? "linear-gradient(to right, transparent, rgba(212,165,116,0.3))"
-                      : "linear-gradient(to right, transparent, rgba(201,147,62,0.4))",
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "'Orbitron', sans-serif",
-                    fontSize: "10px",
-                    letterSpacing: "0.4em",
-                    textTransform: "uppercase",
-                    color: isDark
-                      ? "rgba(255,255,255,0.35)"
-                      : "rgba(100,70,20,0.75)",
-                  }}
-                >
-                  Inside the Experience
-                </span>
-                <div
-                  style={{
-                    width: "40px",
-                    height: "1px",
-                    background: isDark
-                      ? "linear-gradient(to left, transparent, rgba(212,165,116,0.3))"
-                      : "linear-gradient(to left, transparent, rgba(200,100,255,0.4))",
-                  }}
-                />
-              </div>
-              <h2
-                className="mt-2"
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: isMobile ? "22px" : "32px",
-                  fontWeight: 700,
-                  lineHeight: 1.3,
-                  color: isDark ? "#ffffff" : "#1a0a2e",
-                }}
-              >
-                A glimpse of{" "}
-                <span
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    color: "transparent",
-                  }}
-                >
-                  Nexora XR
-                </span>{" "}
-                in motion
-              </h2>
-              <p
-                className="mt-3"
-                style={{
-                  fontFamily: "'Exo 2', sans-serif",
-                  fontSize: isMobile ? "12px" : "14px",
-                  lineHeight: 1.7,
-                  color: isDark
-                    ? "rgba(255,255,255,0.4)"
-                    : "rgba(100,70,20,0.7)",
-                  maxWidth: "560px",
-                  margin: "12px auto 0",
-                }}
-              >
-                Real groups, families, and teams fully immersed in shared XR
-                moments — giving you a feel for how Nexora XR looks and feels
-                beyond the screen.
-              </p>
-            </div>
-          </Section>
-
-          <Section delay={0.15}>
-            <div
-              className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
-              style={{ pointerEvents: "auto" }}
-            >
-              {galleryImages.map((image, index) => (
-                <GlassPanel
-                  key={image.src}
-                  accent="rgba(212,165,116,"
-                  className="group overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
-                  style={{ padding: 0 }}
-                >
-                  <div
-                    className="relative overflow-hidden"
-                    style={{ height: "clamp(200px, 22vw, 280px)" }}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 96vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      priority={index === 0}
-                    />
-                    {/* Gradient overlay */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: isDark
-                          ? "linear-gradient(to bottom, transparent 40%, rgba(6,6,14,0.85) 100%)"
-                          : "linear-gradient(to bottom, transparent 40%, rgba(250,248,255,0.9) 100%)",
-                      }}
-                    />
-                    {/* Hover border */}
-                    <div
-                      className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
-                      style={{ border: "1px solid rgba(212,165,116,0.12)" }}
-                    />
-                    {/* Index badge */}
-                    <div
-                      className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
-                      style={{
-                        background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
-                        border: "1px solid rgba(212,165,116,0.15)",
-                        backdropFilter: "blur(8px)",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: "'Orbitron', sans-serif",
-                          fontSize: "8px",
-                          letterSpacing: "0.2em",
-                          color: "rgba(212,165,116,0.7)",
-                        }}
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    {/* Caption overlay */}
-                    <div
-                      className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
-                    >
-                      <p
-                        style={{
-                          fontFamily: "'Exo 2', sans-serif",
-                          fontSize: "11px",
-                          lineHeight: 1.5,
-                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.85)",
-                          margin: 0,
-                        }}
-                      >
-                        {image.alt}
-                      </p>
-                    </div>
-                  </div>
-                </GlassPanel>
-              ))}
-            </div>
-          </Section>
-        </ParallaxLayer>
-      </section>
+      
 
       {/* ===== 4.25 OUR STORIES ===== */}
       <section
@@ -1550,7 +1384,7 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
 
           <Section delay={0.15}>
             <div
-              className={`${SECTION_MAX_WIDTH} grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5`}
+              className={`${SECTION_MAX_WIDTH} grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6`}
               style={{ pointerEvents: "auto" }}
             >
             {([
@@ -1579,6 +1413,176 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
           </div>
         </Section>
       </section>
+
+
+      {/* ===== HOME EXPERIENCE GALLERY ===== */}
+      <section
+        className="flex flex-col items-center py-14 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8"
+        style={{ minHeight: "auto", pointerEvents: "auto" }}
+      >
+        <ParallaxLayer speed={-0.06}>
+          <Section>
+            <div className={`${SECTION_MAX_WIDTH} text-center mb-10 md:mb-14`}>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background: isDark
+                      ? "linear-gradient(to right, transparent, rgba(212,165,116,0.3))"
+                      : "linear-gradient(to right, transparent, rgba(201,147,62,0.4))",
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "'Orbitron', sans-serif",
+                    fontSize: "10px",
+                    letterSpacing: "0.4em",
+                    textTransform: "uppercase",
+                    color: isDark
+                      ? "rgba(255,255,255,0.35)"
+                      : "rgba(100,70,20,0.75)",
+                  }}
+                >
+                  Inside the Experience
+                </span>
+                <div
+                  style={{
+                    width: "40px",
+                    height: "1px",
+                    background: isDark
+                      ? "linear-gradient(to left, transparent, rgba(212,165,116,0.3))"
+                      : "linear-gradient(to left, transparent, rgba(201,147,62,0.4))",
+                  }}
+                />
+              </div>
+              <h2
+                className="mt-2"
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: isMobile ? "22px" : "32px",
+                  fontWeight: 700,
+                  lineHeight: 1.3,
+                  color: isDark ? "#ffffff" : "#1a0a2e",
+                }}
+              >
+                A glimpse of{" "}
+                <span
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, #D4A574 0%, #C9933E 50%, #B8860B 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    color: "transparent",
+                  }}
+                >
+                  Nexora XR
+                </span>{" "}
+                in motion
+              </h2>
+              <p
+                className="mt-3"
+                style={{
+                  fontFamily: "'Exo 2', sans-serif",
+                  fontSize: isMobile ? "12px" : "14px",
+                  lineHeight: 1.7,
+                  color: isDark
+                    ? "rgba(255,255,255,0.4)"
+                    : "rgba(100,70,20,0.7)",
+                  maxWidth: "560px",
+                  margin: "12px auto 0",
+                }}
+              >
+                Real groups, families, and teams fully immersed in shared XR
+                moments — giving you a feel for how Nexora XR looks and feels
+                beyond the screen.
+              </p>
+            </div>
+          </Section>
+
+          <Section delay={0.15}>
+            <div
+              className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
+              style={{ pointerEvents: "auto" }}
+            >
+              {galleryImages.map((image, index) => (
+                <GlassPanel
+                  key={image.src}
+                  accent="rgba(212,165,116,"
+                  className="group overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
+                  style={{ padding: 0 }}
+                >
+                  <div
+                    className="relative overflow-hidden"
+                    style={{ height: "clamp(200px, 22vw, 280px)" }}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 96vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      priority={index === 0}
+                    />
+                    {/* Gradient overlay */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: isDark
+                          ? "linear-gradient(to bottom, transparent 40%, rgba(6,6,14,0.85) 100%)"
+                          : "linear-gradient(to bottom, transparent 40%, rgba(250,248,255,0.9) 100%)",
+                      }}
+                    />
+                    {/* Hover border */}
+                    <div
+                      className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
+                      style={{ border: "1px solid rgba(212,165,116,0.12)" }}
+                    />
+                    {/* Index badge */}
+                    <div
+                      className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
+                      style={{
+                        background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
+                        border: "1px solid rgba(212,165,116,0.15)",
+                        backdropFilter: "blur(8px)",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "'Orbitron', sans-serif",
+                          fontSize: "8px",
+                          letterSpacing: "0.2em",
+                          color: "rgba(212,165,116,0.7)",
+                        }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    {/* Caption overlay */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
+                    >
+                      <p
+                        style={{
+                          fontFamily: "'Exo 2', sans-serif",
+                          fontSize: "11px",
+                          lineHeight: 1.5,
+                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.85)",
+                          margin: 0,
+                        }}
+                      >
+                        {image.alt}
+                      </p>
+                    </div>
+                  </div>
+                </GlassPanel>
+              ))}
+            </div>
+          </Section>
+        </ParallaxLayer>
+      </section>
+
 
       {!skipVisionMission && (
         <>
@@ -1882,8 +1886,8 @@ function CTAButton({
           : isDark ? "rgba(255,255,255,0.6)" : "rgba(100,70,20,0.75)",
         background: primary
           ? isDark
-            ? "linear-gradient(135deg, rgba(140,100,220,0.3), rgba(212,165,116,0.22))"
-            : "linear-gradient(135deg, rgba(201,147,62,0.8), rgba(200,100,255,0.7))"
+            ? "linear-gradient(135deg, rgba(201,147,62,0.35), rgba(212,165,116,0.25))"
+            : "linear-gradient(135deg, rgba(201,147,62,0.85), rgba(212,165,116,0.75))"
           : isDark
             ? "rgba(255,255,255,0.04)"
             : "rgba(201,147,62,0.08)",
@@ -2171,17 +2175,33 @@ function BrandCard({
 }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const logoColor = isDark ? `${accent}0.92)` : `${accent}0.85)`;
+  
+  // Map logo keys to actual image filenames
+  const logoImageMap: Record<PlatformLogoKey, string> = {
+    meta: "/leading-platform/meta quest.jpeg",
+    apple: "/leading-platform/apple vision pro.jpeg",
+    playstation: "/leading-platform/PlayStation VR2.jpeg",
+    valve: "/leading-platform/Valve Index.jpeg",
+    htc: "/leading-platform/HTC Vive .jpeg",
+    pico: "/leading-platform/Pico.jpeg",
+    unity: "/leading-platform/Unity.png",
+    unreal: "/leading-platform/Unreal Engine.png",
+    magicleap: "/leading-platform/Magic Leap.jpeg",
+    varjo: "/leading-platform/Varjo.jpeg",
+    openxr: "/leading-platform/OpenXR.png",
+    webxr: "/leading-platform/WebXR .png",
+  };
+  
   return (
     <div
-      className="group cursor-default flex flex-col items-center justify-center text-center p-5 md:p-6 rounded-2xl transition-all duration-300"
+      className="group cursor-default flex flex-col items-center justify-center text-center p-6 md:p-8 rounded-2xl transition-all duration-300"
       style={{
         background: isDark
           ? "linear-gradient(160deg, rgba(12,10,24,0.55), rgba(8,6,18,0.35))"
           : "linear-gradient(160deg, rgba(255,255,255,0.8), rgba(250,248,255,0.7))",
         border: `1px solid ${accent}${isDark ? "0.08)" : "0.15)"}`,
         backdropFilter: "blur(14px)",
-        minHeight: "clamp(90px, 10vw, 110px)",
+        minHeight: "clamp(180px, 18vw, 220px)",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = `${accent}${isDark ? "0.22)" : "0.3)"}`;
@@ -2195,29 +2215,34 @@ function BrandCard({
       }}
     >
       {logo ? (
-        <div className="flex items-center justify-center mb-3">
+        <div className="flex items-center justify-center mb-4 w-full">
           <div
-            aria-hidden="true"
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center overflow-hidden"
             style={{
-              width: "34px",
-              height: "34px",
-              borderRadius: "12px",
-              background: isDark ? `${accent}0.06)` : `${accent}0.08)`,
-              border: `1px solid ${accent}${isDark ? "0.14)" : "0.18)"}`,
-              boxShadow: isDark ? `0 0 18px ${accent}0.05)` : `0 0 18px ${accent}0.07)`,
-              backdropFilter: "blur(10px)",
+              width: "clamp(80px, 12vw, 120px)",
+              height: "clamp(80px, 12vw, 120px)",
+              borderRadius: "16px",
+              background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
+              border: `1px solid ${accent}${isDark ? "0.1)" : "0.15)"}`,
+              boxShadow: isDark ? `0 0 20px ${accent}0.04)` : `0 0 20px ${accent}0.06)`,
             }}
           >
-            <PlatformLogo kind={logo} color={logoColor} size={20} />
+            <Image
+              src={logoImageMap[logo]}
+              alt={`${name} logo`}
+              fill
+              className="object-contain p-3 transition-transform duration-300 group-hover:scale-110"
+              style={{
+                filter: isDark ? "brightness(0.95)" : "brightness(1.05)",
+              }}
+            />
           </div>
-          <span className="sr-only">{name} logo</span>
         </div>
       ) : null}
       <span
         style={{
           fontFamily: "'Orbitron', sans-serif",
-          fontSize: "13px",
+          fontSize: "clamp(13px, 1.2vw, 15px)",
           fontWeight: 700,
           color: isDark ? "#ffffff" : "#1a0a2e",
           marginBottom: "8px",
@@ -2229,7 +2254,7 @@ function BrandCard({
       <span
         style={{
           fontFamily: "'Exo 2', sans-serif",
-          fontSize: "9px",
+          fontSize: "clamp(9px, 0.9vw, 11px)",
           letterSpacing: "0.2em",
           color: isDark ? `${accent}0.55)` : `${accent}0.9)`,
           textTransform: "uppercase",
