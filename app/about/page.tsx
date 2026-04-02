@@ -3,6 +3,7 @@
 import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
+import { ReviewSection } from "@/components/ReviewSection";
 import { useTheme } from "@/contexts/ThemeContext";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -417,6 +418,8 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        <ReviewSection />
 
         {/* Our Vision & Our Mission */}
         <section className="mt-14 md:mt-20">

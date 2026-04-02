@@ -10,6 +10,7 @@ import hellImg from "../assets/images/hell.png";
 import { VRHeadset3D } from "./VRHeadset";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
+import { ReviewSection } from "@/components/ReviewSection";
 
 const SECTION_MAX_WIDTH = "w-full max-w-6xl mx-auto";
 
@@ -1853,6 +1854,8 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
           </span>
         </div>
       </section>
+
+      <ReviewSection />
     </div>
   );
 }
