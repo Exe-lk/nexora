@@ -4,7 +4,14 @@ import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type Field = {
@@ -46,12 +53,69 @@ function FieldLabel({ label, required, isDark }: { label: string; required?: boo
   );
 }
 
+function inputGlow(isDark: boolean) {
+  // Keep focus rings subtle and theme-consistent with Occasions cards.
+  return isDark ? "0 0 0 3px rgba(201,147,62,0.18)" : "0 0 0 3px rgba(130,60,220,0.16)";
+}
+
 export default function ContactPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
   const [form, setForm] = useState<Record<string, string>>({});
   const [viewW, setViewW] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Occasions-style premium interaction for the form container (pointer-tracked glow + tilt)
+  const formRef = useRef<HTMLDivElement | null>(null);
+  const formInteractiveRef = useRef<HTMLDivElement | null>(null);
+  const mx = useMotionValue(0); // -0.5 .. 0.5
+  const my = useMotionValue(0); // -0.5 .. 0.5
+  const hover = useMotionValue(0); // 0 .. 1
+
+  const mxSpring = useSpring(mx, { stiffness: 260, damping: 28, mass: 0.9 });
+  const mySpring = useSpring(my, { stiffness: 260, damping: 28, mass: 0.9 });
+  const hoverSpring = useSpring(hover, { stiffness: 340, damping: 30, mass: 0.8 });
+
+  const rotateY = useTransform(mxSpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [-10, 10]);
+  const rotateX = useTransform(mySpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [10, -10]);
+  const lift = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0] : [0, -10]);
+  const scale = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [1, 1] : [1, 1.015]);
+  const glowOpacity = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.6] : [0, 1]);
+
+  const shineX = useTransform(mxSpring, [-0.5, 0.5], [30, 70]);
+  const shineY = useTransform(mySpring, [-0.5, 0.5], [30, 70]);
+  const shineBg = useMotionTemplate`radial-gradient(600px circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.22), transparent 55%)`;
+  const formAccentSoft = isDark ? "rgba(201,147,62," : "rgba(130,60,220,";
+  const radialGlowBg = useMotionTemplate`radial-gradient(circle at ${shineX}% ${shineY}%, ${formAccentSoft}0.14), transparent 70%)`;
+
+  useEffect(() => {
+    const el = formInteractiveRef.current;
+    if (!el) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      mx.set(Math.max(-0.5, Math.min(0.5, px)));
+      my.set(Math.max(-0.5, Math.min(0.5, py)));
+    };
+    const onPointerEnter = () => hover.set(1);
+    const onPointerLeave = () => {
+      hover.set(0);
+      mx.set(0);
+      my.set(0);
+    };
+
+    el.addEventListener("pointermove", onPointerMove, { passive: true });
+    el.addEventListener("pointerenter", onPointerEnter, { passive: true });
+    el.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerenter", onPointerEnter);
+      el.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, [hover, mx, my]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -84,6 +148,17 @@ export default function ContactPage() {
       { id: "phone", label: "Phone", placeholder: "+44 …", type: "tel" },
     ],
     [],
+  );
+
+  const inputBaseStyle = useMemo(
+    () => ({
+      fontFamily: "'Inter', sans-serif",
+      fontSize: "0.95rem",
+      background: isDark ? "rgba(255,255,255,0.04)" : "rgba(201,147,62,0.06)",
+      border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)",
+      color: isDark ? "rgba(255,255,255,0.92)" : "#1a0a2e",
+    }),
+    [isDark],
   );
 
   return (
@@ -189,16 +264,64 @@ export default function ContactPage() {
             transition={{ duration: 0.8, delay: 0.18, ease: "easeOut" }}
             className="w-full lg:max-w-3xl"
           >
-            <div
-              className="rounded-3xl p-6 backdrop-blur-xl"
+            <motion.div
+              ref={formRef}
+              className="group relative rounded-3xl"
               style={{
                 background: isDark
                   ? "linear-gradient(160deg, rgba(10,8,20,0.72) 0%, rgba(15,12,28,0.58) 100%)"
                   : "linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(248,246,255,0.86) 100%)",
                 border: isDark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(201,147,62,0.16)",
                 boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(201,147,62,0.14)",
+                backdropFilter: "blur(20px)",
+                isolation: "isolate",
               }}
             >
+              {/* Occasions-style clip container (prevents glow bleed during transforms) */}
+              <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none" aria-hidden="true">
+                {/* Hover glow — top accent line */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    backgroundImage: isDark
+                      ? "linear-gradient(135deg, #D4A574, #B8860B)"
+                      : "linear-gradient(135deg, rgba(130,60,220,0.9), rgba(201,147,62,0.85))",
+                  }}
+                />
+
+                {/* Mouse-tracking radial glow */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    opacity: glowOpacity,
+                    background: radialGlowBg,
+                  }}
+                />
+
+                {/* Specular "glass" shine */}
+                <motion.div
+                  className="absolute inset-0"
+                  style={{
+                    opacity: useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.25] : [0, 0.55]),
+                    background: shineBg,
+                    mixBlendMode: isDark ? ("screen" as const) : ("overlay" as const),
+                  }}
+                />
+              </div>
+
+              <motion.div
+                ref={formInteractiveRef}
+                className="relative p-6 backdrop-blur-xl z-10"
+                style={{
+                  y: lift,
+                  scale,
+                  rotateX,
+                  rotateY,
+                  transformStyle: "preserve-3d",
+                  willChange: "transform",
+                }}
+                transition={{ type: "spring", stiffness: 520, damping: 40, mass: 0.8 }}
+              >
               <div
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
@@ -231,13 +354,23 @@ export default function ContactPage() {
                       value={form[f.id] ?? ""}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.id]: e.target.value }))}
                       placeholder={f.placeholder}
-                      className="w-full rounded-2xl px-4 py-3 outline-none"
-                      style={{
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "0.95rem",
-                        background: isDark ? "rgba(255,255,255,0.04)" : "rgba(201,147,62,0.06)",
-                        border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)",
-                        color: isDark ? "rgba(255,255,255,0.92)" : "#1a0a2e",
+                      className="w-full rounded-2xl px-4 py-3 outline-none transition-all duration-300"
+                      style={inputBaseStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = inputGlow(isDark);
+                        e.currentTarget.style.border = isDark ? "1px solid rgba(201,147,62,0.32)" : "1px solid rgba(130,60,220,0.28)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = "0 0 0 0 rgba(0,0,0,0)";
+                        e.currentTarget.style.border = isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)";
+                      }}
+                      onMouseEnter={(e) => {
+                        if (document.activeElement === e.currentTarget) return;
+                        e.currentTarget.style.border = isDark ? "1px solid rgba(201,147,62,0.22)" : "1px solid rgba(130,60,220,0.22)";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (document.activeElement === e.currentTarget) return;
+                        e.currentTarget.style.border = isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)";
                       }}
                     />
                   </div>
@@ -251,13 +384,23 @@ export default function ContactPage() {
                   onChange={(e) => setForm((prev) => ({ ...prev, project: e.target.value }))}
                   placeholder="What are you launching? Space size, audience, timeline, and what you want people to feel."
                   rows={5}
-                  className="w-full rounded-2xl px-4 py-3 outline-none resize-none"
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "0.95rem",
-                    background: isDark ? "rgba(255,255,255,0.04)" : "rgba(201,147,62,0.06)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)",
-                    color: isDark ? "rgba(255,255,255,0.92)" : "#1a0a2e",
+                  className="w-full rounded-2xl px-4 py-3 outline-none resize-none transition-all duration-300"
+                  style={inputBaseStyle}
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = inputGlow(isDark);
+                    e.currentTarget.style.border = isDark ? "1px solid rgba(201,147,62,0.32)" : "1px solid rgba(130,60,220,0.28)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = "0 0 0 0 rgba(0,0,0,0)";
+                    e.currentTarget.style.border = isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)";
+                  }}
+                  onMouseEnter={(e) => {
+                    if (document.activeElement === e.currentTarget) return;
+                    e.currentTarget.style.border = isDark ? "1px solid rgba(201,147,62,0.22)" : "1px solid rgba(130,60,220,0.22)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (document.activeElement === e.currentTarget) return;
+                    e.currentTarget.style.border = isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(201,147,62,0.12)";
                   }}
                 />
               </div>
@@ -313,7 +456,8 @@ export default function ContactPage() {
                   Keep it short: the venue/event context, timeline, and the vibe you want. We’ll follow up with next steps.
                 </p>
               </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </section>
 

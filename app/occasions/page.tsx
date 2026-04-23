@@ -1,10 +1,17 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useState, useEffect, useId } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+  useMotionTemplate,
+} from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
-import { FloatingNav } from "@/components/HUDOverlay";
 import { useTheme } from "@/contexts/ThemeContext";
 
 // ─── Occasion data ────────────────────────────────────────────────────────────
@@ -95,24 +102,12 @@ const OCCASIONS = [
   },
 ];
 
-// ─── Mouse parallax hook ──────────────────────────────────────────────────────
-function useMouseParallax() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const smoothX = useSpring(x, { stiffness: 50, damping: 20 });
-  const smoothY = useSpring(y, { stiffness: 50, damping: 20 });
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      x.set((e.clientX / window.innerWidth - 0.5) * 2);
-      y.set((e.clientY / window.innerHeight - 0.5) * 2);
-    };
-    window.addEventListener("mousemove", handler, { passive: true });
-    return () => window.removeEventListener("mousemove", handler);
-  }, [x, y]);
-
-  return { smoothX, smoothY };
-}
+// Unify card palette (match "Corporate Events" card)
+const OCCASION_CARD_THEME = {
+  accent: "#D4A574",
+  accentSoft: "rgba(201,147,62,",
+  gradient: "linear-gradient(135deg, #D4A574, #B8860B)",
+} as const;
 
 // ─── Card component ──────────────────────────────────────────────────────────
 function OccasionCard({
@@ -124,10 +119,10 @@ function OccasionCard({
   index: number;
   isDark: boolean;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+  const cardId = useId();
   const ref = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -137,51 +132,80 @@ function OccasionCard({
   const imageY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.2, 1.3]);
 
+  // Motion-driven pointer interaction (no React re-render on hover)
+  const mx = useMotionValue(0); // -0.5 .. 0.5
+  const my = useMotionValue(0); // -0.5 .. 0.5
+  const hover = useMotionValue(0); // 0 .. 1
+
+  const mxSpring = useSpring(mx, { stiffness: 260, damping: 28, mass: 0.9 });
+  const mySpring = useSpring(my, { stiffness: 260, damping: 28, mass: 0.9 });
+  const hoverSpring = useSpring(hover, { stiffness: 340, damping: 30, mass: 0.8 });
+
+  const rotateY = useTransform(mxSpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [-10, 10]);
+  const rotateX = useTransform(mySpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [10, -10]);
+  const lift = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0] : [0, -10]);
+  const scale = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [1, 1] : [1, 1.02]);
+  const glowOpacity = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.6] : [0, 1]);
+  const imageHoverScale = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [1, 1.015] : [1, 1.05]);
+
+  const shineX = useTransform(mxSpring, [-0.5, 0.5], [30, 70]);
+  const shineY = useTransform(mySpring, [-0.5, 0.5], [30, 70]);
+  const shineBg = useMotionTemplate`radial-gradient(600px circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.22), transparent 55%)`;
+  const radialGlowBg = useMotionTemplate`radial-gradient(circle at ${shineX}% ${shineY}%, ${OCCASION_CARD_THEME.accentSoft}0.14), transparent 70%)`;
+
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (cardRef.current) {
-        const rect = cardRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: (e.clientX - rect.left) / rect.width - 0.5,
-          y: (e.clientY - rect.top) / rect.height - 0.5,
-        });
-      }
+    const el = cardRef.current;
+    if (!el) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      mx.set(Math.max(-0.5, Math.min(0.5, px)));
+      my.set(Math.max(-0.5, Math.min(0.5, py)));
     };
-    const handleMouseLeave = () => {
-      setMousePosition({ x: 0, y: 0 });
+    const onPointerEnter = () => hover.set(1);
+    const onPointerLeave = () => {
+      hover.set(0);
+      mx.set(0);
+      my.set(0);
     };
-    const card = cardRef.current;
-    if (card) {
-      card.addEventListener("mousemove", handleMouseMove);
-      card.addEventListener("mouseleave", handleMouseLeave);
-      return () => {
-        card.removeEventListener("mousemove", handleMouseMove);
-        card.removeEventListener("mouseleave", handleMouseLeave);
-      };
-    }
-  }, []);
+
+    el.addEventListener("pointermove", onPointerMove, { passive: true });
+    el.addEventListener("pointerenter", onPointerEnter, { passive: true });
+    el.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerenter", onPointerEnter);
+      el.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, [hover, mx, my]);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: (index % 3) * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+      initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 26, scale: 0.985, filter: "blur(10px)" }}
+      whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{
+        duration: 0.7,
+        delay: prefersReducedMotion ? 0 : index * 0.01,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className="group relative rounded-3xl cursor-pointer"
       style={{
         background: isDark
           ? "linear-gradient(160deg, rgba(15,12,28,0.8) 0%, rgba(10,8,20,0.6) 100%)"
           : "linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(248,246,255,0.9) 100%)",
         border: isDark
-          ? `1px solid ${occasion.accentSoft}0.12)`
-          : `1px solid ${occasion.accentSoft}0.2)`,
+          ? `1px solid ${OCCASION_CARD_THEME.accentSoft}0.12)`
+          : `1px solid ${OCCASION_CARD_THEME.accentSoft}0.2)`,
         backdropFilter: "blur(20px)",
         boxShadow: isDark
-          ? `0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px ${occasion.accentSoft}0.05)`
-          : `0 8px 40px ${occasion.accentSoft}0.08), 0 0 0 1px ${occasion.accentSoft}0.08)`,
+          ? `0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px ${OCCASION_CARD_THEME.accentSoft}0.05)`
+          : `0 8px 40px ${OCCASION_CARD_THEME.accentSoft}0.08), 0 0 0 1px ${OCCASION_CARD_THEME.accentSoft}0.08)`,
         isolation: "isolate",
       }}
-      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
     >
       {/* ── Dedicated clip container ────────────────────────────────────────
            All absolute overlay layers live here so overflow-hidden is applied
@@ -211,14 +235,25 @@ function OccasionCard({
         {/* Hover glow — top accent line */}
         <div
           className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{ backgroundImage: occasion.gradient }}
+          style={{ backgroundImage: OCCASION_CARD_THEME.gradient }}
         />
 
         {/* Mouse-tracking radial glow */}
         <motion.div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
-            background: `radial-gradient(circle at ${50 + mousePosition.x * 100}% ${50 + mousePosition.y * 100}%, ${occasion.accentSoft}0.15), transparent 70%)`,
+            opacity: glowOpacity,
+            background: radialGlowBg,
+          }}
+        />
+
+        {/* Specular "glass" shine */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            opacity: useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.25] : [0, 0.55]),
+            background: shineBg,
+            mixBlendMode: isDark ? ("screen" as const) : ("overlay" as const),
           }}
         />
       </div>
@@ -226,20 +261,36 @@ function OccasionCard({
       <motion.div
         ref={cardRef}
         className="relative p-5 md:p-8 z-10"
-        animate={{
-          x: mousePosition.x * 4,
-          y: mousePosition.y * 4,
+        style={{
+          y: lift,
+          scale,
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+          willChange: "transform",
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        transition={{ type: "spring", stiffness: 520, damping: 40, mass: 0.8 }}
       >
+        {/* subtle depth plane */}
+        <div
+          className="absolute inset-0 rounded-3xl pointer-events-none"
+          aria-hidden="true"
+          style={{
+            boxShadow: isDark
+              ? `0 18px 70px rgba(0,0,0,0.35), 0 0 0 1px ${OCCASION_CARD_THEME.accentSoft}0.06)`
+              : `0 18px 70px ${OCCASION_CARD_THEME.accentSoft}0.10), 0 0 0 1px ${OCCASION_CARD_THEME.accentSoft}0.10)`,
+            opacity: prefersReducedMotion ? 0.35 : 1,
+          }}
+        />
+
         {/* Tag */}
-        <div className="flex items-center mb-5">
+        <div className="flex items-center mb-5" style={{ transform: "translateZ(18px)" }}>
           <span
             className="tracking-[0.25em] transition-colors duration-300 group-hover:text-white"
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "9px",
-              color: isDark ? `${occasion.accentSoft}0.8)` : `${occasion.accentSoft}1)`,
+              color: isDark ? `${OCCASION_CARD_THEME.accentSoft}0.8)` : `${OCCASION_CARD_THEME.accentSoft}1)`,
             }}
           >
             {occasion.tag}
@@ -248,12 +299,14 @@ function OccasionCard({
 
         {/* Title */}
         <h2
+          id={`${cardId}-title`}
           style={{
             fontFamily: "'Orbitron', sans-serif",
             fontSize: "1.25rem",
             fontWeight: 700,
             color: isDark ? "#fff" : "#1a0a2e",
             marginBottom: "4px",
+            transform: "translateZ(26px)",
           }}
         >
           {occasion.title}
@@ -263,20 +316,32 @@ function OccasionCard({
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "12px",
             letterSpacing: "0.05em",
-            color: isDark ? `${occasion.accentSoft}0.7)` : `${occasion.accentSoft}0.8)`,
+            color: isDark ? `${OCCASION_CARD_THEME.accentSoft}0.7)` : `${OCCASION_CARD_THEME.accentSoft}0.8)`,
             marginBottom: "16px",
+            transform: "translateZ(20px)",
           }}
         >
           {occasion.subtitle}
         </p>
 
         {/* Inline image for each occasion */}
-        <div className="relative w-full h-40 md:h-48 mb-5 overflow-hidden rounded-2xl">
-          <img
+        <div className="relative w-full h-40 md:h-48 mb-5 overflow-hidden rounded-2xl" style={{ transform: "translateZ(30px)" }}>
+          <motion.img
             src={occasion.image}
             alt={occasion.title}
             className="absolute inset-0 w-full h-full object-cover object-center"
-            style={{ filter: isDark ? "brightness(0.8) saturate(1.2)" : "brightness(0.95) saturate(1.1)" }}
+            style={{
+              scale: imageHoverScale,
+              filter: isDark ? "brightness(0.8) saturate(1.2)" : "brightness(0.95) saturate(1.1)",
+            }}
+          />
+          <motion.div
+            className="absolute inset-0"
+            aria-hidden="true"
+            style={{
+              opacity: useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.12] : [0, 0.18]),
+              backgroundImage: `linear-gradient(135deg, ${OCCASION_CARD_THEME.accentSoft}0.18), transparent 55%)`,
+            }}
           />
         </div>
 
@@ -285,12 +350,12 @@ function OccasionCard({
           className="mb-5"
           style={{
             height: "1px",
-            backgroundImage: `linear-gradient(to right, ${occasion.accentSoft}0.3), transparent)`,
+            backgroundImage: `linear-gradient(to right, ${OCCASION_CARD_THEME.accentSoft}0.3), transparent)`,
           }}
         />
 
         {/* Features */}
-        <ul className="flex flex-col gap-2.5">
+        <ul className="flex flex-col gap-2.5" style={{ transform: "translateZ(16px)" }}>
           {occasion.features.map((f, i) => (
             <li key={i} className="flex items-start gap-3">
               <span
@@ -298,8 +363,8 @@ function OccasionCard({
                 style={{
                   width: 6,
                   height: 6,
-                  backgroundImage: occasion.gradient,
-                  boxShadow: `0 0 8px ${occasion.accentSoft}0.6)`,
+                  backgroundImage: OCCASION_CARD_THEME.gradient,
+                  boxShadow: `0 0 8px ${OCCASION_CARD_THEME.accentSoft}0.6)`,
                 }}
               />
               <span
@@ -318,18 +383,20 @@ function OccasionCard({
 
         {/* CTA */}
         <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={prefersReducedMotion ? {} : { scale: 1.03, y: -1 }}
+          whileTap={{ scale: 0.985 }}
           className="mt-8 w-full py-3 rounded-2xl text-white cursor-pointer"
           style={{
             fontFamily: "'Exo 2', sans-serif",
             fontSize: "12px",
             fontWeight: 600,
             letterSpacing: "0.08em",
-            backgroundImage: occasion.gradient,
-            boxShadow: `0 4px 20px ${occasion.accentSoft}0.35)`,
+            backgroundImage: OCCASION_CARD_THEME.gradient,
+            boxShadow: `0 4px 20px ${OCCASION_CARD_THEME.accentSoft}0.35)`,
             border: "none",
+            transform: "translateZ(34px)",
           }}
+          aria-describedby={`${cardId}-title`}
         >
           BOOK THIS EXPERIENCE
         </motion.button>
@@ -344,7 +411,20 @@ export default function OccasionsPage() {
   const isDark = theme === "dark";
   const router = useRouter();
   const heroRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLElement>(null);
   const [viewW, setViewW] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Section-wide premium spotlight (subtle, premium, same theme)
+  const spotX = useMotionValue(50);
+  const spotY = useMotionValue(40);
+  const spotHover = useMotionValue(0);
+  const spotXSpring = useSpring(spotX, { stiffness: 120, damping: 30, mass: 0.9 });
+  const spotYSpring = useSpring(spotY, { stiffness: 120, damping: 30, mass: 0.9 });
+  const spotHoverSpring = useSpring(spotHover, { stiffness: 240, damping: 32, mass: 0.8 });
+  const spotlightBg = useMotionTemplate`radial-gradient(720px circle at ${spotXSpring}% ${spotYSpring}%, ${
+    isDark ? "rgba(212,165,116,0.14)" : "rgba(130,60,220,0.10)"
+  }, transparent 58%)`;
 
   useEffect(() => {
     const update = () => setViewW(window.innerWidth);
@@ -352,6 +432,28 @@ export default function OccasionsPage() {
     window.addEventListener("resize", update, { passive: true });
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  useEffect(() => {
+    const el = cardsRef.current;
+    if (!el) return;
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      spotX.set(Math.max(0, Math.min(100, x)));
+      spotY.set(Math.max(0, Math.min(100, y)));
+    };
+    const onEnter = () => spotHover.set(1);
+    const onLeave = () => spotHover.set(0);
+    el.addEventListener("pointermove", onMove, { passive: true });
+    el.addEventListener("pointerenter", onEnter, { passive: true });
+    el.addEventListener("pointerleave", onLeave, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerenter", onEnter);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [spotHover, spotX, spotY]);
 
   return (
     <div
@@ -583,13 +685,49 @@ export default function OccasionsPage() {
       </motion.section>
 
       {/* ── Cards grid ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 pb-20 md:pb-32" style={{ position: "relative", zIndex: 1 }}>
+      <motion.section
+        ref={cardsRef}
+        className="mx-auto max-w-7xl px-4 sm:px-6 pb-20 md:pb-32"
+        style={{ position: "relative", zIndex: 1 }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.18 }}
+        variants={{
+          hidden: prefersReducedMotion ? {} : { opacity: 1 },
+          show: prefersReducedMotion
+            ? { opacity: 1 }
+            : {
+                opacity: 1,
+                transition: { staggerChildren: 0.075, delayChildren: 0.08 },
+              },
+        }}
+      >
+        {/* shared spotlight */}
+        <motion.div
+          className="absolute inset-0 rounded-[32px] pointer-events-none"
+          aria-hidden="true"
+          style={{
+            opacity: prefersReducedMotion ? 0.12 : useTransform(spotHoverSpring, [0, 1], [0.08, 0.22]),
+            background: spotlightBg,
+            filter: "blur(2px)",
+          }}
+        />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {OCCASIONS.map((occasion, i) => (
-            <OccasionCard key={occasion.id} occasion={occasion} index={i} isDark={isDark} />
+            <motion.div
+              key={occasion.id}
+              variants={{
+                hidden: prefersReducedMotion ? {} : { opacity: 0, y: 18, scale: 0.99, filter: "blur(10px)" },
+                show: prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+              }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <OccasionCard occasion={occasion} index={i} isDark={isDark} />
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

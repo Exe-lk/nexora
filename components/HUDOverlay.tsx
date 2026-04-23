@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
@@ -736,32 +736,121 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
   const [mouseXRaw, setMouseXRaw] = useState(0);
   const [mouseYRaw, setMouseYRaw] = useState(0);
 
-  const galleryImages = [
-    {
-      src: "/vr home 1.jpeg",
-      alt: "Family experiencing an XR moment together in a living room.",
-    },
-    {
-      src: "/vr home 2.jpeg",
-      alt: "Group of children and adults celebrating while wearing VR headsets.",
-    },
-    {
-      src: "/vr home 3.jpeg",
-      alt: "Team playing an immersive VR game experience together.",
-    },
-    {
-      src: "/vr home 4.jpeg",
-      alt: "Guests exploring an XR installation with handheld controllers.",
-    },
-    {
-      src: "/vr home 5.jpeg",
-      alt: "Visitors walking across a large XR play space.",
-    },
-    {
-      src: "/vr home 6.jpeg",
-      alt: "Family interacting inside a shared XR environment.",
-    },
-  ];
+  const galleryImages = useMemo(
+    () => [
+      {
+        src: "/vr home 1.jpeg",
+        alt: "Family experiencing an XR moment together in a living room.",
+      },
+      {
+        src: "/vr home 2.jpeg",
+        alt: "Group of children and adults celebrating while wearing VR headsets.",
+      },
+      {
+        src: "/vr home 3.jpeg",
+        alt: "Team playing an immersive VR game experience together.",
+      },
+      {
+        src: "/vr home 4.jpeg",
+        alt: "Guests exploring an XR installation with handheld controllers.",
+      },
+      {
+        src: "/vr home 5.jpeg",
+        alt: "Visitors walking across a large XR play space.",
+      },
+      {
+        src: "/vr home 6.jpeg",
+        alt: "Family interacting inside a shared XR environment.",
+      },
+    ],
+    []
+  );
+
+  const galleryScrollerRef = useRef<HTMLDivElement | null>(null);
+  const gallerySegmentWidthRef = useRef(0);
+  const galleryIsLoopingRef = useRef(false);
+  const [galleryLoopReady, setGalleryLoopReady] = useState(false);
+
+  const galleryEdgeFade = useMemo(() => {
+    return isDark
+      ? {
+          left: "linear-gradient(90deg, rgba(6,8,16,1), rgba(6,8,16,0))",
+          right: "linear-gradient(270deg, rgba(6,8,16,1), rgba(6,8,16,0))",
+        }
+      : {
+          left: "linear-gradient(90deg, rgba(250,248,255,1), rgba(250,248,255,0))",
+          right: "linear-gradient(270deg, rgba(250,248,255,1), rgba(250,248,255,0))",
+        };
+  }, [isDark]);
+
+  const galleryLoopItems = useMemo(() => {
+    return [...galleryImages, ...galleryImages, ...galleryImages];
+  }, [galleryImages]);
+
+  const measureAndCenterGallery = () => {
+    const el = galleryScrollerRef.current;
+    if (!el) return;
+    const seg = el.scrollWidth / 3;
+    if (!Number.isFinite(seg) || seg <= 0) return;
+    gallerySegmentWidthRef.current = seg;
+    el.scrollLeft = seg;
+    setGalleryLoopReady(true);
+  };
+
+  const handleGalleryLoopScroll = () => {
+    const el = galleryScrollerRef.current;
+    if (!el) return;
+    if (!galleryLoopReady) return;
+    if (galleryIsLoopingRef.current) return;
+
+    const seg = gallerySegmentWidthRef.current || el.scrollWidth / 3;
+    if (!Number.isFinite(seg) || seg <= 0) return;
+
+    const eps = 2;
+    const leftEdge = seg * 0.5 - eps;
+    const rightEdge = seg * 1.5 + eps;
+
+    if (el.scrollLeft <= leftEdge) {
+      galleryIsLoopingRef.current = true;
+      el.scrollLeft = el.scrollLeft + seg;
+      requestAnimationFrame(() => {
+        galleryIsLoopingRef.current = false;
+      });
+      return;
+    }
+
+    if (el.scrollLeft >= rightEdge) {
+      galleryIsLoopingRef.current = true;
+      el.scrollLeft = el.scrollLeft - seg;
+      requestAnimationFrame(() => {
+        galleryIsLoopingRef.current = false;
+      });
+    }
+  };
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      measureAndCenterGallery();
+    });
+
+    const onResize = () => {
+      setGalleryLoopReady(false);
+      requestAnimationFrame(() => measureAndCenterGallery());
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
+
+  const scrollGalleryByCards = (dir: "left" | "right") => {
+    const el = galleryScrollerRef.current;
+    if (!el) return;
+    const amount = Math.min(el.clientWidth * 0.85, 560);
+    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+  };
 
   // Headset size: responsive across all breakpoints
   const headsetSize =
@@ -1503,82 +1592,143 @@ export function HUDContent({ skipHero = false, skipVisionMission = false }: { sk
           </Section>
 
           <Section delay={0.15}>
-            <div
-              className={`${SECTION_MAX_WIDTH} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7`}
-              style={{ pointerEvents: "auto" }}
-            >
-              {galleryImages.map((image, index) => (
-                <GlassPanel
-                  key={image.src}
-                  accent="rgba(212,165,116,"
-                  className="group overflow-hidden transition-transform duration-500 hover:-translate-y-2 w-full h-full"
-                  style={{ padding: 0 }}
+            <div className={`${SECTION_MAX_WIDTH} relative`} style={{ pointerEvents: "auto" }}>
+              <div className="-mx-4 sm:-mx-6 md:-mx-8 relative">
+                <div
+                  ref={galleryScrollerRef}
+                  onScroll={handleGalleryLoopScroll}
+                  className="flex gap-5 md:gap-6 overflow-x-auto pb-3 px-4 sm:px-6 md:px-8"
+                  style={{
+                    scrollSnapType: "x proximity",
+                    WebkitOverflowScrolling: "touch",
+                    scrollBehavior: "smooth",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                  }}
                 >
-                  <div
-                    className="relative overflow-hidden"
-                    style={{ height: "clamp(200px, 22vw, 280px)" }}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 96vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      priority={index === 0}
-                    />
-                    {/* Gradient overlay */}
-                    <div
-                      className="absolute inset-0"
+                  {galleryLoopItems.map((image, index) => (
+                    <motion.div
+                      key={`${image.src}-${index}`}
+                      initial={{ opacity: 0, y: 16, scale: 0.985 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                      whileHover={{ y: -6 }}
+                      className="shrink-0"
                       style={{
-                        background: isDark
-                          ? "linear-gradient(to bottom, transparent 40%, rgba(6,6,14,0.85) 100%)"
-                          : "linear-gradient(to bottom, transparent 40%, rgba(250,248,255,0.9) 100%)",
-                      }}
-                    />
-                    {/* Hover border */}
-                    <div
-                      className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
-                      style={{ border: "1px solid rgba(212,165,116,0.12)" }}
-                    />
-                    {/* Index badge */}
-                    <div
-                      className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
-                      style={{
-                        background: isDark ? "rgba(6,6,14,0.6)" : "rgba(255,255,255,0.75)",
-                        border: "1px solid rgba(212,165,116,0.15)",
-                        backdropFilter: "blur(8px)",
+                        scrollSnapAlign: "start",
+                        width: "min(420px, 88vw)",
                       }}
                     >
-                      <span
-                        style={{
-                          fontFamily: "'Orbitron', sans-serif",
-                          fontSize: "8px",
-                          letterSpacing: "0.2em",
-                          color: "rgba(212,165,116,0.7)",
-                        }}
+                      <GlassPanel
+                        accent="rgba(212,165,116,"
+                        className="group overflow-hidden transition-transform duration-500 w-full h-full"
+                        style={{ padding: 0 }}
                       >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    {/* Caption overlay */}
-                    <div
-                      className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
-                    >
-                      <p
-                        style={{
-                          fontFamily: "'Exo 2', sans-serif",
-                          fontSize: "11px",
-                          lineHeight: 1.5,
-                          color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.85)",
-                          margin: 0,
-                        }}
-                      >
-                        {image.alt}
-                      </p>
-                    </div>
-                  </div>
-                </GlassPanel>
-              ))}
+                        <div
+                          className="relative overflow-hidden"
+                          style={{ height: "clamp(200px, 22vw, 280px)" }}
+                        >
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            fill
+                            sizes="(min-width: 1024px) 420px, (min-width: 640px) 420px, 88vw"
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            priority={index === 0}
+                          />
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background: isDark
+                                ? "linear-gradient(to bottom, transparent 40%, rgba(6,6,14,0.85) 100%)"
+                                : "linear-gradient(to bottom, transparent 40%, rgba(250,248,255,0.9) 100%)",
+                            }}
+                          />
+                          <div
+                            className="absolute inset-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-xl"
+                            style={{ border: "1px solid rgba(212,165,116,0.12)" }}
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8">
+                            <p
+                              style={{
+                                fontFamily: "'Exo 2', sans-serif",
+                                fontSize: "11px",
+                                lineHeight: 1.5,
+                                color: isDark ? "rgba(255,255,255,0.65)" : "rgba(100,70,20,0.85)",
+                                margin: 0,
+                              }}
+                            >
+                              {image.alt}
+                            </p>
+                          </div>
+                        </div>
+                      </GlassPanel>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 w-14 sm:w-20"
+                  style={{ background: galleryEdgeFade.left }}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 right-0 w-14 sm:w-20"
+                  style={{ background: galleryEdgeFade.right }}
+                />
+
+                <button
+                  type="button"
+                  aria-label="Scroll gallery left"
+                  onClick={() => scrollGalleryByCards("left")}
+                  className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-11 sm:w-11 rounded-full grid place-items-center backdrop-blur-md transition-opacity"
+                  style={{
+                    background: isDark ? "rgba(12,10,24,0.55)" : "rgba(255,255,255,0.70)",
+                    border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(168,120,10,0.18)",
+                    boxShadow: isDark ? "0 14px 40px rgba(0,0,0,0.35)" : "0 14px 40px rgba(201,147,62,0.14)",
+                    opacity: galleryLoopReady ? 1 : 0,
+                    pointerEvents: galleryLoopReady ? "auto" : "none",
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden style={{ display: "block" }}>
+                    <path
+                      d="M14.5 5.5L8 12l6.5 6.5"
+                      fill="none"
+                      stroke={isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.9)"}
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Scroll gallery right"
+                  onClick={() => scrollGalleryByCards("right")}
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-11 sm:w-11 rounded-full grid place-items-center backdrop-blur-md transition-opacity"
+                  style={{
+                    background: isDark ? "rgba(12,10,24,0.55)" : "rgba(255,255,255,0.70)",
+                    border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(168,120,10,0.18)",
+                    boxShadow: isDark ? "0 14px 40px rgba(0,0,0,0.35)" : "0 14px 40px rgba(201,147,62,0.14)",
+                    opacity: galleryLoopReady ? 1 : 0,
+                    pointerEvents: galleryLoopReady ? "auto" : "none",
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden style={{ display: "block" }}>
+                    <path
+                      d="M9.5 5.5L16 12l-6.5 6.5"
+                      fill="none"
+                      stroke={isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.9)"}
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </Section>
         </ParallaxLayer>
@@ -2623,7 +2773,7 @@ function StoryCard({
           style={{ border: `1px solid ${accent}0.15)` }}
         />
         <div
-          className="absolute top-4 left-4 px-3 py-1.5 rounded-full"
+          className="absolute top-4 left-4 px-3 py-1.5 rounded-full flex items-center justify-center"
           style={{
             background: isDark ? "rgba(6,6,14,0.65)" : "rgba(255,255,255,0.8)",
             border: `1px solid ${accent}${isDark ? "0.2)" : "0.25)"}`,
@@ -2634,6 +2784,7 @@ function StoryCard({
             style={{
               fontFamily: "'Orbitron', sans-serif",
               fontSize: "9px",
+              lineHeight: 1,
               letterSpacing: "0.25em",
               color: isDark ? `${accent}0.8)` : `${accent}1)`,
             }}

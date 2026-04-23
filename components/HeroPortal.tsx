@@ -293,8 +293,7 @@ export function HeroPortal() {
           className="mt-6 md:mt-7 max-w-xl mx-auto px-2"
           style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(0.9rem, 2vw, 1.1rem)", lineHeight: 1.75, fontWeight: 400, color: textColor }}
         >
-          NexoraXR creates breathtaking immersive XR/VR experiences for events and develops genre-defining VR games
-          that push the boundaries of reality.
+          NexoraXR delivers immersive event experiences and next-level VR games that expand reality.
         </motion.p>
 
         <motion.div

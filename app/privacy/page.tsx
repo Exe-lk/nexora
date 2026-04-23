@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -18,29 +18,40 @@ function accentStyles(isDark: boolean, accent: Section["accent"]) {
   if (accent === "cyan") {
     return {
       border: isDark ? "rgba(212,165,116,0.22)" : "rgba(184,134,11,0.22)",
+      borderHover: isDark ? "rgba(212,165,116,0.48)" : "rgba(184,134,11,0.42)",
       glow: isDark ? "rgba(212,165,116,0.16)" : "rgba(184,134,11,0.12)",
+      glowHover: isDark ? "rgba(212,165,116,0.26)" : "rgba(184,134,11,0.18)",
       title: isDark ? "rgba(230,185,115,0.95)" : "rgba(184,134,11,0.95)",
     };
   }
   if (accent === "pink") {
     return {
       border: isDark ? "rgba(184,134,11,0.22)" : "rgba(184,134,11,0.20)",
+      borderHover: isDark ? "rgba(251,113,133,0.44)" : "rgba(190,24,93,0.36)",
       glow: isDark ? "rgba(184,134,11,0.14)" : "rgba(184,134,11,0.10)",
+      glowHover: isDark ? "rgba(251,113,133,0.18)" : "rgba(190,24,93,0.12)",
       title: isDark ? "rgba(251,113,133,0.9)" : "rgba(190,24,93,0.9)",
     };
   }
   return {
     border: isDark ? "rgba(212,165,116,0.22)" : "rgba(184,134,11,0.20)",
+    borderHover: isDark ? "rgba(212,165,116,0.46)" : "rgba(168,120,10,0.40)",
     glow: isDark ? "rgba(212,165,116,0.16)" : "rgba(184,134,11,0.10)",
+    glowHover: isDark ? "rgba(212,165,116,0.24)" : "rgba(184,134,11,0.15)",
     title: isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.92)",
   };
 }
 
 function PolicyCard({ isDark, section }: { isDark: boolean; section: Section }) {
+  const reduceMotion = useReducedMotion();
   const s = accentStyles(isDark, section.accent);
   return (
-    <div
-      className="rounded-3xl p-6 backdrop-blur-xl"
+    <motion.article
+      tabIndex={0}
+      whileHover={reduceMotion ? undefined : { y: -6, scale: 1.01 }}
+      whileFocus={reduceMotion ? undefined : { y: -6, scale: 1.01 }}
+      transition={reduceMotion ? undefined : { type: "spring", stiffness: 320, damping: 26, mass: 0.7 }}
+      className="group relative h-full overflow-hidden rounded-3xl p-6 backdrop-blur-xl outline-none ring-1 ring-transparent transition-shadow duration-300 focus-visible:ring-2"
       style={{
         background: isDark
           ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
@@ -49,6 +60,57 @@ function PolicyCard({ isDark, section }: { isDark: boolean; section: Section }) 
         boxShadow: isDark ? `0 18px 60px rgba(0,0,0,0.35), 0 0 0 1px ${s.glow}` : `0 16px 50px ${s.glow}`,
       }}
     >
+      {/* soft glow bloom */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+        style={{
+          background: `radial-gradient(closest-side, ${s.glowHover} 0%, transparent 65%)`,
+        }}
+      />
+
+      {/* sheen sweep */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -inset-20 opacity-0 mix-blend-screen transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        animate={
+          reduceMotion
+            ? { x: 0, y: 0 }
+            : {
+                x: ["-12%", "12%"],
+                y: ["8%", "-8%"],
+              }
+        }
+        transition={
+          reduceMotion
+            ? undefined
+            : {
+                duration: 2.6,
+                ease: "easeInOut",
+                repeat: Infinity,
+                repeatType: "mirror",
+              }
+        }
+        style={{
+          background: isDark
+            ? `linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.06) 48%, transparent 62%)`
+            : `linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.26) 48%, transparent 62%)`,
+        }}
+      />
+
+      {/* hover border tint + shadow boost */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        style={{
+          boxShadow: isDark
+            ? `0 28px 85px rgba(0,0,0,0.45), 0 0 0 1px ${s.glowHover}`
+            : `0 26px 70px ${s.glowHover}`,
+          border: `1px solid ${s.borderHover}`,
+        }}
+      />
+
+      <div className="relative flex h-full flex-col">
       <div
         style={{
           fontFamily: "'Orbitron', sans-serif",
@@ -60,7 +122,7 @@ function PolicyCard({ isDark, section }: { isDark: boolean; section: Section }) 
       >
         {section.title}
       </div>
-      <ul className="mt-4 space-y-2">
+      <ul className="mt-4 flex-1 space-y-2">
         {section.bullets.map((b) => (
           <li
             key={b}
@@ -78,7 +140,8 @@ function PolicyCard({ isDark, section }: { isDark: boolean; section: Section }) 
           </li>
         ))}
       </ul>
-    </div>
+      </div>
+    </motion.article>
   );
 }
 
@@ -220,8 +283,10 @@ export default function PrivacyPage() {
             <motion.div
               key={section.title}
               initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.05 + idx * 0.06, ease: "easeOut" }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, delay: 0.04 + idx * 0.06, ease: "easeOut" }}
+              className="h-full"
             >
               <PolicyCard isDark={isDark} section={section} />
             </motion.div>

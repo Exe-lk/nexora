@@ -5,7 +5,15 @@ import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 const tickets = [
   {
@@ -42,6 +50,233 @@ const tickets = [
     accent: "text-emerald-400",
   },
 ];
+
+function PricingTicketCard({
+  ticket,
+  index,
+  isDark,
+}: {
+  ticket: (typeof tickets)[number];
+  index: number;
+  isDark: boolean;
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Motion-driven pointer interaction (no React re-render on hover)
+  const mx = useMotionValue(0); // -0.5 .. 0.5
+  const my = useMotionValue(0); // -0.5 .. 0.5
+  const hover = useMotionValue(0); // 0 .. 1
+
+  const mxSpring = useSpring(mx, { stiffness: 260, damping: 28, mass: 0.9 });
+  const mySpring = useSpring(my, { stiffness: 260, damping: 28, mass: 0.9 });
+  const hoverSpring = useSpring(hover, { stiffness: 340, damping: 30, mass: 0.8 });
+
+  const rotateY = useTransform(mxSpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [-10, 10]);
+  const rotateX = useTransform(mySpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [10, -10]);
+  const lift = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0] : [0, -10]);
+  const scale = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [1, 1] : [1, 1.02]);
+  const glowOpacity = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.6] : [0, 1]);
+
+  const shineX = useTransform(mxSpring, [-0.5, 0.5], [30, 70]);
+  const shineY = useTransform(mySpring, [-0.5, 0.5], [30, 70]);
+  const shineBg = useMotionTemplate`radial-gradient(600px circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.22), transparent 55%)`;
+
+  // Reuse the existing ticket glow color, but make it mouse-tracking like the occasions cards.
+  // ticket.color is a tailwind gradient class; for the glow layer we only need a soft RGBA.
+  const glowColor =
+    ticket.id === "adult"
+      ? isDark
+        ? "rgba(34,211,238,0.16)"
+        : "rgba(8,145,178,0.14)"
+      : ticket.id === "child"
+        ? isDark
+          ? "rgba(244,114,182,0.16)"
+          : "rgba(190,24,93,0.14)"
+        : isDark
+          ? "rgba(52,211,153,0.16)"
+          : "rgba(5,150,105,0.14)";
+
+  const radialGlowBg = useMotionTemplate`radial-gradient(circle at ${shineX}% ${shineY}%, ${glowColor}, transparent 70%)`;
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      mx.set(Math.max(-0.5, Math.min(0.5, px)));
+      my.set(Math.max(-0.5, Math.min(0.5, py)));
+    };
+    const onPointerEnter = () => hover.set(1);
+    const onPointerLeave = () => {
+      hover.set(0);
+      mx.set(0);
+      my.set(0);
+    };
+
+    el.addEventListener("pointermove", onPointerMove, { passive: true });
+    el.addEventListener("pointerenter", onPointerEnter, { passive: true });
+    el.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerenter", onPointerEnter);
+      el.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, [hover, mx, my]);
+
+  return (
+    <motion.div
+      key={ticket.id}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 * index, ease: "easeOut" }}
+      className="group relative"
+    >
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${ticket.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+      />
+
+      {/* Dedicated clip container so overflow-hidden is applied on a non-transformed element */}
+      <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none" aria-hidden="true">
+        <div
+          className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background:
+              ticket.id === "adult"
+                ? "linear-gradient(90deg, rgba(34,211,238,0.0), rgba(34,211,238,0.8), rgba(34,211,238,0.0))"
+                : ticket.id === "child"
+                  ? "linear-gradient(90deg, rgba(244,114,182,0.0), rgba(244,114,182,0.8), rgba(244,114,182,0.0))"
+                  : "linear-gradient(90deg, rgba(52,211,153,0.0), rgba(52,211,153,0.85), rgba(52,211,153,0.0))",
+          }}
+        />
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            opacity: glowOpacity,
+            background: radialGlowBg,
+          }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            opacity: useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.25] : [0, 0.55]),
+            background: shineBg,
+            mixBlendMode: isDark ? ("screen" as const) : ("overlay" as const),
+          }}
+        />
+      </div>
+
+      <motion.div
+        ref={cardRef}
+        className="relative h-full flex flex-col p-8 rounded-3xl backdrop-blur-xl transition-colors duration-500"
+        style={{
+          y: lift,
+          scale,
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+          willChange: "transform",
+          background: isDark
+            ? "rgba(15,23,42,0.6)"
+            : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
+          border: isDark ? "1px solid rgba(51,65,85,1)" : "1px solid rgba(184,134,11,0.2)",
+          boxShadow: isDark ? undefined : "0 16px 50px rgba(184,134,11,0.08)",
+        }}
+        transition={{ type: "spring", stiffness: 520, damping: 40, mass: 0.8 }}
+      >
+        <div className="mb-8" style={{ transform: "translateZ(12px)" }}>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: isDark ? "#fff" : "#1a0a2e" }}>
+            {ticket.title}
+          </h3>
+          <p
+            className="text-sm mb-6"
+            style={{
+              color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.55)",
+            }}
+          >
+            {ticket.age}
+          </p>
+          <div className="flex items-baseline gap-2">
+            <span
+              className="text-sm font-semibold"
+              style={{
+                color: isDark ? "rgba(148,163,184,1)" : "rgba(60,40,100,0.6)",
+              }}
+            >
+              LKR
+            </span>
+            <span
+              className="text-5xl font-extrabold"
+              style={{
+                color:
+                  ticket.id === "adult"
+                    ? isDark
+                      ? "rgb(34,211,238)"
+                      : "rgb(8,145,178)"
+                    : ticket.id === "child"
+                      ? isDark
+                        ? "rgb(244,114,182)"
+                        : "rgb(190,24,93)"
+                      : isDark
+                        ? "rgb(52,211,153)"
+                        : "rgb(5,150,105)",
+              }}
+            >
+              {ticket.price.toLocaleString()}
+            </span>
+          </div>
+          <p
+            className="mt-4 text-sm min-h-[40px]"
+            style={{
+              color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
+            }}
+          >
+            {ticket.description}
+          </p>
+        </div>
+
+        <div className="flex-grow" style={{ transform: "translateZ(10px)" }}>
+          <ul className="space-y-3 mb-8">
+            {ticket.features.map((feature, j) => (
+              <li
+                key={j}
+                className="flex items-start"
+                style={{
+                  color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.75)",
+                }}
+              >
+                <svg
+                  className="w-5 h-5 mr-3 mt-0.5 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke={
+                    ticket.id === "adult"
+                      ? isDark
+                        ? "rgb(34,211,238)"
+                        : "rgb(8,145,178)"
+                      : ticket.id === "child"
+                        ? isDark
+                          ? "rgb(244,114,182)"
+                          : "rgb(190,24,93)"
+                        : isDark
+                          ? "rgb(52,211,153)"
+                          : "rgb(5,150,105)"
+                  }
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-sm">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function PricingPage() {
   const { theme } = useTheme();
@@ -138,114 +373,7 @@ export default function PricingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl relative z-20">
           {tickets.map((ticket, i) => {
-            return (
-              <motion.div
-                key={ticket.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * i, ease: "easeOut" }}
-                className="group relative"
-              >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${ticket.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                />
-                <div
-                  className="relative h-full flex flex-col p-8 rounded-3xl backdrop-blur-xl transition-colors duration-500"
-                  style={{
-                    background: isDark
-                      ? "rgba(15,23,42,0.6)"
-                      : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                    border: isDark
-                      ? "1px solid rgba(51,65,85,1)"
-                      : "1px solid rgba(184,134,11,0.2)",
-                    boxShadow: isDark ? undefined : "0 16px 50px rgba(184,134,11,0.08)",
-                  }}
-                >
-                  <div className="mb-8">
-                    <h3
-                      className="text-2xl font-bold mb-2"
-                      style={{ color: isDark ? "#fff" : "#1a0a2e" }}
-                    >
-                      {ticket.title}
-                    </h3>
-                    <p
-                      className="text-sm mb-6"
-                      style={{
-                        color: isDark ? "rgba(255,255,255,0.5)" : "rgba(60,40,100,0.55)",
-                      }}
-                    >
-                      {ticket.age}
-                    </p>
-                    <div className="flex items-baseline gap-2">
-                      <span
-                        className="text-sm font-semibold"
-                        style={{
-                          color: isDark ? "rgba(148,163,184,1)" : "rgba(60,40,100,0.6)",
-                        }}
-                      >
-                        LKR
-                      </span>
-                      <span
-                        className="text-5xl font-extrabold"
-                        style={{
-                          color:
-                            ticket.id === "adult"
-                              ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
-                              : ticket.id === "child"
-                                ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
-                                : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)",
-                        }}
-                      >
-                        {ticket.price.toLocaleString()}
-                      </span>
-                    </div>
-                    <p
-                      className="mt-4 text-sm min-h-[40px]"
-                      style={{
-                        color: isDark ? "rgba(255,255,255,0.55)" : "rgba(60,40,100,0.65)",
-                      }}
-                    >
-                      {ticket.description}
-                    </p>
-                  </div>
-
-                  <div className="flex-grow">
-                    <ul className="space-y-3 mb-8">
-                      {ticket.features.map((feature, j) => (
-                        <li
-                          key={j}
-                          className="flex items-start"
-                          style={{
-                            color: isDark ? "rgba(203,213,225,1)" : "rgba(60,40,100,0.75)",
-                          }}
-                        >
-                          <svg
-                            className="w-5 h-5 mr-3 mt-0.5 shrink-0"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke={
-                              ticket.id === "adult"
-                                ? isDark ? "rgb(34,211,238)" : "rgb(8,145,178)"
-                                : ticket.id === "child"
-                                  ? isDark ? "rgb(244,114,182)" : "rgb(190,24,93)"
-                                  : isDark ? "rgb(52,211,153)" : "rgb(5,150,105)"
-                            }
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-            );
+            return <PricingTicketCard key={ticket.id} ticket={ticket} index={i} isDark={isDark} />;
           })}
         </div>
       </div>

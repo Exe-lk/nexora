@@ -129,6 +129,41 @@ export function Navbar() {
 
         {!isTabletOrSmall && (
           <>
+            <button
+              className="px-4 py-2 rounded-full transition-all duration-300 cursor-pointer shrink-0 whitespace-nowrap"
+              style={{
+                fontFamily: "'Exo 2', sans-serif",
+                fontSize: "15px",
+                color: isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)",
+                background: "transparent",
+                border: "none",
+                letterSpacing: "0.06em",
+                textShadow: isDark
+                  ? "0 1px 8px rgba(0,0,0,0.7)"
+                  : "0 1px 6px rgba(255,255,255,0.8)",
+                boxShadow: "none",
+                transform: "translateY(0)",
+                transition: "color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease",
+              }}
+              onClick={handleNavHome}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = isDark ? "#ffffff" : "rgba(60,30,120,1)";
+                e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.08)" : "rgba(201,147,62,0.1)";
+                e.currentTarget.style.boxShadow = isDark
+                  ? "0 8px 24px rgba(0,0,0,0.45)"
+                  : "0 8px 22px rgba(201,147,62,0.30)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = isDark ? "rgba(255,255,255,0.88)" : "rgba(60,30,120,0.85)";
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              Home
+            </button>
+
             <div
               ref={expRef}
               className="relative"
@@ -461,6 +496,25 @@ export function Navbar() {
               : "0 8px 40px rgba(201,147,62,0.12)",
           }}
         >
+          <button
+            className="w-full py-3.5 rounded-xl transition-all cursor-pointer"
+            style={{
+              fontFamily: "'Exo 2', sans-serif",
+              fontSize: "15px",
+              color: isDark ? "rgba(255,255,255,0.90)" : "rgba(60,30,120,0.88)",
+              background: "transparent",
+              border: "none",
+              letterSpacing: "0.06em",
+            }}
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileExpOpen(false);
+              handleNavHome();
+            }}
+          >
+            Home
+          </button>
+
           <button
             className="w-full py-3.5 rounded-xl transition-all cursor-pointer"
             style={{

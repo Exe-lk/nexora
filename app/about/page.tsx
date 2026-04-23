@@ -5,10 +5,17 @@ import { FloatingNav } from "@/components/HUDOverlay";
 import { WebGLScene } from "@/components/WebGLScene";
 import { ReviewSection } from "@/components/ReviewSection";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Feature = {
   title: string;
@@ -39,9 +46,17 @@ const FEATURES: Feature[] = [
     icon: "",
     title: "Share the journey",
     description:
-      "Designed for families, friends, dates, and teams—everyone moves together, laughs together, and remembers it together.",
+      "Whether with family, friends, or teammates, it’s all about sharing moments, laughter, and memories together.",
     accent: "pink",
     image: "/share the joerny.jpeg",
+  },
+  {
+    icon: "",
+    title: "See it in motion",
+    description:
+      "Turning real spaces into story worlds, where your actions and curiosity create moments you won’t forget.",
+    accent: "violet",
+    image: "/vr home 5.jpeg",
   },
 ];
 
@@ -123,11 +138,13 @@ function Card({
           {badge}
         </div>
         <div
+          aria-hidden="true"
           className="h-9 w-9 rounded-2xl"
           style={{
-            backgroundImage: s.gradient,
-            boxShadow: `0 10px 30px ${s.glow}`,
-            opacity: 0.95,
+            backgroundImage: "none",
+            boxShadow: "none",
+            opacity: 0,
+            pointerEvents: "none",
           }}
         />
       </div>
@@ -168,11 +185,180 @@ function Card({
   );
 }
 
+function ManifestoCard({
+  isDark,
+  label,
+  delay = 0,
+  children,
+}: {
+  isDark: boolean;
+  label: string;
+  delay?: number;
+  children: React.ReactNode;
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const accent = "#D4A574";
+  const accentSoft = "rgba(212,165,116,";
+  const gradient = "linear-gradient(135deg, #D4A574, #C9933E)";
+
+  // Pointer-driven tilt (same interaction model as occasion cards)
+  const mx = useMotionValue(0); // -0.5 .. 0.5
+  const my = useMotionValue(0); // -0.5 .. 0.5
+  const hover = useMotionValue(0); // 0 .. 1
+
+  const mxSpring = useSpring(mx, { stiffness: 260, damping: 28, mass: 0.9 });
+  const mySpring = useSpring(my, { stiffness: 260, damping: 28, mass: 0.9 });
+  const hoverSpring = useSpring(hover, { stiffness: 340, damping: 30, mass: 0.8 });
+
+  const rotateY = useTransform(mxSpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [-10, 10]);
+  const rotateX = useTransform(mySpring, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [10, -10]);
+  const lift = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0] : [0, -10]);
+  const scale = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [1, 1] : [1, 1.02]);
+  const glowOpacity = useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.6] : [0, 1]);
+
+  const shineX = useTransform(mxSpring, [-0.5, 0.5], [30, 70]);
+  const shineY = useTransform(mySpring, [-0.5, 0.5], [30, 70]);
+  const shineBg = useMotionTemplate`radial-gradient(600px circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.22), transparent 55%)`;
+  const radialGlowBg = useMotionTemplate`radial-gradient(circle at ${shineX}% ${shineY}%, ${accentSoft}0.14), transparent 70%)`;
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      mx.set(Math.max(-0.5, Math.min(0.5, px)));
+      my.set(Math.max(-0.5, Math.min(0.5, py)));
+    };
+    const onPointerEnter = () => hover.set(1);
+    const onPointerLeave = () => {
+      hover.set(0);
+      mx.set(0);
+      my.set(0);
+    };
+
+    el.addEventListener("pointermove", onPointerMove, { passive: true });
+    el.addEventListener("pointerenter", onPointerEnter, { passive: true });
+    el.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerenter", onPointerEnter);
+      el.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, [hover, mx, my]);
+
+  return (
+    <motion.div
+      className="group relative w-full rounded-3xl cursor-pointer"
+      style={{
+        background: isDark
+          ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
+          : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
+        border: isDark ? `1px solid ${accentSoft}0.12)` : `1px solid ${accentSoft}0.2)`,
+        boxShadow: isDark
+          ? `0 18px 60px rgba(0,0,0,0.35), 0 0 0 1px ${accentSoft}0.06)`
+          : `0 18px 60px ${accentSoft}0.10), 0 0 0 1px ${accentSoft}0.10)`,
+        backdropFilter: "blur(20px)",
+        isolation: "isolate",
+      }}
+      initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 22, scale: 0.99, filter: "blur(10px)" }}
+      whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        duration: 0.7,
+        delay: prefersReducedMotion ? 0 : delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      {/* clip container (prevents hover overlays bleeding past radius when parent transforms) */}
+      <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none" aria-hidden="true">
+        <div
+          className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ backgroundImage: gradient }}
+        />
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ opacity: glowOpacity, background: radialGlowBg }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            opacity: useTransform(hoverSpring, [0, 1], prefersReducedMotion ? [0, 0.25] : [0, 0.55]),
+            background: shineBg,
+            mixBlendMode: isDark ? ("screen" as const) : ("overlay" as const),
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(800px circle at 50% 0%, ${accentSoft}${isDark ? "0.08" : "0.06"}), transparent 55%)`,
+          }}
+        />
+      </div>
+
+      <motion.div
+        ref={cardRef}
+        className="relative rounded-3xl p-6 sm:p-8 md:p-10 text-center"
+        style={{
+          y: lift,
+          scale,
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+          willChange: "transform",
+        }}
+        transition={{ type: "spring", stiffness: 520, damping: 40, mass: 0.8 }}
+      >
+        <div
+          className="absolute inset-0 rounded-3xl pointer-events-none"
+          aria-hidden="true"
+          style={{
+            boxShadow: isDark
+              ? `0 18px 70px rgba(0,0,0,0.35), 0 0 0 1px ${accentSoft}0.06)`
+              : `0 18px 70px ${accentSoft}0.10), 0 0 0 1px ${accentSoft}0.10)`,
+            opacity: prefersReducedMotion ? 0.35 : 1,
+          }}
+        />
+
+        <div
+          style={{
+            fontFamily: "'Orbitron', sans-serif",
+            fontSize: "9px",
+            letterSpacing: "0.35em",
+            color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
+            textTransform: "uppercase",
+            marginBottom: "16px",
+            transform: "translateZ(18px)",
+          }}
+        >
+          {label}
+        </div>
+
+        <div style={{ transform: "translateZ(26px)" }}>{children}</div>
+
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-7 h-[1px] w-28 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ backgroundImage: `linear-gradient(to right, transparent, ${accent}, transparent)` }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function AboutPage() {
   const router = useRouter();
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const stateRef = useRef({ scrollY: 0, mouseX: 0, mouseY: 0 });
+  const featureScrollerRef = useRef<HTMLDivElement | null>(null);
+  const featureSegmentWidthRef = useRef(0);
+  const featureIsLoopingRef = useRef(false);
+  const [featureLoopReady, setFeatureLoopReady] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -199,6 +385,92 @@ export default function AboutPage() {
     ],
     [],
   );
+
+  const featureEdgeFade = useMemo(() => {
+    return isDark
+      ? {
+          left: "linear-gradient(90deg, rgba(6,8,16,1), rgba(6,8,16,0))",
+          right: "linear-gradient(270deg, rgba(6,8,16,1), rgba(6,8,16,0))",
+        }
+      : {
+          left: "linear-gradient(90deg, rgba(250,248,255,1), rgba(250,248,255,0))",
+          right: "linear-gradient(270deg, rgba(250,248,255,1), rgba(250,248,255,0))",
+        };
+  }, [isDark]);
+
+  const featureLoopItems = useMemo(() => {
+    // Render 3 segments so we can keep the user in the middle and wrap seamlessly.
+    return [...FEATURES, ...FEATURES, ...FEATURES];
+  }, []);
+
+  const measureAndCenterFeatures = () => {
+    const el = featureScrollerRef.current;
+    if (!el) return;
+    const seg = el.scrollWidth / 3;
+    if (!Number.isFinite(seg) || seg <= 0) return;
+    featureSegmentWidthRef.current = seg;
+    // Start in the middle segment so users can scroll both ways immediately.
+    el.scrollLeft = seg;
+    setFeatureLoopReady(true);
+  };
+
+  const handleFeatureLoopScroll = () => {
+    const el = featureScrollerRef.current;
+    if (!el) return;
+    if (!featureLoopReady) return;
+    if (featureIsLoopingRef.current) return;
+
+    const seg = featureSegmentWidthRef.current || el.scrollWidth / 3;
+    if (!Number.isFinite(seg) || seg <= 0) return;
+
+    // Small epsilon avoids flicker near wrap points due to fractional pixels.
+    const eps = 2;
+    // Keep the user in the middle segment; wrap only when well into first/third.
+    const leftEdge = seg * 0.5 - eps;
+    const rightEdge = seg * 1.5 + eps;
+
+    if (el.scrollLeft <= leftEdge) {
+      featureIsLoopingRef.current = true;
+      el.scrollLeft = el.scrollLeft + seg;
+      requestAnimationFrame(() => {
+        featureIsLoopingRef.current = false;
+      });
+      return;
+    }
+
+    if (el.scrollLeft >= rightEdge) {
+      featureIsLoopingRef.current = true;
+      el.scrollLeft = el.scrollLeft - seg;
+      requestAnimationFrame(() => {
+        featureIsLoopingRef.current = false;
+      });
+    }
+  };
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      setFeatureLoopReady(false);
+      measureAndCenterFeatures();
+    });
+
+    const onResize = () => {
+      setFeatureLoopReady(false);
+      requestAnimationFrame(() => measureAndCenterFeatures());
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
+
+  const scrollFeaturesByCards = (dir: "left" | "right") => {
+    const el = featureScrollerRef.current;
+    if (!el) return;
+    const amount = Math.min(el.clientWidth * 0.9, 560);
+    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+  };
 
   return (
     <div
@@ -404,18 +676,105 @@ export default function AboutPage() {
               Why people fall in love with the experience
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {FEATURES.map((f) => (
-              <Card
-                key={f.title}
-                isDark={isDark}
-                accent={f.accent}
-                badge={`${f.icon}  ${f.title}`}
-                title={f.title}
-                description={f.description}
-            image={f.image}
+          <div className="relative">
+            {/* Full-bleed scroller like the review section */}
+            <div className="-mx-4 sm:-mx-6 relative">
+              <div
+                ref={featureScrollerRef}
+                onScroll={handleFeatureLoopScroll}
+                className="flex gap-5 overflow-x-auto pb-3 px-4 sm:px-6"
+                style={{
+                  scrollSnapType: "x proximity",
+                  WebkitOverflowScrolling: "touch",
+                  scrollBehavior: "smooth",
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                }}
+              >
+                {featureLoopItems.map((f, idx) => (
+                  <div
+                    key={`${f.title}-${idx}`}
+                    className="shrink-0"
+                    style={{
+                      scrollSnapAlign: "start",
+                      width: "min(420px, 88vw)",
+                    }}
+                  >
+                    <Card
+                      isDark={isDark}
+                      accent={f.accent}
+                      badge={`${f.icon}  ${f.title}`}
+                      title={f.title}
+                      description={f.description}
+                      image={f.image}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Edge fades */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 left-0 w-14 sm:w-20"
+                style={{ background: featureEdgeFade.left }}
               />
-            ))}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 right-0 w-14 sm:w-20"
+                style={{ background: featureEdgeFade.right }}
+              />
+
+              {/* Scroll buttons */}
+              <button
+                type="button"
+                aria-label="Scroll features left"
+                onClick={() => scrollFeaturesByCards("left")}
+                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-11 sm:w-11 rounded-full grid place-items-center backdrop-blur-md transition-opacity"
+                style={{
+                  background: isDark ? "rgba(12,10,24,0.55)" : "rgba(255,255,255,0.70)",
+                  border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(168,120,10,0.18)",
+                  boxShadow: isDark ? "0 14px 40px rgba(0,0,0,0.35)" : "0 14px 40px rgba(201,147,62,0.14)",
+                  opacity: featureLoopReady ? 1 : 0,
+                  pointerEvents: featureLoopReady ? "auto" : "none",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden style={{ display: "block" }}>
+                  <path
+                    d="M14.5 5.5L8 12l6.5 6.5"
+                    fill="none"
+                    stroke={isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.9)"}
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                aria-label="Scroll features right"
+                onClick={() => scrollFeaturesByCards("right")}
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-11 sm:w-11 rounded-full grid place-items-center backdrop-blur-md transition-opacity"
+                style={{
+                  background: isDark ? "rgba(12,10,24,0.55)" : "rgba(255,255,255,0.70)",
+                  border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(168,120,10,0.18)",
+                  boxShadow: isDark ? "0 14px 40px rgba(0,0,0,0.35)" : "0 14px 40px rgba(201,147,62,0.14)",
+                  opacity: featureLoopReady ? 1 : 0,
+                  pointerEvents: featureLoopReady ? "auto" : "none",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden style={{ display: "block" }}>
+                  <path
+                    d="M9.5 5.5L16 12l-6.5 6.5"
+                    fill="none"
+                    stroke={isDark ? "rgba(230,185,115,0.92)" : "rgba(168,120,10,0.9)"}
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </section>
 
@@ -455,32 +814,7 @@ export default function AboutPage() {
             />
           </div>
           <div className="mx-auto max-w-3xl flex flex-col items-center gap-6">
-            <motion.div
-              className="w-full rounded-3xl p-6 sm:p-8 md:p-10 text-center"
-              style={{
-                background: isDark
-                  ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
-                  : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(184,134,11,0.2)",
-                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(184,134,11,0.08)",
-              }}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <div
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "9px",
-                  letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
-                  textTransform: "uppercase",
-                  marginBottom: "16px",
-                }}
-              >
-                Our Vision
-              </div>
+            <ManifestoCard isDark={isDark} label="Our Vision">
               <h2
                 style={{
                   fontFamily: "'Orbitron', sans-serif",
@@ -504,7 +838,7 @@ export default function AboutPage() {
                 </span>{" "}
                 into immersive reality.
               </h2>
-            </motion.div>
+            </ManifestoCard>
 
             <div
               style={{
@@ -516,32 +850,7 @@ export default function AboutPage() {
               }}
             />
 
-            <motion.div
-              className="w-full rounded-3xl p-6 sm:p-8 md:p-10 text-center"
-              style={{
-                background: isDark
-                  ? "linear-gradient(160deg, rgba(15,12,28,0.74) 0%, rgba(10,8,20,0.58) 100%)"
-                  : "linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(248,246,255,0.88) 100%)",
-                border: isDark ? "1px solid rgba(212,165,116,0.22)" : "1px solid rgba(184,134,11,0.2)",
-                boxShadow: isDark ? "0 18px 60px rgba(0,0,0,0.35)" : "0 16px 50px rgba(184,134,11,0.08)",
-              }}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
-            >
-              <div
-                style={{
-                  fontFamily: "'Orbitron', sans-serif",
-                  fontSize: "9px",
-                  letterSpacing: "0.35em",
-                  color: isDark ? "rgba(255,255,255,0.4)" : "rgba(100,70,20,0.75)",
-                  textTransform: "uppercase",
-                  marginBottom: "16px",
-                }}
-              >
-                Our Mission
-              </div>
+            <ManifestoCard isDark={isDark} label="Our Mission" delay={0.15}>
               <p
                 style={{
                   fontFamily: "'Exo 2', sans-serif",
@@ -559,7 +868,7 @@ export default function AboutPage() {
                 </span>{" "}
                 that inspire creativity, connection, and exploration.
               </p>
-            </motion.div>
+            </ManifestoCard>
           </div>
         </section>
 
