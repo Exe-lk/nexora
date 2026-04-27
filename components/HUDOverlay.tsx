@@ -2328,45 +2328,47 @@ function BrandCard({
 }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  
-  // Map logo keys to actual image filenames
-  const logoImageMap: Record<PlatformLogoKey, string> = {
-    meta: "/leading-platform/meta quest.jpeg",
-    apple: "/leading-platform/apple vision pro.jpeg",
-    playstation: "/leading-platform/PlayStation VR2.jpeg",
-    valve: "/leading-platform/Valve Index.jpeg",
-    htc: "/leading-platform/HTC Vive .jpeg",
-    pico: "/leading-platform/Pico.jpeg",
-    unity: "/leading-platform/Unity.png",
-    unreal: "/leading-platform/Unreal Engine.png",
-    magicleap: "/leading-platform/Magic Leap.jpeg",
-    varjo: "/leading-platform/Varjo.jpeg",
-    openxr: "/leading-platform/OpenXR.png",
-    webxr: "/leading-platform/WebXR .png",
-  };
-  
+
   return (
-    <div
-      className="group cursor-default flex flex-col items-center justify-center text-center p-6 md:p-8 rounded-2xl transition-all duration-300"
+    <motion.div
+      className="group cursor-default flex flex-col items-center justify-center text-center p-6 md:p-8 rounded-2xl"
+      initial={{ opacity: 0, y: 14, scale: 0.985 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.35 }}
+      whileHover={{ y: -6, scale: 1.015 }}
+      transition={{ type: "spring", stiffness: 420, damping: 32, mass: 0.6 }}
       style={{
+        position: "relative",
         background: isDark
           ? "linear-gradient(160deg, rgba(12,10,24,0.55), rgba(8,6,18,0.35))"
-          : "linear-gradient(160deg, rgba(255,255,255,0.8), rgba(250,248,255,0.7))",
-        border: `1px solid ${accent}${isDark ? "0.08)" : "0.15)"}`,
+          : "linear-gradient(160deg, rgba(255,255,255,0.82), rgba(250,248,255,0.74))",
+        border: `1px solid ${accent}${isDark ? "0.1)" : "0.16)"}`,
         backdropFilter: "blur(14px)",
         minHeight: "clamp(180px, 18vw, 220px)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = `${accent}${isDark ? "0.22)" : "0.3)"}`;
-        e.currentTarget.style.boxShadow = `0 0 28px ${accent}${isDark ? "0.08)" : "0.12)"}`;
-        e.currentTarget.style.transform = "translateY(-3px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = `${accent}${isDark ? "0.08)" : "0.15)"}`;
-        e.currentTarget.style.boxShadow = "none";
-        e.currentTarget.style.transform = "translateY(0)";
+        boxShadow: isDark
+          ? `0 12px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.02), 0 0 40px ${accent}0.05)`
+          : `0 14px 44px rgba(26,10,46,0.12), 0 0 0 1px rgba(0,0,0,0.02), 0 0 44px ${accent}0.06)`,
+        transformStyle: "preserve-3d",
+        overflow: "hidden",
       }}
     >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background: isDark
+            ? `radial-gradient(600px circle at 50% 30%, ${accent}0.18), transparent 55%)`
+            : `radial-gradient(560px circle at 50% 30%, ${accent}0.16), transparent 55%)`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute -inset-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background:
+            "linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.22) 50%, transparent 65%)",
+          transform: "translateX(-40%) rotate(10deg)",
+          filter: "blur(1px)",
+        }}
+      />
       {logo ? (
         <div className="flex items-center justify-center mb-4 w-full">
           <div
@@ -2375,20 +2377,22 @@ function BrandCard({
               width: "clamp(80px, 12vw, 120px)",
               height: "clamp(80px, 12vw, 120px)",
               borderRadius: "16px",
-              background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
-              border: `1px solid ${accent}${isDark ? "0.1)" : "0.15)"}`,
-              boxShadow: isDark ? `0 0 20px ${accent}0.04)` : `0 0 20px ${accent}0.06)`,
+              background: "transparent",
+              border: "none",
+              boxShadow: "none",
             }}
           >
-            <Image
-              src={logoImageMap[logo]}
-              alt={`${name} logo`}
-              fill
-              className="object-contain p-3 transition-transform duration-300 group-hover:scale-110"
-              style={{
-                filter: isDark ? "brightness(0.95)" : "brightness(1.05)",
-              }}
-            />
+            <div
+              className="transition-transform duration-300 group-hover:scale-110"
+              style={{ transformOrigin: "center" }}
+              aria-hidden="true"
+            >
+              <PlatformLogo
+                kind={logo}
+                color={isDark ? "rgba(255,255,255,0.9)" : "rgba(26,10,46,0.9)"}
+                size={64}
+              />
+            </div>
           </div>
         </div>
       ) : null}
@@ -2415,7 +2419,7 @@ function BrandCard({
       >
         {tag}
       </span>
-    </div>
+    </motion.div>
   );
 }
 
